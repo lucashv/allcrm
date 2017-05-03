@@ -1,0 +1,59 @@
+<div cg-busy="loadingInsertInteracao">
+  <div class="modal-header">
+    <h3 class="modal-title">Criar novo lembrete</h3>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <form class="form-horizontal" name="formLembrete" novalidate>
+
+          <div class="form-group">
+            <label for="titulo" class="col-sm-2 control-label">Título</label>
+            <div class="col-sm-10">
+              <input type="text" id="titulo" class="form-control rounded" ng-model="lembrete.titulo" placeholder="Título" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="observacao">Observação</label>
+            <div class="col-sm-10">
+              <textarea class="form-control" id="observacao" ng-model="lembrete.observacao" placeholder="Observação" rows="2" required></textarea>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="data">Data</label>
+            <div class="col-sm-10">
+              <p class="input-group col-sm-5">
+                <input type="text" class="form-control" uib-datepicker-popup="{{format}}" min-date="minData"
+                 ng-model="data" is-open="mostrarCalendario.opened" close-text="Fechar" clear-text="Limpar"
+                  current-text="Hoje"  placeholder="Data do lembrete" datepicker-options="dateOptions" 
+                  required />
+                <span class="input-group-btn">
+                <button type="button" class="btn btn-primary" ng-click="abrirCalendario()">
+                  <i class="fa fa-calendar"></i>
+                </button>
+              </span>
+              </p>
+            </div>
+          </div>
+
+          <div class="form-group" ng-show="data">
+            <label class="col-sm-2 control-label" for="horario">Horário</label>
+            <div class="col-sm-10">
+              <uib-timepicker id="horario" ng-model="horario" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></uib-timepicker>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success" ng-click="salvarLembrete(lembrete, data, horario)" ng-disabled="formLembrete.$invalid">
+      <i class="fa fa-save"></i>
+      <span>&nbsp;&nbsp;Salvar</span>
+    </button>
+    <button type="button" class="btn btn-lightred btn-ef btn-ef-4 btn-ef-4c" ng-click="cancel()"><i class="fa fa-arrow-left"></i> Cancel
+    </button>
+  </div>
+</div>

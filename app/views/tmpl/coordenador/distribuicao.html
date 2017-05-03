@@ -1,0 +1,151 @@
+<!--Form cadastro -->
+<div class="page">
+  <!-- page header -->
+  <div class="pageheader">
+    <div class="page-bar">
+      <ul class="page-breadcrumb">
+        <li>
+          <a ui-sref="app.dashboard">
+            <i class="fa fa-home"></i> {{:: main.title }}
+          </a>
+        </li>
+        <li>
+          <a href="javascript:;">Coordenador Comercial</a>
+        </li>
+        <li>
+          <a href="javascript:;">{{:: page.subtitle }}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12" ng-if="showAviso">
+      <section cg-busy="loadingAcesse" class="tile">
+        <!-- tile header -->
+        <div class="tile-header bg-red">
+          <h1 class="custom-font">
+          <strong>Erro ao Enviar E-mails</strong>
+        </h1>
+          <ul class="controls">
+            <li class="remove">
+              <a href="" ng-click="limparErros()">
+                <i class="fa fa-times"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <!-- /tile header -->
+        <!-- tile widget -->
+        <div class="tile-widget bg-lightred">
+          <p>
+            Acesse para Reenviar.
+          </p>
+          <ul ng-repeat="erros in errosEnvioEmail">
+            <li>
+              <a class="link-effect link-effect-12" data-ytta-id="-" ng-href="#app/contatos/detalhes/{{erros.contatoId}}">{{erros.nome}}</a>
+            </li>
+          </ul>
+          <button class="btn btn-danger btn-ef btn-ef-3 btn-ef-3c mb-10" ng-click="limparErros()">Limpar Erros
+            <i class="fa  fa-trash-o"></i>
+          </button>
+        </div>
+        <!-- /tile widget -->
+      </section>
+    </div>
+  </div>
+  <!-- table -->
+  <div class="pagecontent">
+
+
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12">
+        <section class="tile" cg-busy="[loadInteracoes,loadingContatoEnviar,loadPagamentoReposicao]">
+          <div class="tile-header">
+            <h1 class="custom-font"><strong>Distribuição</strong> de Leads</h1>
+          </div>
+
+          <div class="tile-body">
+
+            <div class="form-group">
+              <button class="btn btn-success btn-ef btn-ef-3 btn-ef-3c mb-10" ng-click="enviarMultiplosContatos(contatosEnviar)" ng-disabled="corretor.$invalid">Enviar Selecionados
+                <i class="fa  fa-check-square-o"></i>
+              </button>
+            </div>
+
+
+            <table class="st-table table table-custom" st-safe-src="contatosEnviar" st-table="displayedCollection">
+              <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>DDD</th>
+                  <th>Email</th>
+                  <th>Tipo</th>
+                  <th>Origem</th>
+                  <th>Operadora</th>
+                  <th>Enviar Para</th>
+                  <th>Obs Envio</th>
+                  <th width="20%">Envio</th>
+                  <th width="20%">Corretor</th>
+
+                </tr>
+                <tr>
+                  <th colspan="10">
+                    <label for="pesquisar">Pesquisar</label>
+                    <input type="text" id="pesquisar" class="form-control" name="name" st-search placeholder="Pesquise na lista de envio" />
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr st-select-mode="multiple" st-select-row="contato" ng-repeat="contato in displayedCollection">
+                  <td>
+                    <a ng-href="#app/contatos/detalhes/{{:: contato.idContato }}" uib-popover="{{:: contato.observacao }}" popover-trigger="mouseenter" popover-placement="right">{{:: contato.idContato }}</a>
+                  </td>
+                  <td>
+                    {{:: contato.telefone }}
+                  </td>
+                  <td>
+                    <i class="{{:: contato.email }}"></i>
+                  </td>
+                  <td>
+                    {{:: contato.empresa }}
+                  </td>
+
+                  <td>
+                    {{:: contato.origem }}
+                  </td>
+                  <td>
+                    {{:: contato.operadora }}
+
+                  </td>
+                  <td>
+                    {{:: contato.enviarPara }}
+                  </td>
+                  <td>
+                    <textarea rows="1" ng-model="contato.obsTipoEnvio" class="form-control rounded" placeholder="Obs"></textarea>
+                  </td>
+                  <td>
+                    <select chosen="{width: '100%'}" data-placeholder-text-single="'Selecione o Tipo de Envio'" name="tipoEnvio" ng-options="tipoEnvio as (tipoEnvio.id + ' ' + tipoEnvio.tipoEnvio)  disable when tipoEnvio.id ==25 for tipoEnvio in tiposEnvios" ng-model="contato.tipoEnvio" ng-change="validaReposicao(contato, $index)">
+                    </select>
+                  </td>
+                  <td data-title="'Corretor'">
+                    <select name="corretor"  data-placeholder-text-single="'Selecione o Corretor'"  chosen="{width: '100%'}" ng-options="corretor as (corretor.id + ' ' + (corretor.nome + ' ' +corretor.sobre_nome ) )| capitalize : true disable when corretor.envioBloqueado for corretor in corretores" ng-model="contato.corretor" ng-change="validaReposicao(contato, $index)" required>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr class="text-right hidden-print">
+                  <td colspan="10">
+                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
+                  </td>
+
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

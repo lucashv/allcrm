@@ -1,0 +1,111 @@
+<div cg-busy="[loadingInsertInteracao,
+  loadOrigem,
+  loadOrigens,
+  loadFornecedores,
+  loadSites,
+  loadOperadoras]">
+  <div class="modal-header">
+    <h3 class="modal-title">Reentrada</h3>
+  </div>
+  <div class="modal-body">
+    <div class="task-container priority-high">
+      <h3 class="task-name">{{ contato.aviso.tipo }} </h3>
+
+      <span class="task-priority"></span>
+      <p class="task-desc"><b>{{ contato.aviso.texto }}</b></p>
+      <div class="input-group">
+        <span class="input-group-btn">
+        <button class="btn btn-slategray" ng-click="acessar(contato.id)">
+          <i class="fa fa-hand-o-right"></i>
+          <span>Acesse</span>
+        </button>
+      </div>
+
+    </div>
+
+    <div class="alert alert-warning lista-animada">
+      <p class="task-meta">
+        <strong>Tempo desde o último envio:</strong>
+      </p>
+      <p class="task-desc">{{:: ultimoEnvio }} horas</p>
+
+    </div>
+
+    <div class="alert alert-lightred lista-animada" ng-if="alertaInteracaoCadastradaSemEnvio.length">
+      <button type="button" ng-click="fecharAlertaInteracao()" class="close">×</button>
+      {{ alertaInteracaoCadastradaSemEnvio }}
+    </div>
+
+    <div class="alert alert-primary lista-animada" ng-if="mensagem.length || mensagemOrigem.length">
+      <button type="button" ng-click="fecharAlertaInteracao()" class="close">×</button>
+      <p>{{ mensagemOrigem }}</p>
+      <p>{{ mensagem }}</p>
+    </div>
+    <form class="form-horizontal" name="formularioReentrada" role="form" novalidate>
+      <div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Origem</label>
+          <div class="col-sm-10">
+            <label class="checkbox checkbox-custom-alt checkbox-custom-sm" for="fornecedores">
+              <input id="fornecedores" name="origemTipo" ng-model="interacao.origemTipo" type="radio" value="fornecedores" required>
+              <i></i> Fornecedores
+            </label>
+            <label class="checkbox checkbox-custom-alt checkbox-custom-sm" for="sites">
+              <input id="sites" name="origemTipo" ng-model="interacao.origemTipo" type="radio" value="sites" required>
+              <i></i>Sites
+            </label>
+            <label class="checkbox checkbox-custom-alt checkbox-custom-sm" for="outras">
+              <input id="outras" name="origemTipo" ng-model="interacao.origemTipo" type="radio" value="outras" required>
+              <i></i>Outras
+            </label>
+
+          </div>
+        </div>
+
+        <div class="form-group" ng-if="interacao.origemTipo == 'sites' ">
+          <label class="col-sm-2 control-label" for="sites">Sites</label>
+          <div class="col-sm-10">
+
+            <select chosen="{width: '100%'}" ng-model="interacao.origem" name="outrasOrigens" data-ng-change="reentrada(interacao)" ng-options=" site   as (site.id + ' ' + site.site)  for site in sitesList ">
+              <option value="">Selecione uma opção</option>
+
+            </select>
+          </div>
+        </div>
+        <div class="form-group" ng-if="interacao.origemTipo == 'fornecedores' ">
+          <label class="col-sm-2 control-label" for="fornecedores">Fornecedores</label>
+          <div class="col-sm-10">
+
+            <select chosen="{width: '100%'}" ng-model="interacao.origem" name="outrasOrigens" data-ng-change="reentrada(interacao)" ng-options=" fornecedor   as   fornecedor.nomeFantasia   for fornecedor in fornecedorList ">
+              <option value="">Selecione uma opção</option>
+
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" ng-if="interacao.origemTipo == 'outras' ">
+          <label class="col-sm-2 control-label" for="outras">Outras</label>
+          <div class="col-sm-10">
+            <select chosen="{width: '100%'}" ng-model="interacao.origem" name="outrasOrigens" data-ng-change="reentrada(interacao)" ng-options=" outra   as   outra.outraOrigem  for outra in outrasOrigensList ">
+              <option value="">Selecione uma opção</option>
+
+            </select>
+          </div>
+        </div>
+
+      </div>
+
+
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success" ng-click="criaInteracao(interacao)" ng-show="!cadastradoSemEnvio" ng-disabled="formularioReentrada.$invalid">
+      <i class="fa fa-save"></i>
+      <span>&nbsp;&nbsp;Salvar</span>
+    </button>
+    <button class="btn btn-lightred btn-ef btn-ef-4 btn-ef-4c" ng-click="cancel()">
+      <i class="fa fa-arrow-left"></i> Cancelar
+    </button>
+  </div>
+</div>
+</div>

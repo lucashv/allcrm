@@ -1,0 +1,68 @@
+<section class="tile time-simple">
+
+  <div class="tile-body">
+
+    <div class="row">
+      <div class="col-md-9">
+
+        <h4 class="text-uppercase text-strong mt-10 ">{{ contato.nome }}</h4>
+        <p class="mt-0 mb-20">{{ contato.observacao }}</p>
+
+      </div>
+
+
+    </div>
+
+    <div class="row pt-20">
+
+
+      <div class="col-md-2">
+
+        <ul class="list-unstyled text-default  mb-20">
+          <li><strong>ID:</strong> {{ contato.contatoId }}</li>
+          <li><strong>Idade:</strong> {{ contato.idade }}</li>
+          <li><strong>Operadora:</strong> {{ contato.operadora }}</li>
+          <li>
+            <strong>Tipo:</strong>
+            <span ng-if="contato.empresa">
+              PME
+            </span>
+            <span ng-if="!contato.empresa">
+              PF
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="col-md-3">
+        <p class="text-uppercase text-strong mb-10 custom-font">Produtos de Interresse</p>
+        <ul class="list-unstyled text-default mb-20">
+          <li>{{ produtomensagem }} </li>
+          <li ng-repeat="produto in contatosProdutos">{{produto.tipoProdutoNome}} - {{produto.produtoNome}} </li>
+        </ul>
+      </div>
+
+      <div class="col-md-3">
+        <ul class="list-unstyled text-default  mb-20">
+          <li><strong>Email(s):</strong>
+            <div class="ml-5" data-ng-repeat="email in emails track by email.id">{{ email.email }}  </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="col-md-3 ">
+        <ul class="list-unstyled text-default">
+          <li><strong>Telefone(s):</strong>
+            <div class="ml-5" data-ng-repeat="telefone in telefones track by telefone.id"> {{ telefone.telefone | telefone}}  ({{ telefone.operadoraNome }})</div>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+    <div class="row" ng-transclude>
+
+    </div>
+
+  </div>
+
+</section>

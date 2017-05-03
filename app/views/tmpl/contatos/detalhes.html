@@ -1,0 +1,205 @@
+<div class="page">
+  <!-- page header -->
+  <div class="pageheader">
+    <div class="page-bar">
+      <ul class="page-breadcrumb">
+        <li>
+          <a href>
+            <i class="fa fa-home"></i> CRM
+          </a>
+        </li>
+        <li>
+          <a href>Contatos</a>
+        </li>
+        <li>
+          <a href> Detalhes Contato </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-content">
+
+    <!-- aviso de contato de outro usuario -->
+    <div ng-if="exibeAviso">
+      <div class="row">
+        <div class="col-md-12">
+          <section class="tile bg-lightred">
+            <!-- tile header -->
+            <div class="tile-header dvd dvd-btm">
+              <h1 class="custom-font"><strong>Contato </strong>não disponível</h1>
+              <ul class="controls">
+                <li class="dropdown" dropdown on-toggle="toggled(open)"></li>
+                <li class="remove">
+                  <a href tile-control-close>
+                    <i class="fa fa-times"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <!-- tile body -->
+            <div class="tile-body">
+              <p>Este contato se encontra com outro corretor.</p>
+            </div>
+            <!-- /tile body -->
+          </section>
+        </div>
+      </div>
+    </div>
+    <!-- aviso de contato de outro usuario -->
+
+    <div class="visible-print-block">
+      <figure>
+        <img src="http://imagens.allcross.com.br/logo_allcross_colorida.png" alt="Logo AllCross" />
+      </figure>
+      <h1> <b>Detalhes </b>do Contato </h1>
+      <b>Extraido em:</b> {{dataAtual | date: 'dd/MM/yyyy HH:MM'}} - <b>Por :</b> {{usuarioLogado | capitalize : true}}
+    </div>
+
+    <div class="row"  cg-busy="[loadingInteracoes, loadContato, loadTelefones, loadEmails, loadProdutosContato, loadUpdateContato]">
+      <div class="col-md-12" >
+        <template-contato
+        contato="contato" emails="emailsContato" telefones="telefonesContato" contatos-produtos="contatosProdutos" produtomensagem="{{produtoMensagem}}">
+
+          <button class="btn btn-primary btn-ef btn-ef-3 btn-ef-3c m-10 hidden-print" type="button" ng-click="editarContato(contato, emailsContato,  telefonesContato)">
+            <i class="fa fa-edit"></i> Editar Contato
+          </button>
+          <button class="btn btn-danger btn-ef btn-ef-3 btn-ef-3c m-10 hidden-print" type="button" ng-click="excluirContato(contato)">
+            <i class="fa fa-times"></i> Excluir Contato
+          </button>
+
+          <button class="btn btn-dutch btn-ef btn-ef-3 btn-ef-3c m-10 hidden-print" type="button" ng-click="criarLembrete()">
+            <i class="fa fa-book"></i> Criar Lembrete
+          </button>
+
+          <button class="btn btn-danger btn-ef btn-ef-3 btn-ef-3c m-10 hidden-print" ng-if="exibeDevolverIndicacaoSeguro" ng-click="devolveIndicaoSeguro(interacoes, contato)">
+            <i class="fa fa-arrow-left"></i> Devolver para fila de seguros
+          </button>
+        </template-contato>
+      </div>
+    </div>
+
+    <!-- table interacoes -->
+    <div class="row">
+      <div class="col-md-12">
+        <div ng-if="exibeContato">
+          <section class="tile" cg-busy="[loadingInteracoes, loadContato, loadTelefones, loadEmails, loadProdutosContato, loadUpdateContato]">
+            <button class="btn btn-success btn-ef btn-ef-3 btn-ef-3c m-10 hidden-print" ng-click="criarInteracao(interacoes, null)">
+              <i class="fa fa-plus"></i> Criar Interação
+            </button>
+            <button class="btn btn-greensea btn-ef btn-ef-3 btn-ef-3c m-10 hidden-print" ng-if="filial" ng-click="geraIndicacaoPrime(interacoes, contato)">
+              <i class="fa fa-mail-forward"></i> Gerar Indicação Seguro
+            </button>
+            <div class="tile-header">
+              <div class="alert alert-primary lista-animada" ng-if="alertaInteracao.length">
+                <button type="button" ng-click="fecharAlertaInteracao()" class="close">×</button>
+                {{alertaInteracao}}
+              </div>
+            </div>
+            <div class="tile-body" cg-busy="loadingEnvioEmail">
+
+              <table class="st-table table table-custom" st-table="interacoes" st-safe-src="data">
+                <thead>
+                  <tr>
+                    <th st-sort="dataCadastro" class="sorting" width="10%" st-sort-default>Data Interação</th>
+                    <th st-sort="usuarioCadastro" class="sorting" width="10%">Usuário Cadastro</th>
+                    <th st-sort="idInteracaoPai" class="sorting" width="10%">Status</th>
+                    <th st-sort="descricaoInteracao" class="sorting" width="30%">Observacação</th>
+                    <th st-sort="corretorNome" class="sorting" width="10%">Corretor</th>
+                    <th class="sorting" width="10%">Origem</th>
+                    <th class="sorting" width="10%">Tipo Envio</th>
+                    <th width="10%">Ações</th>
+                  </tr>
+                  <tr class="hidden-print">
+                    <th colspan="7">
+                      <div class="form-group">
+                        <label for="pesquise">Pesquise</label>
+                        <input id="pesquise" type="text" class="form-control" st-search placeholder="Pesquise no relatório" />
+                      </div>
+                    </th>
+                    <th colspan="1">
+                      <div class="form-group">
+                        <label>Itens por página</label>
+                        <select class="form-control" ng-model="itemsByPage">
+                          <option value="5">5</option>
+                          <option value="25">25</option>
+                          <option value="50">50</option>
+                          <option value="100">100</option>
+                          <option value="{{tamanhoArray}}">Todos</option>
+                        </select>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="interacao in interacoes" >
+                    <td>{{interacao.dataCadastro}}</td>
+                    <td>{{interacao.usuarioCadastro | capitalize:true}}</td>
+                    <td>
+                      <span ng-if="!interacao.idInteracaoPai">Cadastrada</span>
+                      <span ng-if="interacao.idInteracaoPai" ng-class="
+                      {'text-danger': interacao.situacao == 'Enviada ao Corretor',
+                      'text-primary': interacao.situacao != 'Enviada ao Corretor' && interacao.situacao != 'Venda Efetuada',
+                      'text-success': interacao.situacao == 'Venda Efetuada'}">
+                      {{interacao.situcao}}
+                    </span>
+                    </td>
+                    <td>
+                      <p>{{interacao.descricaoInteracao}}</p>
+                    </td>
+
+
+                    <td>
+                      <span ng-if="interacao.corretorNome">
+                        {{interacao.corretorNome | capitalize: true}}
+                        {{interacao.corretorSobreNome | capitalize: true}}
+                      </span>
+                    </td>
+                    <td>
+                      <span ng-if="interacao.site">{{interacao.site}}</span>
+                      <span ng-if="interacao.razaoSocialFornecedor">{{interacao.razaoSocialFornecedor}}</span>
+                      <span ng-if="interacao.tipoOutraOrigem">{{interacao.tipoOutraOrigem}}</span>
+                    </td>
+                    <td>
+                      <div ng-if="interacao.tipoEnvio" class="text-center">{{interacao.tipoEnvio}}</div>
+                      <div ng-if="!interacao.tipoEnvio" class="text-center"> <i class="fa fa-times"></i></div>
+                    </td>
+                    <td>
+                      <button class="btn btn-success btn-ef btn-ef-3 btn-ef-3c m-10 hidden-print" ng-if="habilitaInteracaoPai(interacao.idInteracaoPai)" ng-click="criarInteracaoNaPai(interacao)">
+                        <i class="fa fa-plus"></i> Criar Interação
+                      </button>
+
+                      <span ng-if="!interacao.emailEnviado && interacao.situcaoObj.id === 2">
+                        <button class="btn btn-info " ng-click="reenviarEmail(interacao)">
+                          <i class="fa fa-send"></i>&nbsp;&nbsp;Reenviar
+                        </button>
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr class="text-center hidden-print">
+                    <td colspan="8">
+                      <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="50"></div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="8">
+                      <button ng-click="imprimirRelatorio()" class="btn btn-success btn-block hidden-print">
+                        <i class="fa fa-file-pdf-o"></i>
+                        <span>Imprimir</span>
+                      </button>
+                    </td>
+                  </tr>
+                </tfoot>
+
+              </table>
+
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

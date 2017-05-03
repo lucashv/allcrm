@@ -1,0 +1,146 @@
+<div class="page">
+
+  <div class="pageheader">
+    <div class="page-bar">
+      <ul class="page-breadcrumb ">
+        <li>
+          <a ui-sref="app.dashboard"><i class="fa fa-home"></i> {{main.title}}</a>
+        </li>
+        <li>
+          <a ui-sref="app.dashboard">{{page.title}}</a>
+        </li>
+        <li>
+          <a href="javascript:;">Gestor Nacional</a>
+        </li>
+      </ul>
+      <div class="page-toolbar">
+
+        <a href="javascript:;" class="btn btn-lightred no-border" daterangepicker="rangeOptions" date-begin="startDate" date-end="endDate">
+          <i class="fa fa-calendar"></i>&nbsp;&nbsp;<span>{{startDate}} - {{endDate}}</span>&nbsp;&nbsp;<i class="fa fa-angle-down"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="pagecontent">
+
+    <div class="row">
+      <div class="col-md-12">
+
+        <section class="tile">
+          <div class="tile-widget bg-slategray p-10" cg-busy="load">
+            <div class="media">
+              <div class="media-body">
+                <h5 class="media-heading mb-0 mt-10">
+
+                  <p class="custom-font ">
+                    De {{startDate}} até {{endDate}}
+                  </p>
+                </h5>
+              </div>
+            </div>
+          </div>
+          <div class="tile-body p-0">
+            <div class="list-group no-radius no-border">
+              <div class="list-group-item" ui-sref="app.contatos.relatorio">
+                <span class="badge badge-primary">{{relacaoTotalIndicacoes.totalQuantidadeIndicacoes}}</span>
+                <i class="fa  fa-paper-plane-o text-muted mr-5"></i> Total de Indicações Distribuídas
+              </div>
+              <div class="list-group-item" ui-sref="app.contatos.relatorio">
+                <span class="badge badge-info">{{relacaoTotalIndicacoes.totalRespondido}}</span>
+                <i class="fa fa-comments-o text-muted mr-5"></i> Total de Indicações Respondidas
+              </div>
+              <div class="list-group-item" ui-sref="app.contatos.relatorio">
+                <span class="badge badge-danger">{{relacaoTotalIndicacoes.totalEnviadoCorretor}}</span>
+                <i class="fa fa-mail-forward text-muted mr-5"></i> Total de Indicações Pendentes
+              </div>
+              <div class="list-group-item" ui-sref="app.contatos.relatorio">
+                <span class="badge badge-success ">{{relacaoTotalIndicacoes.totalVendaEfetuada}}</span>
+                <i class="fa fa-thumbs-o-up text-muted mr-5"></i> Total de Vendas Efetuadas
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-5">
+        <section class="tile simple">
+
+          <div class="tile-widget bg-slategray p-10" cg-busy="load">
+            <div class="media">
+              <div class="media-body">
+
+                <h5 class="media-heading mb-0 mt-10">
+                  <p class="custom-font ">Relação de indicações por filial
+                  </p>
+                  <p class="custom-font ">
+                    De {{startDate}} até {{endDate}}
+                  </p>
+                </h5>
+              </div>
+            </div>
+          </div>
+
+          <!-- tile body -->
+          <div class="tile-body p-0">
+            <div class="list-group no-radius no-border">
+              <div class="list-group-item">
+                <input ng-model="filtro" ng-model-options="{debounce: 500}" type="text" class="form-control" placeholder="Pesquise pelo nome da filial" />
+              </div>
+              <button class="list-group-item lista-animada " ng-click="detalhesFilial(filial)" ng-repeat="filial in relacaoIndicacoesFiliais | filter: filtro">
+                {{filial.nomeFilial | capitalize: true }}
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="col-md-4 painel" ng-if="mostrarCartao">
+        <section class="tile simple">
+
+          <div class="tile-widget bg-slategray p-10">
+            <div class="media">
+              <div class="media-body">
+                <h5 class="media-heading mb-0 mt-10">
+                  <p class="custom-font ">
+                     {{filial.nomeFilial | capitalize : true}}
+                   </p>
+                </h5>
+              </div>
+            </div>
+          </div>
+
+          <!-- tile body -->
+          <div class="tile-body p-0">
+            <div class="list-group no-radius no-border">
+              <a class="list-group-item" ui-sref="app.contatos.relatorio">
+                <span class="badge badge-primary">{{filial.quantidadeIndicacoes}}</span>
+                <i class="fa  fa-paper-plane-o text-muted mr-5"></i> Total Indicações
+              </a>
+              <a class="list-group-item" ui-sref="app.contatos.relatorio">
+                <span class="badge badge-info">{{filial.respondido}}</span>
+                <i class="fa fa-comments-o text-muted mr-5"></i> Respondidas
+              </a>
+              <a class="list-group-item" ui-sref="app.contatos.relatorio">
+                <span class="badge badge-danger">{{filial.enviadoCorretor}}</span>
+                <i class="fa fa-mail-forward text-muted mr-5"></i> Enviadas ao Corretor
+              </a>
+              <a class="list-group-item" ui-sref="app.contatos.relatorio">
+                <span class="badge badge-success ">{{filial.vendaEfetuada}}</span>
+                <i class="fa fa-thumbs-o-up text-muted mr-5"></i> Vendas Efetuadas
+              </a>
+
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+
+
+  </div>
+</div>

@@ -1,0 +1,100 @@
+<!--Form cadastro -->
+<div class="page page-forms-common">
+  <!-- page header -->
+  <div class="pageheader">
+    <div class="page-bar">
+      <ul class="page-breadcrumb">
+        <li>
+          <a ui-sref="app.dashboard">
+            <i class="fa fa-home"></i> {{main.title}}
+          </a>
+        </li>
+        <li>
+          <a href="javascript:;">Contatos</a>
+        </li>
+        <li>
+          <a ui-sref="app.contatos.prime">{{page.subtitle}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class='col-md-12' ng-if="showAviso">
+      <section cg-busy="loadingAcesse" class="tile">
+        <!-- tile header -->
+        <div class="tile-header bg-red">
+          <h1 class="custom-font">
+          <strong>Erro ao Enviar E-mails</strong>
+        </h1>
+          <ul class="controls">
+            <li class="remove">
+              <a href="" ng-click="limparErros()">
+                <i class="fa fa-times"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <!-- /tile header -->
+        <!-- tile widget -->
+        <div class="tile-widget bg-lightred">
+          <p>
+            Acesse para Reenviar.
+          </p>
+          <ul ng-repeat="erros in errosEnvioEmail">
+            <li>
+              <a class="link-effect link-effect-12" data-ytta-id="-" ng-href="#app/contatos/detalhes/{{erros.contatoId}}">{{erros.nome}}</a>
+            </li>
+          </ul>
+          <button class="btn btn-danger btn-ef btn-ef-3 btn-ef-3c mb-10" ng-click="limparErros()">Limpar Erros
+            <i class="fa  fa-trash-o"></i>
+          </button>
+        </div>
+        <!-- /tile widget -->
+      </section>
+    </div>
+  </div>
+  <!-- table -->
+  <div class="pagecontent">
+
+
+    <div class="row">
+      <div class="col-md-12 col-sx-12">
+        <section class="tile" cg-busy="loadingContatoEnviar">
+          <div class="tile-header">
+            <h1 class="custom-font"><strong>Contatos</strong> Seguro</h1>
+          </div>
+
+          <div class="tile-body">
+            <uib-accordion>
+              <uib-accordion-group ng-click="produtosContato(contato, status.open, $index)" is-open="status.open" ng-repeat="contato in contatos">
+                <uib-accordion-heading>
+                  {{contato.contatoId}} - {{contato.nome | capitalize:true}}<i class="pull-right fa" ng-class="{'fa-angle-down': status.open, 'fa-angle-right': !status.open}"></i>
+                </uib-accordion-heading>
+                <div cg-busy="loadProdutosContato">
+                  <ul class="list-unstyled">
+                    <li><b>Telefone:</b> {{contato.telefone | telefone}}</li>
+                    <li><b>Email:</b> {{contato.email}}</li>
+                    <li><b>Observação:</b> {{contato.observacao}}</li>
+                    <li><b>Tipo: </b> {{contato.empresa}}</li>
+                  </ul>
+                  <h5><b>Produtos de Interresse:</b></h5>
+                  <p>{{contato.mensagem}}</p>
+                  <ul>
+                    <li ng-repeat="produto in contato.contatosProdutos">{{produto.tipoProdutoNome}} - {{produto.produtoNome}}  </li>
+                  </ul>
+                  <button type="button" class="btn btn-primary" ng-click="adquirirContato(contato)">
+                    <i class="fa fa-mail-forward "></i>
+                    <span>Pegar</span>
+                  </button>
+                </div>
+              </uib-accordion-group>
+            </uib-accordion>
+
+
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

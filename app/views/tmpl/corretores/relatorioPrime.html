@@ -1,0 +1,192 @@
+<div class="page">
+
+  <!-- page header -->
+  <div class="pageheader hidden-print">
+    <div class="page-bar">
+      <ul class="page-breadcrumb">
+        <li>
+          <a ui-sref="app.dashboard">
+            <i class="fa fa-home"></i> {{main.title}}
+          </a>
+        </li>
+        <li>
+          <a href="javascript:;">Corretores</a>
+        </li>
+        <li>
+          <a ui-sref="app.contatos.relatorio">{{page.subtitle}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- /page header -->
+
+  <div class="pagecontent">
+
+    <div class="row hidden-print">
+      <div class="col-md-12 col-sx-12">
+
+        <section class="tile" cg-busy="loadRelatorio">
+          <!-- tile header -->
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"><strong>Buscar </strong>contatos Prime</h1>
+          </div>
+          <!-- /tile header -->
+          <!-- tile body -->
+          <div class="tile-body">
+            <form name="formRelatorioIndicacoes" ng-submit="consultar(parametro)">
+              <div class="row">
+                <div class="form-group   col-sm-2">
+                  <label class="" for="id">Id</label>
+                  <input type="number" id="id" class="form-control" placeholder="Id" ng-model="parametro.id" min="1" />
+                </div>
+                <div class="form-group  col-md-4">
+                  <label for="nome">Nome</label>
+                  <input type="text" id="nome" class="form-control" placeholder="Nome" ng-model="parametro.nome" />
+                </div>
+                <div class="form-group  col-md-2">
+                  <label for="telefone">Telefone</label>
+                  <input type="text" id="telefone" class="form-control" placeholder="Telefone" ng-model="parametro.telefone" ui-br-phone-number/>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="email">Email</label>
+                  <input type="text" id="email" class="form-control" placeholder="Email" ng-model="parametro.email" />
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="form-group col-md-3">
+                  <label for="dataInicio">Data Início</label>
+                  <p class="input-group">
+                    <input type="text" class="form-control datepicker" uib-datepicker-popup="{{format}}" ng-model="parametro.dataInicio" is-open="mostarCalendarioInicio.opened" close-text="Fechar" clear-text="Limpar" current-text="Hoje" id="dataInicio" placeholder="Data Início"
+                        datepicker-options="dateOptions" />
+                    <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" ng-click="openCalendarioInicio()">
+                      <i class="fa fa-calendar"></i>
+                    </button>
+                  </span>
+                  </p>
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="dataFim">Data Fim</label>
+                  <p class="input-group">
+                    <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="parametro.dataFim" datepicker-options="dateOptions" is-open="mostarCalendarioFim.opened" close-text="Fechar" clear-text="Limpar" current-text="Hoje" id="dataFim" placeholder="Data Fim"
+                    />
+                    <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" ng-click="openCalendarioFim()">
+                      <i class="fa fa-calendar"></i>
+                    </button>
+                  </span>
+                  </p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <button type="button" class="btn btn-danger btn-block" ng-click="limpar()">
+                    <i class="fa fa-trash-o"></i>
+                    <span>Limpar</span>
+                  </button>
+                </div>
+                <div class="col-md-6">
+                  <button type="submit" class="btn btn-success btn-block">
+                    <i class="fa fa-search"></i>
+                    <span>Consultar</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <div class="row" ng-if="mostrarRelatorio">
+      <div class="col-md-12">
+        <section class="tile">
+          <!-- tile header -->
+          <div class="tile-header dvd dvd-btm hidden-print">
+            <h1 class="custom-font"><strong>Relatório</strong>    </h1>
+          </div>
+          <div class="tile-body">
+            <div class="visible-print-block">
+              <figure>
+                <img src="http://imagens.allcross.com.br/logo_allcross_colorida.png" alt="Logo AllCross" />
+              </figure>
+              <h1> <b>Relatório </b>Contatos </h1>
+              <b>Relatório extraido em:</b> {{dataAtual | date: 'dd/MM/yyyy HH:MM'}} - <b>Por :</b> {{usuarioLogado | capitalize : true}}
+            </div>
+
+
+            <table st-table="interacoes" class="table table-striped" st-safe-src="data" cg-busy="loadRelatorio">
+              <thead>
+                <tr>
+                  <th st-sort="idContato">Id</th>
+                  <th st-sort="dataCadastroInterecao">Data</th>
+                  <th st-sort="usuarioCorretor">Corretor</th>
+                  <th st-sort="nomeContato">Contato</th>
+                  <th st-sort="email">Email</th>
+                  <th st-sort="telefone">Telefone</th>
+                  <th st-sort="situacao">Situação</th>
+                </tr>
+                <tr class="hidden-print">
+                  <th colspan="6">
+                    <div class="form-group">
+                      <label for="pesquise">Pesquise</label>
+                      <input id="pesquise" type="text" class="form-control" st-search placeholder="Pesquise no relatório" />
+                    </div>
+                  </th>
+                  <th colspan="1">
+                    <div class="form-group">
+                      <label>Intens por página</label>
+                      <select class="form-control" ng-model="itemsByPage">
+                        <option value="5">5</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="{{tamanhoArray}}">Todos</option>
+                      </select>
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="resultado in interacoes">
+                  <td><a class="link" data-ytta-id="-" ng-href="#app/contatos/detalhes/{{resultado.idContato}}">{{resultado.idContato}}</a></td>
+                  <td>{{resultado.dataCadastroInterecao}}</td>
+                  <td>{{resultado.usuarioCorretor | capitalize: true}}</td>
+                  <td>{{resultado.nomeContato | capitalize: true}}</td>
+                  <td>{{resultado.email}}</td>
+                  <td>{{resultado.telefone}}</td>
+                  <td>{{resultado.situacao}}</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="7">
+                    <h4 class="custom-font">{{interacoes.length}} de {{tamanhoArray}} resultado(s).</h4></td>
+                </tr>
+                <tr class="text-center hidden-print">
+                  <td colspan="7">
+                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="50"></div>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="7">
+                    <button ng-click="imprimirRelatorio()" class="btn btn-success btn-block hidden-print">
+                      <i class="fa fa-file-pdf-o"></i>
+                      <span>Imprimir</span>
+                    </button>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+
+          </div>
+        </section>
+      </div>
+    </div>
+
+
+  </div>
+</div>

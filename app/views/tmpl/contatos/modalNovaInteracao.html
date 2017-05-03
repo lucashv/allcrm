@@ -1,0 +1,157 @@
+<div cg-busy="loadingInsertInteracao">
+  <div class="modal-header">
+    <h3 class="modal-title">Cadastrar Interação</h3>
+  </div>
+  <div class="modal-body">
+    <form class="form-horizontal" name="formCadInteracao" role="form" novalidate>
+      <div class="form-group">
+        <label class="col-sm-2 control-label" for="nome">Status</label>
+        <div class="col-sm-10">
+
+          <select chosen="{width: '100%'}" ng-options="situacao as (situacao.id + ' ' + situacao.descricao) for situacao in situacaoList" ng-change="exibeAgendador(interacao.situacao)" ng-model="interacao.situacao" required>
+            <option value="">Selecione</option>
+          </select>
+        </div>
+      </div>
+      <div ng-if="exibirOrigens">
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Origem</label>
+          <div class="col-sm-10">
+            <label class="checkbox checkbox-custom-alt checkbox-custom-sm" for="fornecedores">
+              <input id="fornecedores" name="tipoOrigem" ng-model="interacao.origemTipo" type="radio" value="fornecedores">
+              <i></i> Fornecedores
+            </label>
+            <label class="checkbox checkbox-custom-alt checkbox-custom-sm" for="sites">
+              <input id="sites" name="tipoOrigem" ng-model="interacao.origemTipo" type="radio" value="sites">
+              <i></i>Sites
+            </label>
+
+            <label class="checkbox checkbox-custom-alt checkbox-custom-sm" for="outras">
+              <input id="outras" name="tipoOrigem" ng-model="interacao.origemTipo" type="radio" value="outras">
+              <i></i>Outras
+            </label>
+            <label class="checkbox checkbox-custom-alt checkbox-custom-sm" for="chat">
+              <input id="chat" name="tipoOrigem" ng-model="interacao.origemTipo" type="radio" value="chat" ng-click="interacao.origem.id = 3">
+              <i></i>Chat
+            </label>
+          </div>
+        </div>
+        <div class="form-group" ng-if="interacao.origemTipo == 'sites' ">
+          <label class="col-sm-2 control-label" for="sites">Sites</label>
+          <div class="col-sm-10">
+            <ui-select ng-model="interacao.origem">
+              <ui-select-match>
+                <span class="text-darkgray" ng-bind="$select.selected.site"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in (sitesList | filter: $select.search)">
+                <span>{{item.id + ' - ' + item.site}}</span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+        <div class="form-group" ng-if="interacao.origemTipo == 'fornecedores' ">
+          <label class="col-sm-2 control-label" for="fornecedores">Fornecedores</label>
+          <div class="col-sm-10">
+            <ui-select ng-model="interacao.origem">
+              <ui-select-match>
+                <span class="text-darkgray" ng-bind="$select.selected.nomeFantasia"></span>
+              </ui-select-match>
+              <ui-select-choices class="rounded" repeat="item in (fornecedorList | filter: $select.search)">
+                <span>{{item.id + ' - ' + item.nomeFantasia}}</span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+
+        <div class="form-group" ng-if="interacao.origemTipo == 'outras' ">
+          <label class="col-sm-2 control-label" for="outras">Outras</label>
+          <div class="col-sm-10">
+            <ui-select ng-model="interacao.origem">
+              <ui-select-match>
+                <span class="text-darkgray" ng-bind="$select.selected.outraOrigem"></span>
+              </ui-select-match>
+              <ui-select-choices class="rounded" repeat="item in (outrasOrigensList | filter: $select.search)">
+                <span>{{item.id + ' - ' + item.outraOrigem}}</span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+
+      </div>
+      <div class="form-group" ng-if="mostrarAgendador">
+        <label class="col-sm-2 control-label">Agendar ?</label>
+        <div class="col-sm-1">
+          <label class="checkbox checkbox-custom-alt checkbox-custom-sm">
+            <input type="checkbox" ng-model="interacao.retorno" data-ng-click="setaTituloLembrete(interacao)" /><i></i>
+          </label>
+        </div>
+      </div>
+      <div class="form-group" ng-if="interacao.retorno">
+        <label class="col-sm-2 control-label" for="lembrete">Título</label>
+        <div class="col-sm-10">
+          <input type="text " class="form-control" id="lembrete" ng-model="interacao.titulo" placeholder="Título do lembrete" required />
+        </div>
+      </div>
+      <div class="form-group" ng-if="interacao.retorno">
+        <label class="col-sm-2 control-label"></label>
+        <div class="col-sm-10">
+          <div class="input-group">
+            <input type="text" class="form-control datepicker" uib-datepicker-popup="{{format}}"
+            ng-model="interacao.dataRetorno" is-open="calendario.opened" close-text="Fechar" clear-text="Limpar" current-text="Hoje"
+            placeholder="Data do lembrete" datepicker-options="dateOptions"
+            />
+            <span class="input-group-btn">
+          <button type="button" class="btn btn-primary" ng-click="openCalendario()">
+            <i class="fa fa-calendar"></i>
+          </button>
+        </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" ng-if="botaoReposicao">
+        <label class="col-sm-2 control-label" uib-tooltip="{{dynamicTooltip}}"><a href="">Solicitar Reposição?</a></label>
+        <div class="col-sm-10">
+          <label class="checkbox checkbox-custom-alt checkbox-custom-sm">
+            <input type="checkbox" ng-model="interacao.reposicao" /><i uib-tooltip="{{dynamicTooltip}}"></i>
+          </label>
+        </div>
+      </div>
+
+
+
+      <div class="form-group" ng-if="exibeOperadoras" cg-busy="loading">
+        <label class="col-sm-2 control-label" for="operadora">Operadora</label>
+        <div class="col-sm-4">
+          <select class=" form-control" ng-change="getProdutosOperadora(interacao.idOperadora)" ng-model="interacao.idOperadora" ng-options="operadora.id as operadora.nomeFantasia for operadora in operadorasList"></select>
+        </div>
+      </div>
+
+      <div class="form-group" cg-busy="loadProdutos" ng-if="exibeProdutos">
+        <label class="col-sm-2 control-label" for="produtos">Produto Vendido</label>
+        <div class="col-sm-6">
+          <select ng-model="interacao.produtoVenido" name="produtos" chosen="{width: '80%'}" ng-options="produto.id as produto.nome for produto in produtos" required>
+            <option value="">Selecione</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label" for="nome">Observacação</label>
+        <div class="col-sm-10">
+          <textarea class="form-control" ng-model="interacao.observacao" placeholder="Observação" rows="3" required></textarea>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success" ng-click="criaInteracao(interacao, horario)" ng-disabled="formCadInteracao.$invalid">
+      <i class="fa fa-save"></i>
+      <span>&nbsp;&nbsp;Salvar</span>
+    </button>
+    <button class="btn btn-lightred btn-ef btn-ef-4 btn-ef-4c" ng-click="cancel()">
+      <i class="fa fa-arrow-left"></i> Cancelar
+    </button>
+  </div>
+</div>
+</div>

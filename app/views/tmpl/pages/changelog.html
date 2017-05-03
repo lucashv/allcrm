@@ -1,0 +1,130 @@
+<div ui-view>
+<!-- Tela de cadastro de novas propostas -->
+<div class="page page-forms-common">
+  <!-- Cabeçalho -->
+  <div class="pageheader">
+    <div class="page-bar">
+      <ul class="page-breadcrumb">
+        <li>
+          <a ui-sref="app.dashboard"><i class="fa fa-home"></i> {{main.title}} </a>
+        </li>
+        <li>
+          <a href="javascript:;">Cron</a>
+        </li>
+        <li>
+          <a ui-sref="app.cron.painel">Painel Crontrole</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- /Cabeçalho -->
+  <!-- Corpo -->
+  <div class="pagecontent">
+
+    <div class="row">
+      <div class="col-md-12">
+        <section class="tile">
+
+          <!-- tile header -->
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"><strong>Painel</strong> Controle</h1>
+          </div>
+          <!-- /tile header -->
+          <!-- Corpo : parte principal da página -->
+
+          <div class="tile-body">
+            <div class="row">
+              <div class="col-md-5">
+                <table class="table table-striped ">
+                  <thead>
+                    <tr>
+                      <th>Recurso</th>
+                      <th>Tempo</th>
+                      <th>Executar</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="recursoCron in listaRecursosCron">
+                      <td>{{recursoCron.recurso}}</td>
+                      <td>
+                        <input type="number" min="0" class="form-control" ng-model="recursoCron.tempo" placeholder="Informe o tempo " />
+                      </td>
+                      <td>
+                        <div class="onoffswitch labeled blue inline-block">
+                          <input type="checkbox" ng-model="recursoCron.rodando" name="{{recursoCron.id}}" class="onoffswitch-checkbox" id="{{recursoCron.id}}" checked="" ng-change="adicionarRotina(listaRecursosCron)">
+                          <label class="onoffswitch-label" for="{{recursoCron.id}}">
+                            <span class="onoffswitch-inner"></span>
+                            <span class="onoffswitch-switch"></span>
+                          </label>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="col-md-6">
+                <div class="alert alert-warning" ng-if="mensagem.length">
+                    {{mensagem}}
+                </div>
+                <div style="max-height: 320px;overflow:auto;" slimscroll="{height: '100%'}"ng-if="logRotinasExecutadas.length" >
+
+                  <ul class="chats p-0">
+                    <li ng-repeat="logRotina in logRotinasExecutadas">
+                      <div class="media">
+                        <div class="media-body">
+                          <p class="media-heading"><span class="datetime">Horário</span></p>
+                          <span class="body">
+                            {{logRotina.recurso}}
+                          </span>
+                        </div>
+                      </div>
+                    </li>
+
+                  </ul>
+
+                </div>
+              </div>
+
+
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+
+                <form name="formulario" class="form-inline" novalidate>
+                  <div class="form-group">
+                    <button class="btn btn-danger" ng-click="stropRotina()">Parar Cron</button>
+                    <button class="btn btn-primary" ng-click="rodarRotina(tempo)" ng-disabled="formulario.$invalid">Rodar Cron</button>
+                  </div>
+                </form>
+
+
+              </div>
+            </div>
+
+
+
+
+
+
+          </div>
+          <!-- /Corpo principal -->
+
+
+
+
+
+
+
+
+
+
+        </section>
+      </div>
+      <!-- /col-md-12 -->
+    </div>
+    <!-- /row -->
+  </div>
+  <!-- /Corpo -->
+</div>
+
+</div>

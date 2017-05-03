@@ -1,0 +1,146 @@
+.st-selected {
+  background: #216eff !important;
+  color: white !important;
+}
+.paragrafo {
+  padding-left: 5em;
+}
+.clicavel {
+  cursor: pointer;
+}
+.lista-animada.ng-leave-active {
+  transform: scale(0.1);
+}
+.lista-animada {
+  transition: transform 1s;
+}
+.painel.ng-enter {
+  transition: 0.7s linear all;
+  opacity: 0;
+}
+.painel.ng-enter.ng-enter-active {
+  opacity: 1;
+}
+.form-control-telefone {
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  border: 1px solid #ccc;
+  border-radius: 600px;
+}
+.form-control-telefone:focus {
+  outline: 0;
+  border-color: #22BEEF;
+}
+.background-azul-allcross {
+  background-color: #284480 !important;
+}
+.ocupa-todo-espaco-hozintal {
+  width: 100%;
+}
+.borda-Desenvolvimento {
+  border-left: 3px solid #245682;
+}
+.borda-Suporte {
+  border-left: 3px solid #16a085;
+}
+.input-group .input-group-telefone {
+  width: 50%;
+}
+.modal-slg {
+  width: 90% !important;
+}
+.modal-md {
+  width: 730px !important;
+}
+
+.input-lembrete {
+    resize: none;
+    padding: 5px;
+}
+textarea.input-lembrete {
+  text-align: justify;
+
+}
+.input-lembrete-titulo {
+  font-size: 18px;
+  font-weight: 700;
+
+}
+
+.input-lembrete-foco:focus{
+  background-color: #FFFFFF;
+  color: #000000 !important;
+
+
+}
+.input-lembrete-descricao {
+  font-size: 14px;
+}
+.pop-over {
+  background: #fff;
+  border-radius: 3px;
+  border: 1px solid #d6dadc;
+  border-bottom-color: #c4c9cc;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, .15);
+  display: block;
+  overflow: hidden;
+  position: absolute;
+  width: 300px;
+  z-index: 70;
+}
+.pop-over-header {
+  box-sizing: border-box;
+  color: #8c8c8c;
+  font-size: 14pt;
+  text-align: center;
+  line-height: 36px;
+  border-bottom: 1px solid #d6dadc;
+  margin: 0 10px;
+  padding: 0 2px;
+  overflow: hidden;
+  position: relative;
+  white-space: nowrap;
+  z-index: 1;
+}
+.pop-over-body {
+  margin-top: 10px;
+  text-align: center;
+  padding: 0px 10px 10px 10px;
+}
+
+*{margin:0;padding:0;}
+
+/* === TABELA === */
+.table-fixed thead {
+      width: 97%;
+}
+
+.table-fixed tbody {
+
+      overflow-y: auto;
+      width: 100%;
+}
+
+.table-fixed thead, .table-fixed tbody, .table-fixed tr, .table-fixed td, .table-fixed th {
+      display: block;
+}
+
+.table-fixed tbody td, .table-fixed thead > tr> th {
+      float: left;
+      border-bottom-width: 0;
+}
+/* === /TABELA === */
+
+/* === BOTÕES === */
+.botoes{
+	position: relative;
+
+}
+/* === /BOTÕES === */
+
+.fc-overlay:hover {
+  display: block !important;
+}

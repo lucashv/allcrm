@@ -1,0 +1,75 @@
+<div class="page page-full page-calendar" cg-busy="loadAgenda">
+
+
+  <div class="tbox tbox-sm">
+
+    <!-- <div class="tcol w-lg bg-tr-white lt b-r">
+
+      <div class="p-15 bg-white">
+        <button type="button" class="btn btn-greensea btn-xs mb-10 pull-right b-0" ng-click="addEvent()" uib-tooltip="Criar lembrete." tooltip-placement="bottom"><i class="fa fa-plus"></i></button>
+        <h4 class="custom-font text-default m-0">Lembretes</h4>
+      </div>
+
+      <div class="p-15" style="max-height: 650px;overflow:auto;" slimscroll="{height: '100%'}">
+        <div class="form-group">
+          <label for="pesquisar">Pesquisar</label>
+          <input type="text" id="pesquisar" class="form-control" data-ng-model="filtro.titulo" placeholder="Digite o título do lembrete." />
+        </div>
+
+        <div ng-repeat="lembrete in lembretes | filter:filtro:strict | orderBy:start track by $index " class="p-10 mb-10 event-control {{ lembrete.className}}">
+          <a href class="pull-right text-muted event-remove" data-ng-click="addEvent(lembrete, $index)" uib-tooltip="Editar"><i class="fa fa-edit"></i></a>
+          <b class="text-xs">{{ lembrete.title }}</b>
+          <p class="text-xs">{{ lembrete.info }}</p>
+          <a href class="pull-right text-muted event-remove" data-ng-click="remove($index, lembrete)" uib-tooltip="Excluir"><i class="fa fa-trash-o"></i></a>
+          <div class="text-xs text-muted">{{lembrete.start | date:"MMM dd"}} </div>
+        </div>
+
+      </div>
+
+
+    </div> -->
+
+    <div class="tcol">
+      <div class="p-15 bg-white">
+
+        <div class="pull-right">
+          <button type="button" class="btn btn-sm btn-default" ng-click="today()">Hoje</button>
+          <button type="button" class="btn btn-greensea btn-sm ml-5" ng-click="addEvent()" uib-tooltip="Criar lembrete." tooltip-placement="bottom"><i class="fa fa-plus"></i></button>
+        </div>
+        <h4 class="custom-font text-default m-0">Agenda</h4>
+
+      </div>
+
+
+      <div class="p-15">
+
+        <div class="fc-overlay">
+          <div class="panel b-solid">
+            <h4 class="text-light mt-0"><b>{{ event.title }}</b></h4>
+            <div class="b-b b-solid mb-10"></div>
+            <div class="mt-10">
+              <p>{{ event.info }}</p>
+              <p data-ng-show="event.contatoNome">{{ event.contato_id }} - {{ event.contatoNome }}</p>
+
+
+            </div>
+
+            <div class="mt-10 text-muted"><i class="icon-calendar mr-5"></i> {{ event.start._d | date:'medium' }}</div>
+
+          </div>
+        </div>
+
+        <div class="calendar bg-white" ng-model="lembretes" ui-calendar="uiConfig.calendar" calendar="calendario"></div>
+
+
+
+      </div>
+
+    </div>
+
+
+
+  </div>
+
+
+</div>

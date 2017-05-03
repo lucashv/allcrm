@@ -1,0 +1,131 @@
+<div class="page">
+
+  <div class="pageheader">
+    <div class="page-bar">
+      <ul class="page-breadcrumb ">
+        <li>
+          <a href><i class="fa fa-home"></i> CRM </a>
+        </li>
+        <li>
+          <a href> Dashboard </a>
+        </li>
+        <li>
+          <a href> Coordenador </a>
+        </li>
+      </ul>
+      <div class="page-toolbar">
+        <a href="javascript:;" class="btn btn-lightred no-border daterangepickerEvent" daterangepicker="rangeOptions" date-begin="startDate" date-end="endDate">
+          <i class="fa fa-calendar"></i>&nbsp;&nbsp;<span>{{startDate}} - {{endDate}}</span>&nbsp;&nbsp;<i class="fa fa-angle-down"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="pagecontent">
+
+    <div class="row">
+      <div class="col-md-12">
+
+        <section class="tile">
+          <div class="tile-widget bg-slategray p-10" cg-busy="load">
+            <div class="media">
+              <div class="media-body">
+                <h5 class="media-heading mb-0 mt-10">
+
+                  <p class="custom-font ">
+                    De {{startDate}} até {{endDate}}
+                  </p>
+                </h5>
+              </div>
+            </div>
+          </div>
+          <div class="tile-body p-0">
+            <div class="list-group no-radius no-border">
+              <div class="list-group-item">
+                <span class="badge badge-success">{{ relacaoTotalIndicacoes.totalQuantidadeIndicacoes }}</span>
+                <i class="fa  fa-paper-plane-o text-muted mr-5"></i> Total de Indicações Distribuídas
+              </div>
+              <div class="list-group-item">
+                <span class="badge badge-info">{{ relacaoTotalIndicacoes.totalRespondido }}</span>
+                <i class="fa fa-comments-o text-muted mr-5"></i> Total de Indicações Respondidas
+              </div>
+              <div class="list-group-item">
+                <span class="badge badge-danger">{{ relacaoTotalIndicacoes.totalEnviadoCorretor }}</span>
+                <i class="fa fa-mail-forward text-muted mr-5"></i> Total de Indicações Pendentes
+              </div>
+              <div class="list-group-item">
+                <span class="badge bg-greensea">{{ relacaoTotalIndicacoes.totalVendaEfetuada }}</span>
+                <i class="fa fa-money text-muted mr-5"></i> Total de Vendas Efetuadas
+              </div>
+              <div class="list-group-item" ng-click="solicitacoesReposicaoView()">
+                <span class="badge bg-drank">{{ solicitacoesReposicao }}</span>
+                <i class="fa fa-exchange text-muted mr-5"></i> Reposições Pendentes Aprovação
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-md-12">
+        <section class="tile simple">
+
+          <div class="tile-widget bg-slategray p-10" cg-busy="load">
+            <div class="media">
+              <div class="media-body">
+
+                <h5 class="media-heading mb-0 mt-10">
+                  <p class="custom-font ">Relação de indicações por corretores
+                  </p>
+                  <p class="custom-font ">
+                    De {{startDate}} até {{endDate}}
+                  </p>
+                </h5>
+              </div>
+            </div>
+          </div>
+
+          <!-- tile body -->
+          <div class="tile-body p-0">
+            <table class="table">
+              <tr>
+                <th>Corretor</th>
+                <th class="text-center">Recebidas</th>
+                <th class="text-center">Respondidas</th>
+                <th class="text-center">Pendentes</th>
+                <th class="text-center">Vendas</th>
+                <th class="text-center">Situação</th>
+              </tr>
+              <tr>
+                <td colspan="6">
+                  <input ng-model="filtro" ng-model-options="{debounce: 500}" type="text" class="form-control" placeholder="Pesquise pelo nome do corretor" />
+                </td>
+
+              </tr>
+              <tr ng-repeat="corretor in relacaoIndicacoesCorretor | orderBy: 'usuarioCorretor' | filter: filtro">
+                <td>{{ corretor.usuarioCorretor | capitalize : true }} </td>
+                <td class="text-center"><span class="text-success" data-ng-click="vizualizaRelatorio(null, false, corretor.idCorretor, startDate, endDate)">{{ corretor.quantidadeIndicacoes }}</span></td>
+                <td class="text-center"><span class="text-info" data-ng-click="vizualizaRelatorio(null, true, corretor.idCorretor, startDate, endDate)">{{ corretor.respondido }}</span></td>
+                <td class="text-center"><span class="text-danger" data-ng-click="vizualizaRelatorio(2, false, corretor.idCorretor, startDate, endDate)">{{ corretor.enviadoCorretor }}</span></td>
+                <td class="text-center"><span class="text-greensea" data-ng-click="vizualizaRelatorio(5, false, corretor.idCorretor, startDate, endDate)">{{ corretor.vendaEfetuada }}</span></td>
+                <td class="text-center">
+                    <i class="pull-center" ng-click="atualizaStatusCorretor(corretor)"
+                    ng-class="{'fa fa-thumbs-up text-success ': !corretor.envioBloqueado,
+                          'fa fa-thumbs-down text-danger ': corretor.envioBloqueado  }"></i>
+                </td>
+
+              </tr>
+            </table>
+          </div>
+        </section>
+      </div>
+
+
+    </div>
+
+  </div>
+</div>

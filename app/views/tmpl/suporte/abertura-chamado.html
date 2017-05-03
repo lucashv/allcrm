@@ -1,0 +1,27 @@
+<form name="formularioChamado" novalidate cg-busy="AberturaChamado.loadChamado">
+
+  <div class="modal-header">
+    <h3 class="modal-title custom-font">Suporte</h3>
+  </div>
+  <div class="modal-body">
+    <h4 class="custom-font" style="text-indent: 1em;"><p>O novo sistema de Chamados foi desenvolvido com o objetivo de facilitar as atividades na abertura e acompanhamento de chamados para os colaboradores do Grupo AllCross.<br>
+<span style="text-indent: 1em;">Efetue suas solicitações referentes a  infraestrutura <b>(Internet, Email, Impressoras)</b> ou  sistemas <b>(Crm, Simulador)</b> nesta área.</span><br>
+Aproveite e deixe aqui seu <b>feed back, sugestão, reclamação ou eleogio</b> referente ao setor de T.I.<br><br></p></h4>
+<h5><span class="text-danger">*O procedimento de abertura de chamados pelo e-mail <b>chamados@allcross.com.br</b> será <b>desativado</b> nos próximos meses.</span></h5>
+    <div class="form-group">
+      <label for="titulo">Título</label>
+      <input type="text" id="titulo" name="formularioChamado.titulo" class="form-control" data-ng-model="AberturaChamado.chamado.titulo" placeholder="Título" required>
+    </div>
+    <div>
+      <label for="descricao">Descrição</label>
+
+      <textarea id="descricao" data-ng-model="AberturaChamado.chamado.descricao" class="form-control" name="formularioChamado.descricao" placeholder="Descreva o seu problema" required></textarea>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success btn-ef btn-ef-3 btn-ef-3c" ng-click="AberturaChamado.salvar(AberturaChamado.chamado)"  data-ng-disabled="formularioChamado.$invalid">
+      <i class="fa fa-save"></i> Salvar
+    </button>
+    <button type="button" class="btn btn-lightred btn-ef btn-ef-4 btn-ef-4c" ng-click="AberturaChamado.cancelar()"><i class="fa fa-arrow-left"></i> Cancelar</button>
+  </div>
+</form>

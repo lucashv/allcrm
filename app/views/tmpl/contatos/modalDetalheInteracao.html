@@ -1,0 +1,20 @@
+          <!-- Modal interacao -->
+            <script type="text/ng-template" id="modalDetalheInteracao.html">
+              <div class="modal-header">
+                  <h3 class="modal-title custom-font">Interação</h3>
+                </div>
+                <div class="modal-body">
+                  <b>Usuário Cadastro: </b>{{modalOptions}}<br>
+                  <b>Situação: </b>{{interacao}}<br>
+                  <select ng-model="items.situacaoId" class="form-control" ng-options="situacao as situacao.descricao for situacao in situacaoList track by items.idSituacao">
+                   <option>...</option>
+                  </select>
+                  <hr>
+            </div>
+                <div class="modal-footer">
+                  <button class="btn btn-success btn-ef btn-ef-3 btn-ef-3c" ng-click="criarInteracao(intaracao)"><i class="fa fa-arrow-right"></i> Salvar</button>
+                  <button class="btn btn-lightred btn-ef btn-ef-4 btn-ef-4c" ng-click="cancel()"><i class="fa fa-arrow-left"></i> Cancelar</button>
+                </div>
+              </div>
+          </script>
+          <!-- Modal interacao -->

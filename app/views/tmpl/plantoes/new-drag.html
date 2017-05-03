@@ -1,0 +1,153 @@
+<div class="page">
+
+  <div class="pageheader">
+    <div class="page-bar">
+      <ul class="page-breadcrumb">
+        <li>
+          <a ui-sref="app.dashboard">
+            <i class="fa fa-home"></i> {{main.title}}
+          </a>
+        </li>
+        <li>
+          <a href="javascript:;">DRAG</a>
+        </li>
+        <li>
+          <a href="javascript:;">{{page.subtitle}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- fecha cabecalho-->
+  <div class="pagecontent">
+
+    <div class="row">
+
+      <div ng-repeat="plantao in plantoes" class="col-md-4">
+        <ul html-sortable="sortableOptions" ng-model='plantao.corretores' html-sortable-callback="seiLa(plantao.corretores)">
+          <li ng-repeat="corretor in plantao.corretores">
+            {{corretor.posicao}} {{corretor.usuario_corretor.nome }}
+          </li>
+        </ul>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <section class="tile">
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"><strong>Adicionar</strong> corretor ao plantão</h1>
+          </div>
+          <div class="tile-body" cg-busy="[loadingBusca, loadCorretores, loadingTiposPlantoes, loadingSalvar]">
+            <form name="formCadPlantao" role="form">
+              <div class="form-group">
+                <label>Tipo Plantão</label>
+                <select chosen="{width: '100%'}" ng-model="plantao.tipo" name="tipoPlantao" ng-options="tiposPlantoes as tiposPlantoes.tipo for tiposPlantoes in tiposPlantoesList">
+                  <option value="">Selecione o tipo do plantão</option>
+                </select>
+
+              </div>
+              <div class="form-group">
+                <label for="">Corretores</label>
+                <select chosen="{width: '100%'}" ng-model="plantao.corretor" name="corretor" ng-options="corretor as  (corretor.nome + ' ' + corretor.sobre_nome) | capitalize : true  for corretor in listaCorretores">
+                  <option value="">Corretor</option>
+                </select>
+
+              </div>
+              <div class="form-group" ng-if="plantao.tipo">
+                <labelfor="posicao">Posição</label>
+
+                  <input type="number" class="form-control" name="posicao" min="0" ng-blur="validaPosicao(plantao.posicao, plantao.tipo)" ng-model="plantao.posicao" placeholder="Posição" required />
+
+              </div>
+              <div class="form-group" ng-if="plantao.tipo">
+                <label for="ramal">Ramal</label>
+
+                <input type="number" class="form-control" name="ramal" ng-model="plantao.ramal" placeholder="Ramal" required />
+
+              </div>
+
+              <div class="form-group">
+
+
+                <button class="btn btn-danger " type="reset" ng-click="cancel()">
+                  <i class="fa fa-trash-o"></i>
+                  <span>&nbsp;&nbsp;Cancelar</span>
+                </button>
+                <button class="btn btn-success " ng-click="salvar(plantao)" ng-disabled="formCadPlantao.$invalid">
+                  <i class="fa fa-save"></i>
+                  <span>&nbsp;&nbsp;Adicionar ao Plantão </span>
+                </button>
+
+              </div>
+
+            </form>
+          </div>
+        </section>
+      </div>
+
+
+      <div class="col-md-8">
+
+        <section class="tile" cg-busy="[loadingLimpa, loadPlantao, loadDelete, loadingSalvar]">
+
+          <!-- tile header -->
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"><strong>Plantões dia: </strong>{{dataAtual}}</h1>
+          </div>
+          <!-- /tile header -->
+          <!-- tile body -->
+          <div class="tile-body">
+            <uib-tabset justified="true">
+              <uib-tab ng-repeat="plantao in plantoes" heading="{{plantao.nome}}" select="carregarPlantoes(plantao.tipo.tipoId, $index)" active="plantao.active" disable="plantao.disabled">
+                <button class="btn btn-danger" ng-click="limparPlantao($index, plantao.tipo.tipoId)" ng-if="plantao.corretores.length">
+                  <i class="fa fa-trash-o"></i>&nbsp;&nbsp;Limpar Plantão
+                </button>
+                <div class="alert alert-danger" ng-if="!plantao.corretores.length">
+                  Não existem corretores cadastrados nesse plantão.
+                </div>
+                <hr>
+                <table class="table table-hover table-condensed" ng-if="plantao.corretores.length">
+                  <thead>
+                    <th>Posição</th>
+                    <th>Corretor</th>
+                    <th>Ramal</th>
+                    <th class="text-center">Ativo</th>
+                    <th>Remover</th>
+                  </thead>
+                  <tbody>
+                    <tr class="lista-animada" ng-repeat="corretor in plantao.corretores">
+                      <td>
+                        {{corretor.posicao}}
+                      </td>
+                      <td>
+                        {{corretor.usuario_corretor.nome | capitalize:true }} <span ng-if="corretor.usuario_corretor.sobreNome">{{corretor.usuario_corretor.sobreNome | capitalize:true}}</span>
+                      </td>
+                      <td>
+                        {{corretor.ramal}}
+                      </td>
+                      <td class="text-center">
+                        <i class="fa fa-circle clicavel" ng-class=" corretor.bloqueado ?  'text-danger' : 'text-success'" ng-click="atualizaBloqueio(corretor)"></i>
+                      </td>
+                      <td>
+                        <a href="javascript:;" class="text-red" ng-click="retiraCorretorPlantao(corretor, plantao)">
+                         Remover
+                       </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </uib-tab>
+
+
+            </uib-tabset>
+
+
+          </div>
+        </section>
+      </div>
+    </div>
+
+  </div>
+</div>

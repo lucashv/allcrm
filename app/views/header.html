@@ -1,0 +1,82 @@
+<header class="clearfix">
+
+  <!-- Branding -->
+  <div class="branding {{:: main.settings.brandingColor }}">
+    <a class="brand" ui-sref="app.dashboard">
+      <span><strong>CRM</strong> AllCross</span>
+    </a>
+    <a href="javascript:;" class="offcanvas-toggle visible-xs-inline" offcanvas-sidebar><i class="fa fa-bars"></i></a>
+  </div>
+  <!-- Branding end -->
+
+
+
+  <!-- Left-side navigation -->
+  <ul class="nav-left pull-left list-unstyled list-inline">
+    <li class="sidebar-collapse divided-right">
+      <a href="javascript:;" collapse-sidebar>
+        <fa name="outdent"></fa>
+      </a>
+    </li>
+
+  </ul>
+  <!-- Left-side navigation end -->
+
+
+
+
+
+
+
+
+  <!-- Right-side navigation -->
+  <ul class="nav-right pull-right list-inline">
+
+
+    <li class="dropdown nav-profile" uib-dropdown data-ng-controller="UserCtrl as User">
+
+      <a href class="dropdown-toggle" uib-dropdown-toggle>
+
+      <i class="icon-user"></i><span>{{:: User.user.nome | capitalize:true }} <i class="fa fa-angle-down" name="angle-down"></i></span>
+      </a>
+
+      <ul class="dropdown-menu animated littleFadeInRight" role="menu">
+
+        <li>
+          <a href="">
+            <span class="badge bg-dutch pull-right">{{:: User.user.perfilLogado | capitalize:true }}</span>
+              <fa name="user"></fa>Perfil:
+          </a>
+        </li>
+        <li>
+          <a href="" ng-click="exibeChangeLog()">
+            <fa name="info-circle"></fa>Sobre
+          </a>
+        </li>
+        <li>
+          <a  href="" ng-show="User.mostraSuporte" data-ng-click="User.suporte()">
+            <i class="fa fa-question-circle"></i>Suporte
+          </a >
+        </li>
+
+        <li class="divider"></li>
+
+        <li>
+         <a href="#" ng-click="User.logout()">
+              <fa name="sign-out"></fa>Sair
+            </a>
+        </li>
+
+      </ul>
+
+    </li>
+
+
+
+
+  </ul>
+  <!-- Right-side navigation end -->
+
+
+
+</header>

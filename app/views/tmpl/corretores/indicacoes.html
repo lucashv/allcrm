@@ -1,0 +1,248 @@
+<div class="page">
+
+  <div class="pageheader">
+    <div class="page-bar">
+      <ul class="page-breadcrumb">
+        <li>
+          <a href>
+            <i class="fa fa-home"></i> CRM
+          </a>
+        </li>
+        <li>
+          <a href>Corretores</a>
+        </li>
+        <li>
+          <a href>Minhas Indicações</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pagecontent">
+
+    <div class="row">
+      <div class="col-md-12 col-sx-12">
+        <section class="tile" cg-busy="loadInteracoesContato">
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"><strong>Minhas</strong> Indicações</h1>
+          </div>
+          <div class="tile-body">
+            <div class="row">
+              <div class="form-group col-md-3">
+                <label for="dataInicio">Data Início</label>
+                <p class="input-group">
+                  <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="parametro.dataInicio" is-open="mostarCalendarioInicio.opened" datepicker-options="dateOptions" close-text="Fechar" clear-text="Limpar" current-text="Hoje" />
+                  <span class="input-group-btn">
+                  <button type="button" class="btn btn-primary" ng-click="openInicio()"><i class="fa fa-calendar"></i></button>
+                </span>
+                </p>
+              </div>
+              <div class="form-group col-md-3">
+                <label for="dataInicio">Data Fim</label>
+                <p class="input-group">
+                  <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="parametro.dataFim" is-open="mostarCalendarioFim.opened" datepicker-options="dateOptions" close-text="Fechar" clear-text="Limpar" current-text="Hoje" />
+                  <span class="input-group-btn">
+                  <button type="button" class="btn btn-primary" ng-click="openFim()"><i class="fa fa-calendar"></i></button>
+                </span>
+                </p>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="nome">Status</label>
+                <select class="form-control" ng-model="parametro.situacao" ng-options="situacao as situacao.descricao group by situacao.statusPai  for situacao in situacaoList">
+                  <option value="">Todos</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <button type="button" class="btn btn-danger btn-block" ng-click="limpar()">
+                  <i class="fa fa-trash-o"></i>
+                  <span>Limpar</span>
+                </button>
+              </div>
+              <div class="col-md-6">
+                <button type="button" ng-click="consultar(parametro)" class="btn btn-success btn-block">
+                  <i class="fa fa-search"></i>
+                  <span>Consultar</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Legenda -->
+            <div class="row">
+              <div class="col-md-5">
+                <h4 class="custom-font"><strong>Status</strong></h4>
+                <div class="list-group">
+                  <a class="list-group-item"><span class="bg-primary">Em Negociacao</span></a>
+                  <a class="list-group-item"><span class="bg-danger">Pendente</span></a>
+                  <a class="list-group-item"><span class="bg-success">Venda Efetuada</span></a>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <h4 class="custom-font"><strong>Ícones</strong></h4>
+                <div class="list-group">
+                  <a class="list-group-item "><i class="fa fa-comment  mr-5"></i> Chat</a>
+                  <a class="list-group-item "><i class="fa fa fa-user  mr-5"></i> Contato Próprio </a>
+                  <a class="list-group-item "> <i class="fa fa-phone  mr-5"></i>Ligação</a>
+                  <a class="list-group-item "> <i class="fa fa-envelope-o  mr-5"></i>Email</a>
+                </div>
+              </div>
+            </div>
+            <!-- Legenda -->
+
+
+
+          </div>
+          <!-- corpoform -->
+        </section>
+      </div>
+    </div>
+
+    <div class="row" ng-if="mostraIndicacoes">
+      <div class="col-md-4">
+        <section class="tile simple" cg-busy="loadInteracoesContato">
+
+          <div class="tile-widget bg-slategray p-10" cg-busy="load">
+            <div class="media">
+              <div class="media-body">
+                <h5 class="media-heading mb-0 mt-10">
+                  <p class="custom-font ">Indicações  {{contato.indiceContato}}
+                  </p>
+                  <p class="custom-font ">
+                    De {{parametro.dataInicio | date:'dd/MM/yyyy' }} até {{parametro.dataFim | date:'dd/MM/yyyy'}}
+                  </p>
+                </h5>
+              </div>
+            </div>
+          </div>
+
+          <!-- tile body -->
+          <div class="tile-body p-0">
+            <div class="list-group no-radius no-border">
+              <div class="list-group-item">
+                <input ng-model="filtro" ng-model-options="{debounce: 100}" type="text" class="form-control" placeholder="Pesquise no pelo nome do corretor" />
+              </div>
+
+              <div style="max-height: 350px; overflow:auto;" slimscroll="{height: '100%'}">
+                <div class="list-group-item lista-animada" ng-click="getMaisInformacoesContato(interacao.idContato, interacao)" ng-repeat="interacao in interacoes | orderBy: 'nomeContato' | filter: filtro">
+
+                  <span ng-class="corInteracao(interacao.situacaoId)">
+                      <i ng-class="iconeOrigemInteracao(interacao.idOrigemInteracao)"></i>
+                      {{interacao.idContato}} - {{interacao.nomeContato | capitalize: true}}
+                      </span>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+      </div>
+
+
+      <div class="col-md-8" ng-if="solicitadoReposicao">
+        <section class="tile">
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"><strong>Aviso</strong></h1>
+              <button type="button" ng-click="fecharMensagemSolicitadoReposicao()" class="close">×</button>
+          </div>
+          <div class="tile-body">
+            <div class="alert alert-primary">
+              Você solicitou reposição para este contato.
+            </div>
+          </div>
+        </section>
+
+
+      </div>
+
+
+
+
+      <div class="col-md-8" cg-busy="[loadInteracoesContato, loadEmails, loadTelefones]" ng-if="mostrarInteracoesContato">
+        <section class="tile">
+
+          <button class="btn btn-danger btn-ef btn-ef-3 btn-ef-3c m-10" ng-click="fechar()">
+            <i class="fa fa-times"></i> Fechar
+          </button>
+          <button class="btn btn-success btn-ef btn-ef-3 btn-ef-3c m-10" ng-click="abrirModalCadastroInteracao(interacoesContato, contato.interacaoPaiContato)">
+            <i class="fa fa-plus"></i> Criar Interação
+          </button>
+          <button class="btn btn-greensea btn-ef btn-ef-3 btn-ef-3c m-10" ng-if="filial" ng-click="geraIndicacaoPrime(interacoesContato, contato)">
+            <i class="fa fa-mail-forward"></i> Gerar Indicação Seguro
+          </button>
+          <div class="tile-header">
+            <h1><a ng-href="#app/contatos/detalhes/{{contato.contatoId}}" target="_blank">{{contato.nome | capitalize: true}}</a><h1>
+          </div>
+
+          <div class="tile-body">
+            <div class="row">
+              <div class="col-md-6">
+              <b>Email(s):</b>
+                <ul>
+                  <li ng-repeat="email in emailsContato">{{email.email}}</li>
+                </ul>
+
+              </div>
+              <div class="col-md-6">
+              <b>Telefone(s):</b>
+              <ul>
+                <li ng-repeat="telefone in telefonesContato">{{telefone.telefone}}</li>
+              </ul>
+
+              </div>
+            </div>
+            <div class="alert alert-primary lista-animada" ng-if="alertaInteracao.length">
+              <button type="button" ng-click="fecharAlertaInteracao()" class="close">×</button>
+              {{alertaInteracao}}
+            </div>
+            <table class="st-table table table-custom">
+              <thead>
+                <tr>
+                  <th>Data Interação</th>
+                  <th>Status</th>
+                  <th width="30%" >Observacação</th>
+                  <th>Corretor</th>
+                  <th>Tipo Envio</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="interacaoContato in interacoesContato">
+                  <td>{{interacaoContato.dataCadastro}}</td>
+                  <td >
+                    <span ng-show="!interacaoContato.idInteracaoPai">Cadastrada</span>
+                    <p ng-show="interacaoContato.idInteracaoPai" ng-class="
+                    {'text-danger': interacaoContato.situcao == 'Enviada ao Corretor',
+                    'text-primary': interacaoContato.situcao != 'Enviada ao Corretor' && interacaoContato.situcao != 'Venda Efetuada',
+                    'text-success': interacaoContato.situcao == 'Venda Efetuada'}">{{interacaoContato.situcao}}</p>
+                  </td>
+                  <td>{{interacaoContato.descricaoInteracao}}</td>
+                  <td>
+                    <span ng-if="interacaoContato.corretorNome">
+                      {{interacaoContato.corretorNome | capitalize: true}}
+                      <span ng-if="interacaoContato.corretorSobreNome"></span>
+                      {{interacaoContato.corretorSobreNome | capitalize: true}}
+                    </span>
+                  </td>
+                  <td>{{interacaoContato.tipoEnvio}}</td>
+                </tr>
+              </tbody>
+            </table>
+        </section>
+
+        </div>
+
+      </div>
+
+
+
+
+
+    </div>
+
+
+
+
+
+  </div>
+</div>

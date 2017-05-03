@@ -1,0 +1,39 @@
+<form name="formularioChamado" novalidate cg-busy="[DesignaTecnico.loadTecnicos]">
+
+
+  <div class="modal-header">
+
+    <div class="media">
+      <div class="media-heading">
+        <b class="text-lg">{{:: DesignaTecnico.chamado.titulo }}</b>
+        <span class="pull-right text-sm text-muted">
+            <span >{{:: DesignaTecnico.chamado.usuarioCadastro }}</span>
+        <br>
+        <span>{{:: DesignaTecnico.chamado.dataCadatro }}</span>
+        </span>
+      </div>
+      <p clas="texto-chamado">{{:: DesignaTecnico.chamado.descricao }}</p>
+    </div>
+
+  </div>
+  <div class="modal-body">
+
+    <div class="form-group">
+      <label for="fila">Técnico</label>
+      <select chosen="{width: '100%'}" id="fila" name="fila"
+       data-ng-options="tecnico as tecnico.nome for tecnico in DesignaTecnico.tecnicos"  data-ng-model="DesignaTecnico.chamado.tecnico" required>
+        <option value="">Selecione o cara!</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="observacao">Observação</label>
+      <textarea name="name" class="from-control" rows="8" cols="40" data-ng-model="DesignaTecnico.chamado.observacao"></textarea>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success btn-ef btn-ef-3 btn-ef-3c" ng-click="DesignaTecnico.salvar(DesignaTecnico.chamado)" data-ng-disabled="formularioChamado.$invalid">
+      <i class="fa fa-save"></i> Salvar
+    </button>
+    <button type="button" class="btn btn-lightred btn-ef btn-ef-4 btn-ef-4c" ng-click="DesignaTecnico.cancelar()"><i class="fa fa-arrow-left"></i> Cancelar</button>
+  </div>
+</form>

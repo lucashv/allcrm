@@ -1,0 +1,120 @@
+<form name="formularioChamado" cg-busy="[
+  InteracaoChamado.loadInteracaoChamado,
+  InteracaoChamado.loadDetalhesUsuario,
+  InteracaoChamado.loadInteracoesChamado,
+  InteracaoChamado.loadStatus
+  ]" novalidate>
+
+  <div class="modal-header">
+    <h3 class="modal-title"><a href="javascript:;" data-ng-click="InteracaoChamado.detalhesChamado(InteracaoChamado.chamado)">ID : {{:: InteracaoChamado.chamado.id  }} - {{:: InteracaoChamado.chamado.titulo }}</a></h3>
+  </div>
+  <div class="modal-body">
+
+    <uib-tabset justified="true">
+      <uib-tab heading="Chamado">
+        <div class="row">
+
+          <div class="col-md-8">
+            <div class="row">
+              <div class="col-md-5">
+                <dt class="text-sm">
+                  <dt>Usuário</dt>
+                <dd> {{ InteracaoChamado.detalhesUsuario.nomeUsuario | capitalize : true }}</dd>
+                <dt>Email</dt>
+                <dd> {{:: InteracaoChamado.detalhesUsuario.email }}</dd>
+                <dt>Cargo</dt>
+                <dd> {{ InteracaoChamado.detalhesUsuario.perfil | capitalize : true }}</dd>
+                <dt>Filial</dt>
+                <dd> {{ InteracaoChamado.detalhesUsuario.filial | capitalize : true}}</dd>
+                <dt>Telefone(s)</dt>
+                <dd> {{:: InteracaoChamado.detalhesUsuario.telefone1 }}</dd>
+                <dd> {{:: InteracaoChamado.detalhesUsuario.telefone2 }}</dd>
+                </dt>
+              </div>
+              <div class="col-md-7">
+                <h4><b>Descrição</b></h4>
+                <p clas="texto-chamado">{{:: InteracaoChamado.chamado.descricao }}</p>
+                <span class="pull-right text-sm text-muted">
+                  Data de abertura do chamado:  {{:: InteracaoChamado.chamado.dataCadatro }}
+                </span>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-md-4">
+
+            <uib-tabset justified="true" >
+              <uib-tab heading="Interagir chamado" >
+                <div class="form-group">
+                  <label for="descricao">Descrição</label>
+                  <textarea id="descricao" data-ng-model="InteracaoChamado.interacao.descricao" class="form-control" name="descricao" placeholder="Descrição da interação" required></textarea>
+                </div>
+
+              </uib-tab>
+              <uib-tab heading="Alterar detalhes chamado" disable="InteracaoChamado.desabilitaDetalhes">
+                <div class="form-group">
+                  <label for="fila">Fila</label>
+                  <select chosen="{width: '100%'}" id="fila" name="fila" data-ng-controller="FilasChamadoController as Filas" data-ng-model="InteracaoChamado.chamado.filaId" data-ng-options="fila.id as fila.fila for fila in Filas.filasChamado">
+                    <option value="">Selecione</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="situacao">Situação</label>
+                  <select chosen="{width: '100%'}" name="situacao" id="situacao" data-ng-controller="StatusChamadoController as Status" data-ng-options="situacao.id as situacao.statusChamado for situacao in Status.situacoes" data-ng-model="InteracaoChamado.chamado.statusId">
+                    <option value="">Selecione</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="tecnico">Técnico</label>
+                  <select chosen="{width: '100%'}" name="tecnico" id="tecnico" data-ng-controller="UsuarioTecnicoController as Tecnico" data-ng-options="tecnico.id as tecnico.nome for tecnico in Tecnico.tecnicos" data-ng-model="InteracaoChamado.chamado.tecnicoId">
+                    <option value="">Todos</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="categoria">Categoria</label>
+                  <select chosen="{width: '100%'}" name="categoria" id="categoria" data-ng-controller="CategoriaChamadoController as Categoria" data-ng-options="categoria.id as categoria.categoria for categoria in Categoria.categorias" data-ng-model="InteracaoChamado.chamado.categoriaId">
+                    <option value="">Todas</option>
+                  </select>
+                </div>
+
+              </uib-tab>
+
+            </uib-tabset>
+
+
+          </div>
+        </div>
+
+      </uib-tab>
+      <uib-tab heading="Interações Chamado" data-ng-click="InteracaoChamado.interacoes(InteracaoChamado.chamado, true)">
+        <div class="row bm-10">
+          <div class="col-sm-12 col-md-12">
+            <button type="button" class="btn btn-default  btn-xs pull-right" data-ng-click="InteracaoChamado.interacoes(InteracaoChamado.chamado, false)"><i class="fa fa-refresh"></i></button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-12">
+            <interacoes-chamado interacoes="InteracaoChamado.interacoesChamado" usuario="InteracaoChamado.usuarioLogado"></interacoes-chamado>
+          </div>
+        </div>
+
+
+
+
+
+      </uib-tab>
+
+    </uib-tabset>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success btn-ef btn-ef-3 btn-ef-3c" ng-click="InteracaoChamado.salvar(InteracaoChamado.chamado, formularioChamado, InteracaoChamado.interacao)">
+      <i class="fa fa-save"></i> Salvar
+    </button>
+    <button type="button" class="btn btn-lightred btn-ef btn-ef-4 btn-ef-4c" ng-click="InteracaoChamado.cancelar()"><i class="fa fa-arrow-left"></i> Cancelar</button>
+  </div>
+</form>

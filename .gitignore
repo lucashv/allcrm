@@ -1,0 +1,12 @@
+node_modules
+dist
+.tmp
+.sass-cache
+bower_components
+app/scripts/services/apiUrlService.js
+app/scripts/services/apiUrlService.js
+.idea
+index.js
+app/styles/main.css
+app/styles/main.css.map
+/nbproject/private/

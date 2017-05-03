@@ -1,0 +1,23 @@
+<div id="sidebar-wrap" ng-controller="NavCtrl">
+  <uib-accordion close-others="oneAtTime" slimscroll="{height: '100%'}">
+
+    <uib-accordion-group is-open="status.isFirstOpen">
+      <uib-accordion-heading>
+        Navegação <i class="pull-right fa" ng-class="{'fa-angle-up': status.isFirstOpen, 'fa-angle-down': !status.isFirstOpen}"></i>
+      </uib-accordion-heading>
+      <ul id="navigation" nav-collapse ripple>
+
+
+       <li ng-repeat="modulo in ::listaModulos track by $index" ui-sref-active="active" ng-click="{'open':$state.includes('{{:: modulo.moduloPaiUrl }}')}"  >
+          <a ui-sref="{{:: modulo.moduloPaiUrl }}"> <fa name="{{:: modulo.moduloPaiIcone }}"></fa><span>{{:: modulo.moduloPaiNome }}</span></a>
+          <ul ng-if="modulo.menus.length">
+              <li  ng-repeat="menu in ::modulo.menus track by menu.moduloOrdem" ui-sref-active="active">
+                <a ui-sref="{{:: menu.moduloUrl }}"><fa name="{{:: menu.moduloIcone }}"></fa>{{:: menu.moduloId }}.{{:: menu.moduloNome }}</a>
+              </li>
+          </ul>
+        </li>
+      </ul>
+
+    </uib-accordion-group>
+  </uib-accordion>
+</div>

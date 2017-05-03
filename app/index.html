@@ -1,0 +1,463 @@
+<!doctype html>
+<html ng-app="minovateApp" ng-controller="MainCtrl" class="no-js {{containerClass}}">
+
+<head>
+  <meta charset="utf-8">
+  <title>CRM AllCross</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+  <!-- Chrome, Firefox OS, Opera and Vivaldi -->
+  <meta name="theme-color" content="#284480">
+  <!-- Windows Phone -->
+  <meta name="msapplication-navbutton-color" content="#284480">
+  <!-- iOS Safari -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="#284480">
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+  <link rel="icon" href="favicon.png" />
+  <!-- build:css(.) styles/vendor.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="bower_components/angular-bootstrap-colorpicker/css/colorpicker.css" />
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+  <link rel="stylesheet" href="bower_components/angular-bootstrap-nav-tree/dist/abn_tree.css" />
+  <link rel="stylesheet" href="bower_components/chosen/chosen.min.css" />
+  <link rel="stylesheet" href="bower_components/datatables/media/css/jquery.dataTables.css" />
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="bower_components/intro.js/introjs.css" />
+  <link rel="stylesheet" href="bower_components/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css" />
+  <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
+  <link rel="stylesheet" href="bower_components/rickshaw/rickshaw.min.css" />
+  <link rel="stylesheet" href="bower_components/angular-toastr/dist/angular-toastr.css" />
+  <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.css" />
+  <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css" />
+  <link rel="stylesheet" href="bower_components/angular-ui-tree/dist/angular-ui-tree.min.css" />
+  <link rel="stylesheet" href="bower_components/animate.css/animate.css" />
+  <link rel="stylesheet" href="bower_components/bootstrap-daterangepicker/daterangepicker.css" />
+  <link rel="stylesheet" href="bower_components/leaflet-draw/dist/leaflet.draw.css" />
+  <link rel="stylesheet" href="bower_components/material-design-iconic-font/dist/css/material-design-iconic-font.css" />
+  <link rel="stylesheet" href="bower_components/morrisjs/morris.css" />
+  <link rel="stylesheet" href="bower_components/ng-table/dist/ng-table.css" />
+  <link rel="stylesheet" href="bower_components/ng-tags-input/ng-tags-input.min.css" />
+  <link rel="stylesheet" href="bower_components/ngImgCrop/compile/minified/ng-img-crop.css" />
+  <link rel="stylesheet" href="bower_components/owl-carousel/owl-carousel/owl.carousel.css" />
+  <link rel="stylesheet" href="bower_components/owl-carousel/owl-carousel/owl.theme.css" />
+  <link rel="stylesheet" href="bower_components/simple-line-icons/css/simple-line-icons.css" />
+  <link rel="stylesheet" href="bower_components/weather-icons/css/weather-icons.css" />
+  <link rel="stylesheet" href="bower_components/weather-icons/css/weather-icons.min.css" />
+  <link rel="stylesheet" href="bower_components/weather-icons/css/weather-icons-wind.css" />
+  <link rel="stylesheet" href="bower_components/weather-icons/css/weather-icons-wind.min.css" />
+  <link rel="stylesheet" href="bower_components/dragular/dist/dragular.min.css" />
+  <link rel="stylesheet" href="bower_components/magnific-popup/dist/magnific-popup.css" />
+  <link rel="stylesheet" href="bower_components/angular-busy/dist/angular-busy.css" />
+  <link rel="stylesheet" href="bower_components/fullcalendar/dist/fullcalendar.css" />
+  <!-- endbower -->
+  <!-- endbuild -->
+  <!-- build:css(.tmp) styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" type="text/css" href="styles/MyStyle.css">
+  <!-- endbuild -->
+</head>
+
+<body id="minovate" class="{{main.settings.navbarHeaderColor}} {{main.settings.activeColor}} {{containerClass}} header-fixed aside-fixed rightbar-hidden appWrapper" ng-class="{'header-fixed': main.settings.headerFixed, 'header-static': !main.settings.headerFixed, 'aside-fixed': main.settings.asideFixed, 'aside-static': !main.settings.asideFixed, 'rightbar-show': main.settings.rightbarShow, 'rightbar-hidden': !main.settings.rightbarShow}">
+
+  <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+  <!-- Application content -->
+  <div id="wrap" ui-view autoscroll="false"></div>
+
+
+
+
+  <script>
+    (function(i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function() {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-77849598-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+
+
+  <!-- build:js(.) scripts/oldieshim.js -->
+  <!--[if lt IE 9]>
+    <script src="bower_components/es5-shim/es5-shim.js"></script>
+    <script src="bower_components/json3/lib/json3.min.js"></script>
+    <![endif]-->
+  <!-- endbuild -->
+
+  <!-- build:js(.) scripts/vendor.js -->
+
+  <!-- bower:js -->
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-animate/angular-animate.js"></script>
+  <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+  <script src="bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="bower_components/angular-bootstrap-nav-tree/dist/abn_tree_directive.js"></script>
+  <script src="bower_components/chosen/chosen.jquery.min.js"></script>
+  <script src="bower_components/angular-chosen-localytics/chosen.js"></script>
+  <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+  <script src="bower_components/datatables/media/js/jquery.dataTables.js"></script>
+  <script src="bower_components/angular-datatables/dist/angular-datatables.min.js"></script>
+  <script src="bower_components/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.min.js"></script>
+  <script src="bower_components/angular-datatables/dist/plugins/colreorder/angular-datatables.colreorder.min.js"></script>
+  <script src="bower_components/angular-datatables/dist/plugins/columnfilter/angular-datatables.columnfilter.min.js"></script>
+  <script src="bower_components/angular-datatables/dist/plugins/colvis/angular-datatables.colvis.min.js"></script>
+  <script src="bower_components/angular-datatables/dist/plugins/fixedcolumns/angular-datatables.fixedcolumns.min.js"></script>
+  <script src="bower_components/angular-datatables/dist/plugins/fixedheader/angular-datatables.fixedheader.min.js"></script>
+  <script src="bower_components/angular-datatables/dist/plugins/scroller/angular-datatables.scroller.min.js"></script>
+  <script src="bower_components/angular-datatables/dist/plugins/tabletools/angular-datatables.tabletools.min.js"></script>
+  <script src="bower_components/d3/d3.js"></script>
+  <script src="bower_components/angular-file-upload/dist/angular-file-upload.min.js"></script>
+  <script src="bower_components/angular-flot/angular-flot.js"></script>
+  <script src="bower_components/angular-fontawesome/dist/angular-fontawesome.js"></script>
+  <script src="bower_components/angular-fullscreen/src/angular-fullscreen.js"></script>
+  <script src="bower_components/angular-simple-logger/dist/angular-simple-logger.js"></script>
+  <script src="bower_components/lodash/lodash.js"></script>
+  <script src="bower_components/angular-google-maps/dist/angular-google-maps.js"></script>
+  <script src="bower_components/intro.js/intro.js"></script>
+  <script src="bower_components/angular-intro.js/src/angular-intro.js"></script>
+  <script src="bower_components/angular-ipsum/dist/ipsum.min.js"></script>
+  <script src="bower_components/leaflet/dist/leaflet-src.js"></script>
+  <script src="bower_components/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
+  <script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
+  <script src="bower_components/masonry/dist/masonry.pkgd.min.js"></script>
+  <script src="bower_components/ev-emitter/ev-emitter.js"></script>
+  <script src="bower_components/imagesloaded/imagesloaded.js"></script>
+  <script src="bower_components/jquery-bridget/jquery-bridget.js"></script>
+  <script src="bower_components/angular-masonry/angular-masonry.js"></script>
+  <script src="bower_components/angular-aria/angular-aria.js"></script>
+  <script src="bower_components/angular-messages/angular-messages.js"></script>
+  <script src="bower_components/angular-material/angular-material.js"></script>
+  <script src="bower_components/moment/moment.js"></script>
+  <script src="bower_components/angular-momentjs/angular-momentjs.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.js"></script>
+  <script src="bower_components/rickshaw/rickshaw.js"></script>
+  <script src="bower_components/angular-rickshaw/rickshaw.js"></script>
+  <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+  <script src="bower_components/angular-smart-table/dist/smart-table.js"></script>
+  <script src="bower_components/angular-toastr/dist/angular-toastr.tpls.js"></script>
+  <script src="bower_components/angular-touch/angular-touch.js"></script>
+  <script src="bower_components/angular-translate/angular-translate.js"></script>
+  <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+  <script src="bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
+  <script src="bower_components/angular-translate-storage-local/angular-translate-storage-local.js"></script>
+  <script src="bower_components/angular-ui-grid/ui-grid.js"></script>
+  <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+  <script src="bower_components/angular-ui-select/dist/select.js"></script>
+  <script src="bower_components/angular-ui-tree/dist/angular-ui-tree.js"></script>
+  <script src="bower_components/angular-ui-utils/ui-utils.js"></script>
+  <script src="bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+  <script src="bower_components/flot/jquery.flot.js"></script>
+  <script src="bower_components/flot/jquery.flot.resize.js"></script>
+  <script src="bower_components/flot-spline/js/jquery.flot.spline.min.js"></script>
+  <script src="bower_components/flot.tooltip/js/jquery.flot.tooltip.js"></script>
+  <script src="bower_components/html.sortable/dist/html.sortable.js"></script>
+  <script src="bower_components/jquery.easy-pie-chart/dist/angular.easypiechart.min.js"></script>
+  <script src="bower_components/jquery.inputmask/dist/jquery.inputmask.bundle.js"></script>
+  <script src="bower_components/jquery.slimscroll/jquery.slimscroll.js"></script>
+  <script src="bower_components/jquery.slimscroll/jquery.slimscroll.min.js"></script>
+  <script src="bower_components/jquery.sparkline/index.js"></script>
+  <script src="bower_components/json3/lib/json3.js"></script>
+  <script src="bower_components/leaflet-draw/dist/leaflet.draw.js"></script>
+  <script src="bower_components/leaflet-heat/dist/leaflet-heat.js"></script>
+  <script src="bower_components/leaflet-plugins/control/Distance.js"></script>
+  <script src="bower_components/leaflet-plugins/control/Layers.Load.js"></script>
+  <script src="bower_components/leaflet-plugins/control/Permalink.js"></script>
+  <script src="bower_components/leaflet-plugins/control/Permalink.Layer.js"></script>
+  <script src="bower_components/leaflet-plugins/control/Permalink.Line.js"></script>
+  <script src="bower_components/leaflet-plugins/control/Permalink.Marker.js"></script>
+  <script src="bower_components/leaflet-plugins/layer/Icon.Canvas.js"></script>
+  <script src="bower_components/leaflet-plugins/layer/Layer.Deferred.js"></script>
+  <script src="bower_components/leaflet-plugins/layer/Marker.Rotate.js"></script>
+  <script src="bower_components/leaflet-plugins/layer/Marker.Text.js"></script>
+  <script src="bower_components/leaflet-plugins/layer/OpenStreetBugs.js"></script>
+  <script src="bower_components/leaflet-plugins/layer/vector/GPX.js"></script>
+  <script src="bower_components/leaflet-plugins/layer/vector/GPX.Speed.js"></script>
+  <script src="bower_components/leaflet-plugins/layer/vector/KML.js"></script>
+  <script src="bower_components/leaflet-plugins/layer/vector/OSM.js"></script>
+  <script src="bower_components/leaflet-plugins/layer/tile/Bing.js"></script>
+  <script src="bower_components/leaflet-plugins/layer/tile/Google.js"></script>
+  <script src="bower_components/leaflet-plugins/layer/tile/Yandex.js"></script>
+  <script src="bower_components/eve/eve.js"></script>
+  <script src="bower_components/raphael/raphael.min.js"></script>
+  <script src="bower_components/mocha/mocha.js"></script>
+  <script src="bower_components/morrisjs/morris.js"></script>
+  <script src="bower_components/ng-bs-daterangepicker/src/ng-bs-daterangepicker.js"></script>
+  <script src="bower_components/ng-table/dist/ng-table.js"></script>
+  <script src="bower_components/ng-tags-input/ng-tags-input.min.js"></script>
+  <script src="bower_components/ngImgCrop/compile/minified/ng-img-crop.js"></script>
+  <script src="bower_components/oclazyload/dist/ocLazyLoad.js"></script>
+  <script src="bower_components/owl-carousel/owl-carousel/owl.carousel.min.js"></script>
+  <script src="bower_components/textAngular/dist/textAngular-rangy.min.js"></script>
+  <script src="bower_components/textAngular/dist/textAngular-sanitize.min.js"></script>
+  <script src="bower_components/textAngular/dist/textAngular.min.js"></script>
+  <script src="bower_components/dragular/dist/dragular.min.js"></script>
+  <script src="bower_components/magnific-popup/dist/jquery.magnific-popup.js"></script>
+  <script src="bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
+  <script src="bower_components/angular-busy/dist/angular-busy.js"></script>
+  <script src="bower_components/angular-input-masks/angular-input-masks-standalone.js"></script>
+  <script src="bower_components/ngCapsLock/ng-caps-lock.js"></script>
+  <script src="bower_components/fullcalendar/dist/fullcalendar.js"></script>
+  <script src="bower_components/angular-ui-calendar/src/calendar.js"></script>
+  <!-- endbower -->
+
+  <!-- endbuild -->
+
+  <!-- build:js({.tmp,app}) scripts/app.js -->
+  <script src="scripts/locale/traducao-pt-br.js"></script>
+  <script src="scripts/app.js"></script>
+  <script src="scripts/routes.js"></script>
+  <script src="scripts/config.js"></script>
+  <script src="scripts/toastrConfig.js"></script>
+  <script src="scripts/controllers/main.js"></script>
+  <script src="scripts/controllers/nav.js"></script>
+  <script src="scripts/directives/navcollapse.js"></script>
+  <script src="scripts/directives/slimscroll.js"></script>
+  <script src="scripts/directives/sparkline.js"></script>
+  <script src="scripts/directives/collapsesidebar.js"></script>
+  <script src="scripts/directives/ripple.js"></script>
+  <script src="scripts/directives/pageloader.js"></script>
+  <script src="scripts/directives/daterangepicker.js"></script>
+  <script src="scripts/directives/tilecontrolclose.js"></script>
+  <script src="scripts/directives/tilecontroltoggle.js"></script>
+  <script src="scripts/directives/tilecontrolrefresh.js"></script>
+  <script src="scripts/directives/tilecontrolfullscreen.js"></script>
+  <script src="scripts/directives/prettyprint.js"></script>
+  <script src="scripts/directives/lazymodel.js"></script>
+  <script src="scripts/directives/activatebutton.js"></script>
+  <script src="scripts/directives/setnganimate.js"></script>
+  <script src="scripts/directives/onblurvalidation.js"></script>
+  <script src="scripts/directives/formsubmit.js"></script>
+  <script src="scripts/directives/check-toggler.js"></script>
+  <script src="scripts/directives/chart-morris.js"></script>
+  <script src="scripts/directives/gaugechart.js"></script>
+  <script src="scripts/directives/wrap-owlcarousel.js"></script>
+  <script src="scripts/directives/todofocus.js"></script>
+  <script src="scripts/directives/todoescape.js"></script>
+  <script src="scripts/directives/clock.js"></script>
+  <script src="scripts/directives/active-toggle.js"></script>
+  <script src="scripts/directives/vector-map.js"></script>
+  <script src="scripts/directives/anchor-scroll.js"></script>
+  <script src="scripts/directives/offcanvas-sidebar.js"></script>
+  <script src="scripts/directives/submitvalidate.js"></script>
+  <script src="scripts/directives/native-tab.js"></script>
+  <script src="scripts/directives/tilecontrollightbox.js"></script>
+
+  <script src="scripts/vendaProdutoContato/services/vendaProdutoContatoService.js"></script>
+  <script src="scripts/vendaProdutoContato/recurso/recrusoVendaProdutoContato.js"></script>
+
+  <script src="scripts/autorizacaoReposicao/resources/autorizacaoReposicaoResource.js"></script>
+  <script src="scripts/autorizacaoReposicao/services/autorizacaoReposicaoService.js"></script>
+  <script src="scripts/autorizacaoReposicao/services/recursoAutorizacaoReposicao.js"></script>
+
+  <script src="scripts/categoriaChamado/controllers/categoriaChamadoController.js"></script>
+  <script src="scripts/categoriaChamado/resources/categoriaChamadoResource.js"></script>
+  <script src="scripts/categoriaChamado/services/categoriaChamadoService.js"></script>
+
+
+  <script src="scripts/cache/services/cacheService.js"></script>
+
+  <script src="scripts/statusChamado/controllers/statusChamadoController.js"></script>
+  <script src="scripts/statusChamado/resources/statusChamadoResource.js"></script>
+  <script src="scripts/statusChamado/services/statusChamadoService.js"></script>
+
+  <script src="scripts/suporte/controllers/aberturaDeChamadoController.js"></script>
+  <script src="scripts/suporte/controllers/chamadosController.js"></script>
+  <script src="scripts/suporte/controllers/designaFilaChamadoController.js"></script>
+  <script src="scripts/suporte/controllers/designaTecnicoChamadoController.js"></script>
+  <script src="scripts/suporte/controllers/detalhesChamadoController.js"></script>
+  <script src="scripts/suporte/controllers/meusChamadosController.js"></script>
+  <script src="scripts/suporte/controllers/interacaoChamadoController.js"></script>
+  <script src="scripts/suporte/controllers/meusChamadosController.js"></script>
+  <script src="scripts/suporte/controllers/newChamadoController.js"></script>
+  <script src="scripts/suporte/controllers/novosChamadosController.js"></script>
+
+
+  <script src="scripts/suporte/recursos/recursoChamado.js"></script>
+  <script src="scripts/suporte/recursos/recursoInteracaoChamado.js"></script>
+  <script src="scripts/suporte/recursos/recursoModalSuporte.js"></script>
+
+
+  <script src="scripts/suporte/services/chamadoService.js"></script>
+
+
+
+  <script src="scripts/contatos/controllers/criarInteracaoController.js"></script>
+  <script src="scripts/contatos/controllers/criarLembreteController.js"></script>
+  <script src="scripts/contatos/controllers/detalhesContatoController.js"></script>
+  <script src="scripts/contatos/controllers/devolverIndicacaoPrimeController.js"></script>
+  <script src="scripts/contatos/controllers/editarContatoController.js"></script>
+  <script src="scripts/contatos/controllers/editarInteracaoController.js"></script>
+  <script src="scripts/contatos/controllers/enviar.js"></script>
+  <script src="scripts/contatos/controllers/gerarIndicacaoPrimeController.js"></script>
+  <script src="scripts/contatos/controllers/newController.js"></script>
+  <script src="scripts/contatos/controllers/preCasdastroController.js"></script>
+  <script src="scripts/contatos/controllers/reentradaController.js"></script>
+  <script src="scripts/contatos/controllers/relatorioController.js"></script>
+  <script src="scripts/contatos/controllers/relatorioEnvioController.js"></script>
+  <script src="scripts/dashboard/modalContatosBloqueando.js"></script>
+
+
+  <script src="scripts/contatos/recurso/contatoResource.js"></script>
+  <script src="scripts/contatos/recurso/recursoContatosProdutos.js"></script>
+
+  <script src="scripts/contatos/services/contatoService.js"></script>
+  <script src="scripts/contatos/services/contatosProdutosService.js"></script>
+  <script src="scripts/contatos/services/preCadastroService.js"></script>
+  <script src="scripts/contatos/controllers/ModalDetalhesContato.js"></script>
+
+
+
+  <script src="scripts/cookie/service/cookieService.js"></script>
+
+  <script src="scripts/coordenador/autorizaReposicaoController.js"></script>
+  <script src="scripts/reposicao/modalValidaReposicao.js"></script>
+  <script src="scripts/reposicao/relatorioReposicaoController.js"></script>
+  <script src="scripts/coordenador/distribuicaoIndicacao.js"></script>
+
+
+
+  <script src="scripts/corretores/controllers/agendaController.js"></script>
+  <script src="scripts/corretores/controllers/indicacoesController.js"></script>
+  <script src="scripts/corretores/controllers/cadastroLembreteController.js"></script>
+  <script src="scripts/corretores/controllers/reposicaoController.js"></script>
+  <script src="scripts/corretores/recurso/recursoModalCorretores.js"></script>
+  <script src="scripts/corretores/corretores.js"></script>
+  <script src="scripts/corretores/corretoresComboService.js"></script>
+  <script src="scripts/corretores/corretoresService.js"></script>
+  <script src="scripts/corretores/modalConfirmacao.js"></script>
+  <script src="scripts/corretores/novoContatoController.js"></script>
+  <script src="scripts/corretores/relatorioIndicacoes.js"></script>
+  <script src="scripts/corretores/relatorioPrime.js"></script>
+  <script src="scripts/corretores/tarefasAgendadasController.js"></script>
+
+
+
+  <script src="scripts/dashboard/coordenadorController.js"></script>
+  <script src="scripts/dashboard/corretorController.js"></script>
+  <script src="scripts/dashboard/gestorNacional.js"></script>
+  <script src="scripts/dashboard/gestorNacionalService.js"></script>
+
+  <script src="scripts/diretivas/autoCompleteContato.js"></script>
+  <script src="scripts/diretivas/chamadoTemplate.js"></script>
+  <script src="scripts/diretivas/contatoTemplate.js"></script>
+  <script src="scripts/diretivas/filasChamado.js"></script>
+  <script src="scripts/diretivas/interacoesChamado.js"></script>
+
+  <script src="scripts/emails/emailsService.js"></script>
+  <script src="scripts/emails/validaEmailService.js"></script>
+
+  <script src="scripts/filasChamado/controllers/filasChamadoController.js"></script>
+  <script src="scripts/filasChamado/resources/filasChamadoResource.js"></script>
+  <script src="scripts/filasChamado/services/filasChamadoService.js"></script>
+
+  <script src="scripts/filiais/filiaisService.js"></script>
+
+  <script src="scripts/filters/captalize.js"></script>
+  <script src="scripts/filters/telefone.js"></script>
+
+  <script src="scripts/fornecedores/fornecedores.js"></script>
+  <script src="scripts/fornecedores/fornecedoresService.js"></script>
+
+  <script src="scripts/html.sortable/html.sortable.angular.min.js"></script>
+
+  <script src="scripts/interacoes/interacoesService.js"></script>
+  <script src="scripts/interacoes/interacoes.js"></script>
+
+  <script src="scripts/ligacoes/ligacoes.js"></script>
+  <script src="scripts/ligacoes/new.js"></script>
+  <script src="scripts/ligacoes/relatorio.js"></script>
+  <script src="scripts/ligacoes/ligacaoInformacaoService.js"></script>
+
+  <script src="scripts/login/login.js"></script>
+  <script src="scripts/login/loginService.js"></script>
+
+  <script src="scripts/modal/recursoModal.js"></script>
+
+  <script src="scripts/montaParametro/services/montaParametroService.js"></script>
+
+  <script src="scripts/operadoras/recursos/recursoOperadoras.js"></script>
+  <script src="scripts/operadoras/operadorasService.js"></script>
+
+  <script src="scripts/outrasOrigens/outrasOrigensService.js"></script>
+  <script src="scripts/outrasOrigens/recursoOrigensInteracoes.js"></script>
+
+  <script src="scripts/plantoes/modalCriarPlantao.js"></script>
+  <script src="scripts/plantoes/new.js"></script>
+  <script src="scripts/plantoes/new-drag.js"></script>
+  <script src="scripts/plantoes/plantoes.js"></script>
+  <script src="scripts/plantoes/plantoesService.js"></script>
+
+  <script src="scripts/prime-broker/enviar.js"></script>
+
+  <script src="scripts/produtos/produtosService.js"></script>
+
+  <script src="scripts/reposicao/solicitacoes.js"></script>
+  <script src="scripts/reposicao/solicitacoesReposicaoService.js"></script>
+
+  <script src="scripts/services/aclService.js"></script>
+  <script src="scripts/services/apiInterceptor.js"></script>
+  <script src="scripts/services/apiUrlService.js"></script>
+  <script src="scripts/services/authService.js"></script>
+  <script src="scripts/services/dateService.js"></script>
+  <script src="scripts/services/emailErrorsService.js"></script>
+  <script src="scripts/services/enviaEmailService.js"></script>
+  <script src="scripts/services/filterService.js"></script>
+  <script src="scripts/services/modalService.js"></script>
+  <script src="scripts/services/storageService.js"></script>
+
+  <script src="scripts/sites/sitesService.js"></script>
+
+  <script src="scripts/situacoesInteracao/SituacoesInteracoesService.js"></script>
+  <script src="scripts/situacoesInteracao/statusComboService.js"></script>
+
+  <script src="scripts/telefones/recurso/recursoOperadorasTelefones.js"></script>
+  <script src="scripts/telefones/recurso/recursoTelefonesContato.js"></script>
+  <script src="scripts/telefones/services/operadorasTelefonesService.js"></script>
+  <script src="scripts/telefones/services/telefonesService.js"></script>
+  <script src="scripts/telefones/services/validaTelefoneService.js"></script>
+
+  <script src="scripts/tiposEnvios/tiposEnviosService.js"></script>
+
+  <script src="scripts/tiposLigacoes/tiposLigacoesService.js"></script>
+
+  <script src="scripts/tiposPlantoes/tiposPlantoesService.js"></script>
+
+
+  <script src="scripts/tiposPropostasOperadoras/tipoPropostasOperadorasService.js"></script>
+
+  <script src="scripts/user/controllers/usuariosController.js"></script>
+  <script src="scripts/user/controllers/usuarioTecnicoController.js"></script>
+  <script src="scripts/user/recurso/recursoUsuarios.js"></script>
+  <script src="scripts/user/user.js"></script>
+  <script src="scripts/user/service/userService.js"></script>
+
+  <script src="scripts/usuarioAgenda/resources/usuarioAgendaResource.js"></script>
+  <script src="scripts/usuarioAgenda/services/usuarioAgendaService.js"></script>
+
+  <script src="scripts/info/changeLogService.js"></script>
+  <script src="scripts/info/changeLogController.js"></script>
+
+  <script src="scripts/contatoCorretorBloqueio/contatoCorretorBloqueioService.js"></script>
+
+
+  <script src="scripts/fullcalendar/pt-br.js"></script>
+
+
+
+  <!-- endbuild -->
+</body>
+
+</html>

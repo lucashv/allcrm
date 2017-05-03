@@ -1,0 +1,91 @@
+<form name="formulario" class="fundo-lembrete" novalidate>
+
+
+  <div class="modal-body" cg-busy="[vm.loadLembrete, vm.loadContato]">
+
+
+
+    <div class="row">
+      <div class="col-md-8">
+
+
+          <div class="form-group">
+            <input ng-model="vm.lembrete.title" class="form-control input-lembrete-titulo" placeholder="Título">
+
+          </div>
+          <div class="form-group">
+
+            <textarea ng-model="vm.lembrete.info" class="form-control " rows="5" placeholder="Descrição"></textarea>
+          </div>
+
+        <div class="form-group" data-ng-if="vm.contato">
+          <h5><a data-ng-click="vm.cancelar()" ng-href="#app/contatos/detalhes/{{vm.contato.idContato}}" target="_blank">{{ vm.contato.idContato }} - {{ vm.contato.nome }}</a></h5>
+        </div>
+        <div class="form-group">
+          <div style="width:25%;" class=" p-10 {{ vm.lembrete.className }}"></div>
+
+        </div>
+
+        <div class="form-group">
+
+          <div class="input-group">
+            <input type="text" class="form-control" uib-datepicker-popup="{{:: vm.format }}" ng-model="vm.lembrete.start" is-open="vm.calendario.opened" datepicker-options="vm.dateOptions" close-text="Fechar" clear-text="Limpar" current-text="Hoje" placeholder="Data"
+                required/>
+            <div class="input-group-btn">
+              <button type="button" class="btn btn-primary" ng-click="vm.openCalendario()">
+                <i class="fa fa-calendar"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+      </div>
+      <div class="col-md-4">
+        <h4 class="text-center"><b>Mais opções</b></h4>
+        <ul class="list-group">
+          <button type="button" class="list-group-item mt-5" data-ng-click="vm.exibirCor(!vm.exibeTabelaCores)"><b>Cor do lembrete</b></button>
+          <button type="button" class="list-group-item mt-5" data-ng-click="vm.exibirContatos(!vm.exibeContatos)"><b>Adicionar contato</b></button>
+        </ul>
+
+        <div>
+          <div class="pop-over" ng-if="vm.exibeTabelaCores">
+            <div class="pop-over-header">
+              Cor do lembrete
+              <button type="button" data-ng-click="vm.fecharOpcoes()" class="close">×</button>
+            </div>
+            <div class="pop-over-body">
+              <div class="wh30 m-5 inline-block {{classe.class}}" data-ng-click="vm.setClassCartao(classe, vm.lembrete)" data-ng-repeat="classe in vm.class">
+
+              </div>
+            </div>
+          </div>
+          <div class="pop-over" ng-if="vm.exibeContatos">
+            <div class="pop-over-header">
+              Contatos
+              <button type="button" data-ng-click="vm.fecharOpcoes()" class="close">×</button>
+            </div>
+            <div class="pop-over-body">
+              <auto-complete-contato contato="vm.contato" exibe="vm.exibeContatos"></auto-complete-contato>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+    </div>
+
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success btn-ef btn-ef-3 btn-ef-3c" data-ng-click="vm.salvar(vm.lembrete, vm.contato)" data-ng-disabled="formulario.$invalid">
+      <i class="fa fa-save"></i> Salvar
+    </button>
+    <button class="btn btn-lightred btn-ef btn-ef-4 btn-ef-4c" ng-click="vm.cancelar()"> <i class="fa fa-arrow-left"></i>Cancelar</button>
+
+  </div>
+</form>

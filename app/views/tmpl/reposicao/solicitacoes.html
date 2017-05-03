@@ -1,0 +1,158 @@
+<div class="page">
+  <!-- page header -->
+  <div class="pageheader">
+    <div class="page-bar">
+      <ul class="page-breadcrumb">
+        <li>
+          <a ui-sref="app.dashboard">
+            <i class="fa fa-home"></i> CRM
+          </a>
+        </li>
+        <li>
+          <a href="javascript:;">Reposições</a>
+        </li>
+        <li>
+          <a>Solicitações de Reposição</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- /page header -->
+  <!-- table -->
+
+
+
+  <div class="pagecontent">
+    <div class="row hidden-print">
+      <div class="col-md-12">
+        <section class="tile" cg-busy="load">
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"><strong>Solicitações</strong> de Reposição</h1>
+          </div>
+          <div class="tile-body">
+
+            <div class="row">
+              <div class="form-group col-md-3">
+                <label for="dataInicio">Data Início</label>
+                <p class="input-group">
+                  <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="parametro.dataInicio" is-open="mostarCalendarioInicio.opened" datepicker-options="dateOptions" close-text="Fechar" clear-text="Limpar" current-text="Hoje" />
+                  <span class="input-group-btn">
+                  <button type="button" class="btn btn-primary" ng-click="openCalendarioInicio()"><i class="fa fa-calendar"></i></button>
+                </span>
+                </p>
+              </div>
+              <div class="form-group col-md-3">
+                <label for="dataInicio">Data Fim</label>
+                <p class="input-group">
+                  <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="parametro.dataFim" is-open="mostarCalendarioFim.opened" datepicker-options="dateOptions" close-text="Fechar" clear-text="Limpar" current-text="Hoje" />
+                  <span class="input-group-btn">
+                  <button type="button" class="btn btn-primary" ng-click="openCalendarioFim()"><i class="fa fa-calendar"></i></button>
+                </span>
+                </p>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <button type="button" class="btn btn-danger btn-block" ng-click="limpar()">
+                  <i class="fa fa-trash-o"></i>
+                  <span>Limpar</span>
+                </button>
+              </div>
+              <div class="col-md-6">
+                <button type="button" ng-click="consultar(parametro)" class="btn btn-success btn-block">
+                  <i class="fa fa-search"></i>
+                  <span>Consultar</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+          <!-- corpoform -->
+        </section>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <section class="tile" cg-busy="load" ng-if="mostraSolicitacoes">
+          <div class="tile-body">
+            <table st-table="solicitacoesInteracoes" st-safe-src="solicitacoes" class="table table-striped">
+              <thead>
+                <tr>
+                  <th st-sort="contato_id" class="sorting" st-sort-default>Id</th>
+                  <th st-sort="nome" class="sorting">Contato</th>
+                  <th st-sort="corretor" class="sorting">Corretor</th>
+                  <th st-sort="dataDaSolicitacao" class="sorting">Data da Solicitação</th>
+                  <th>Ações</th>
+                </tr>
+                <tr class="hidden-print">
+                  <th colspan="4">
+                    <div class="form-group">
+                      <label for="pesquise">Pesquise</label>
+                      <input id="pesquise" type="text" class="form-control" st-search placeholder="Pesquise no relatório" />
+                    </div>
+                  </th>
+                  <th colspan="1">
+                    <div class="form-group">
+                      <label>Intens por página</label>
+                      <select class="form-control" ng-model="itemsByPage">
+                        <option value="5">5</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="{{tamanhoArray}}">Todos</option>
+                      </select>
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="solicitacao in solicitacoes">
+                  <td>
+                    <a data-ytta-id="-" ng-href="#app/contatos/detalhes/{{solicitacao.contatoId}}">{{solicitacao.contatoId}}</a>
+                  </td>
+                  <td>
+                    {{solicitacao.contatoNome | capitalize:true}}
+                  </td>
+                  <td>
+                    {{solicitacao.corretorNome | capitalize:true }}
+                  </td>
+                  <td>{{solicitacao.dataSolicitacao }}</td>
+                  <td>
+
+                    <button type="button" ng-click="aprovaSolicitacao(true,solicitacao)" class="btn btn-success ">
+                      <i class=" fa fa-thumbs-o-up"></i>
+                      <span>Aprova</span>
+                    </button>
+
+
+                    <button type="button" ng-click="aprovaSolicitacao(false,solicitacao)" class="btn btn-danger">
+                      <i class=" fa fa-thumbs-o-down"></i>
+                      <span>Reprova</span>
+                    </button>
+
+                  </td>
+
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr class="text-center hidden-print">
+                  <td colspan="11">
+                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="50"></div>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+
+          </div>
+        </section>
+      </div>
+    </div>
+
+
+
+
+
+  </div>
+</div>

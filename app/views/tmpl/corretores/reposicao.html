@@ -1,0 +1,179 @@
+<div class="page">
+  <!-- page header -->
+  <div class="pageheader">
+    <div class="page-bar">
+      <ul class="page-breadcrumb">
+        <li>
+          <a ui-sref="app.dashboard">
+            <i class="fa fa-home"></i> {{main.title}}
+          </a>
+        </li>
+        <li>
+          <a href="javascript:;">Reposições</a>
+        </li>
+        <li>
+          <a>{{page.subtitle}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- /page header -->
+  <!-- table -->
+
+  <div class="pagecontent">
+    <div class="row hidden-print">
+      <div class="col-md-12">
+        <section class="tile" cg-busy="[loadCorretores, loadSolicitacaoReposicao,loadAprovaReposicao]">
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"><strong>Minhas </strong> solicitaçoes de reposição</h1>
+            <!-- <button type="button" class="btn btn-default" ng-click="aprovaSolicitacao()">Abrir modal confirmação</button> -->
+          </div>
+          <div class="tile-body">
+
+            <div class="row">
+              <div class="form-group col-sm-1">
+                <label class="" for="id">Id</label>
+                <input type="number" id="id" class="form-control" placeholder="Contato Id" ng-model="parametro.idContato" min="1" />
+              </div>
+              <div class="form-group col-md-3">
+                <label for="dataInicio">Data Início</label>
+                <p class="input-group">
+                  <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="parametro.dataInicio" is-open="mostarCalendarioInicio.opened" datepicker-options="dateOptions" close-text="Fechar" clear-text="Limpar" current-text="Hoje" />
+                  <span class="input-group-btn">
+                  <button type="button" class="btn btn-primary" ng-click="openCalendarioInicio()"><i class="fa fa-calendar"></i></button>
+                </span>
+                </p>
+              </div>
+              <div class="form-group col-md-3">
+                <label for="dataInicio">Data Fim</label>
+                <p class="input-group">
+                  <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="parametro.dataFim" is-open="mostarCalendarioFim.opened" datepicker-options="dateOptions" close-text="Fechar" clear-text="Limpar" current-text="Hoje" />
+                  <span class="input-group-btn">
+                  <button type="button" class="btn btn-primary" ng-click="openCalendarioFim()"><i class="fa fa-calendar"></i></button>
+                </span>
+                </p>
+              </div>
+              <div class="form-group col-md-4">
+                <label>Situação</label>
+                <select chosen="{width: '100%'}" class="form-control" ng-model="parametro.situaco">
+                  <option value="">Todos</option>
+                  <option value="1">Autorizadas</option>
+                  <option value="0">Negadas</option>
+                  <option value="2">Pendentes</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <button type="button" class="btn btn-danger btn-block" ng-click="limpar()">
+                  <i class="fa fa-trash-o"></i>
+                  <span>Limpar</span>
+                </button>
+              </div>
+              <div class="col-md-6">
+                <button type="button" ng-click="consultar(parametro)" class="btn btn-success btn-block">
+                  <i class="fa fa-search"></i>
+                  <span>Consultar</span>
+                </button>
+              </div>
+            </div>
+
+
+          </div>
+          <!-- corpoform -->
+        </section>
+      </div>
+    </div>
+    <div class="row" ng-if="mostraSolicitacoes" >
+      <div class="col-md-12">
+        <section class="tile" cg-busy="loadSolicitacaoReposicao">
+          <!-- tile header -->
+          <div class="tile-header dvd dvd-btm hidden-print">
+            <h1 class="custom-font"><strong>Reposições</strong></h1>
+          </div>
+          <div class="tile-body">
+                <p><b>Reposições a Receber: </b><span class="custom-font">{{:: qtdReposicoes }}</span></p>
+                <table class="table" cg-busy="[loadCorretores, loadSolicitacoesAgrupadas, loadSolicitacoes]">
+                  <thead>
+                    <tr>
+                      <th class="text-center">ID</th>
+                      <th class="text-center">Contato</th>
+                      <th class="text-center">Data Solicitacao</th>
+                      <th class="text-center">Primeira Avaliação </th>
+                      <th class="text-center">Autorizada?</th>
+                      <th class="text-center">Observação</th>
+                      <th class="text-center">Avaliação Gestor</th>
+                      <th class="text-center">Data Avaliação Gestor</th>
+                      <th class="text-center">Autorizada Gestor</th>
+                      <th class="text-center">Contato Pagamento</th>
+                    </tr>
+
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="solicitacao in solicitacoes | orderBy : 'contatoNome' | filter: resultado.corretorId">
+                      <td class="text-center">{{::solicitacao.contatoId }}</td>
+                      <td class="text-center">{{ solicitacao.contatoNome | capitalize: true }}</td>
+                      <td class="text-center">{{:: solicitacao.dataSolicitacao }}</td>
+                      <td class="text-center">
+                        <span ng-if="solicitacao.dataPrimeiraAvaliacao"> {{:: solicitacao.dataPrimeiraAvaliacao }} </span>
+                        <span ng-if="!solicitacao.dataPrimeiraAvaliacao" class="text-info">Pendente Avaliação</span>
+                      </td>
+                      <td>
+                        <div class="text-center">
+                          <span ng-class="
+                          { 'text-success' :  solicitacao.primeiraAvaliaca == '1' ,
+                            'text-danger'  :  solicitacao.primeiraAvaliaca == '0' }">
+                              <span ng-if="solicitacao.primeiraAvaliaca == '1' ">
+                                <i class="fa fa-check-circle"></i>
+                              </span>
+                              <span ng-if="solicitacao.primeiraAvaliaca == '0' ">
+                                <i class="fa fa-ban"></i>
+                              </span>
+                          </span>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        <span ng-if="solicitacao.observacaoPrimeiraAvaliacao"> {{:: solicitacao.observacaoPrimeiraAvaliacao }} </span>
+                        <span ng-if="!solicitacao.observacaoPrimeiraAvaliacao" class="text-info">Pendente Avaliação</span>
+                      </td>
+                      <td class="text-center">
+                        <span ng-if="solicitacao.primeiraAvaliaca == '1'"> {{:: solicitacao.observacaoSegundaAValiacao }} </span>
+                        <span ng-if="!solicitacao.observacaoSegundaAValiacao  == '1'"><i class="fa fa-ban text-danger"></i></span>
+                      </td>
+                      <td class="text-center">
+                        <span ng-if="solicitacao.dataSegundaAvaliacao != null"> {{:: solicitacao.dataSegundaAvaliacao }} </span>
+                        <span ng-if="solicitacao.dataSegundaAvaliacao == null">
+                          <i class="fa fa-ban text-danger"></i>
+                        </span>
+                      </td>
+                        <td class="text-center">
+                          <div class="text-center">
+                            <span ng-class="
+                            { 'text-success' :  solicitacao.autorizadoGestor == '1' ,
+                              'text-danger'  :  solicitacao.autorizadoGestor == '0' }">
+                                <span ng-if="solicitacao.autorizadoGestor == '1' ">
+                                  <i class="fa fa-check-circle"></i>
+                                </span>
+                                <span ng-if="solicitacao.autorizadoGestor == '0' ">
+                                  <i class="fa fa-ban"></i>
+                                </span>
+                            </span>
+                          </div>
+                        </td>
+                        <td class="text-center">
+                        <span ng-if="solicitacao.contatoPagamento"> <a class="link" ng-href="#app/contatos/detalhes/{{:: solicitacao.contatoPagamento }}">{{:: solicitacao.contatoPagamento }}</a></span>
+                        <span ng-if="!solicitacao.contatoPagamento">  <i class="fa fa-ban text-danger"></i> </span>
+                      </td>
+                    </tr>
+                  </tbody>
+
+                </table>
+
+          </div>
+        </section>
+      </div>
+    </div>
+
+
+  </div>
+</div>

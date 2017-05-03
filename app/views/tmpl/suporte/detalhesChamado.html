@@ -1,0 +1,117 @@
+<div class="page">
+  <!-- page header -->
+  <div class="pageheader">
+    <div class="page-bar">
+      <ul class="page-breadcrumb">
+        <li>
+          <a href="javascript:;">
+            <i class="fa fa-home"></i> CRM
+          </a>
+        </li>
+        <li>
+          <a href="javascript:;">Suporte</a>
+        </li>
+        <li>
+          <a href="javascript:;">Detalhes Chamado</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-content">
+
+
+
+
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12">
+        <section class="tile time-simple" cg-busy="[DetalhesChamado.loadDetalhesUsuario, DetalhesChamado.loadDetalhesChamado]">
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"><strong>Detalhes do </strong> Chamado</h1>
+          </div>
+
+          <div class="tile-body">
+            <div class="row">
+              <div class="col-md-9">
+                <p class="text-default lt">Aberto em: {{:: DetalhesChamado.chamado.dataCadatro }}</p>
+                <h3 class="text-uppercase text-strong mt-10 ">{{:: DetalhesChamado.chamado.titulo}}</h3>
+                <p class="mt-0 mb-20">{{:: DetalhesChamado.chamado.descricao }}</p>
+              </div>
+              <div class="col-md-3">
+
+              </div>
+            </div>
+            <div class="row b-t pt-20">
+              <div class="col-md-3 b-r">
+                <p class="text-uppercase text-strong mb-10 custom-font">Outros detalhes</p>
+                <ul class="list-unstyled text-default lt mb-20">
+                  <li><strong>ID:</strong> {{:: DetalhesChamado.chamado.id }}</li>
+                  <li><strong>Situação:</strong> {{:: DetalhesChamado.chamado.statusChamado }}</li>
+                  <li><strong>Fila:</strong> {{:: DetalhesChamado.chamado.fila }}</li>
+                  <li><strong>Técnico:</strong> {{:: DetalhesChamado.chamado.usuarioTecnico }}</li>
+                </ul>
+              </div>
+              <div class="col-md-6 b-r">
+                <p class="text-uppercase text-strong mb-10 custom-font">Informações do usuário</p>
+                <ul class="list-unstyled text-default lt mb-20">
+                  <li><strong>Nome:</strong> {{ DetalhesChamado.detalhesUsuario.nomeUsuario }}</li>
+                  <li><strong>Filial:</strong> {{ DetalhesChamado.detalhesUsuario.filial }}</li>
+                  <li><strong>Telefone:</strong> {{ DetalhesChamado.detalhesUsuario.telefone1 }}</li>
+                  <li><strong>Email:</strong>{{ DetalhesChamado.detalhesUsuario.email }}</li>
+                </ul>
+              </div>
+            </div>
+            <div class="row" data-ng-if="DetalhesChamado.exibeBtnInteracao">
+              <div class="col-md-12">
+                <button type="button" class="btn btn-success btn-ef btn-ef-3 btn-ef-3c m-10 hidden-print" data-ng-click="DetalhesChamado.interagir(DetalhesChamado.chamado)">
+                  <i class="fa fa-plus"></i> Criar Interação
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-7">
+        <section class="tile" cg-busy="DetalhesChamado.loadInteracoesChamado">
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"><strong>Interações do </strong> Chamado</h1>
+          </div>
+          <div class="tile-body">
+            <interacoes-chamado interacoes="DetalhesChamado.interacoesChamado" usuario="DetalhesChamado.usuarioLogado"></interacoes-chamado>
+
+          </div>
+
+        </section>
+      </div>
+      <div class="col-md-5">
+        <section class="tile" cg-busy="DetalhesChamado.loadStatus" ng-if="DetalhesChamado.solicitarHomologacao">
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"><strong>Homologação do </strong> Chamado</h1>
+          </div>
+          <div class="tile-body">
+            <p>O técnico que estava atendendo o chamado solicitou a sua homologação.</p>
+            <p><b>O seu chamado foi atendido?</b></p>
+            <form name="formulario">
+              <div class="form-group">
+                <label for="descricao"> <b>Observação:</b></label>
+                <textarea name="name" class="form-control" id="descricao" rows="4"
+                  placeholder="Deixe a sua observação sobre o atendimento."
+                  data-ng-model="DetalhesChamado.interacao.descricao">
+                </textarea>
+              </div>
+              <div class="form-group">
+                <button type="button" class="btn btn-success" data-ng-click="DetalhesChamado.homologarChamado(DetalhesChamado.chamado, 5, DetalhesChamado.interacao)" name="button"><i class="fa fa-thumbs-o-up mr-5"></i>Sim</button>
+                <button type="button" class="btn btn-danger" data-ng-click="DetalhesChamado.homologarChamado(DetalhesChamado.chamado, 6, DetalhesChamado.interacao)" name="button"><i class="fa fa-thumbs-o-down mr-5"></i>Não</button>
+              </div>
+            </form>
+          </div>
+        </section>
+      </div>
+    </div>
+
+  </div>
+</div>

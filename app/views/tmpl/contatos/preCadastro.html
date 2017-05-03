@@ -1,0 +1,115 @@
+<!--Form cadastro -->
+<div class="page page-forms-common">
+  <!-- page header -->
+  <div class="pageheader">
+    <div class="page-bar">
+      <ul class="page-breadcrumb">
+        <li>
+          <a ui-sref="app.dashboard">
+            <i class="fa fa-home"></i> {{main.title}}
+          </a>
+        </li>
+        <li>
+          <a href="javascript:;">Contatos</a>
+        </li>
+        <li>
+          <a ui-sref="app.contatos.preCadastro">{{page.subtitle}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- table -->
+  <div class="pagecontent">
+
+
+    <div class="row">
+      <div class="col-md-4">
+        <section class="tile simple" cg-busy="[loadPreContatos, loadUpdate]">
+          <div class="tile-widget bg-slategray p-20">
+            <div class="media">
+              <div class="media-body">
+                <h4 class="media-heading mb-0 mt-10">
+                Pré Contatos
+              </h4>
+              </div>
+            </div>
+          </div>
+
+          <div class="tile-body p-0">
+            <div class="list-group no-radius no-border">
+              <button class="list-group-item" ng-repeat="preContato in preCadastros" ng-click="exibeContato(preContato, $index)">
+                {{preContato.nome}}
+              </button>
+            </div>
+          </div>
+        </section>
+
+      </div>
+      <div class="col-md-8" ng-if="dadosPreContato">
+        <section class="tile" cg-busy="loadUpdate">
+          <div class="tile-widget">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="media mb-20">
+                  <div class="media-body">
+                    <button type="button" ng-click="fechar()" class="close">×</button>
+                    <h4 class="media-heading mb-0"><strong> {{contato.nome}} </strong></h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-5">
+                <dl class="dl-horizontal">
+                  <dt style="width: 80px;">Email:&nbsp;</dt>
+                  <dd style="margin-left: 70px;">{{contato.email}}</dd>
+                  <dt style="width: 80px;">Telefone:&nbsp; </dt>
+                  <dd style="margin-left: 70px;">{{contato.telefone}}</dd>
+                  <dt style="width: 80px;">Tipo:&nbsp; </dt>
+                  <dd style="margin-left: 70px;">{{contato.tipoPessoa | uppercase }}</dd>
+                  <dt style="width: 80px;" ng-if="contato.tipoPessoa == 'pme'">N° Pessoas:&nbsp; </dt>
+                  <dd style="margin-left: 70px;" ng-if="contato.tipoPessoa == 'pme'">{{contato.numeroPessoas | uppercase }}</dd>
+                  <dt style="width: 80px;">Site:&nbsp; </dt>
+                  <dd style="margin-left: 70px;">{{contato.site}}</dd>
+                  <dt style="width: 80px;">Interesse:&nbsp; </dt>
+                  <dd style="margin-left: 70px;">
+                    <ul>
+                      <li>Saúde: <span>{{interesse(contato.oferecidoSaude)}}</span></li>
+                      <li>Odonto: <span>{{interesse(contato.oferecidoOdonto)}}</span></li>
+                      <li>Seguro: <span>{{interesse(contato.oferecidoSeguros)}}</span></li>
+                    </ul>
+                  </dd>
+
+                </dl>
+              </div>
+
+              <div class="col-md-7">
+                <b>Observação:</b>
+                <p>{{contato.observacao}}</p>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <button type="button" ng-click="validarPreContato('V', contato, contato.indice)" class="btn btn-primary">
+                  <fa class="fa-thumbs-o-up mr-10"></fa>Válido
+                </button>
+                <button type="button" ng-click="validarPreContato('R', contato, contato.indice)" class="btn btn-danger">
+                  <fa class="fa-thumbs-o-down mr-10"></fa>Inválido
+                </button>
+              </div>
+            </div>
+
+
+          </div>
+        </section>
+      </div>
+    </div>
+
+
+
+  </div>
+</div>

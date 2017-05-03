@@ -1,0 +1,303 @@
+<div class="page page-tables-bootstrap">
+
+  <!-- page header -->
+  <div class="pageheader hidden-print">
+    <div class="page-bar">
+      <ul class="page-breadcrumb">
+        <li>
+          <a ui-sref="app.dashboard">
+            <i class="fa fa-home"></i> {{:: main.title }}
+          </a>
+        </li>
+        <li>
+          <a href="javascript:;">Contatos</a>
+        </li>
+        <li>
+          <a href="javascript:;">{{:: page.subtitle }}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- /page header -->
+
+  <div class="pagecontent">
+
+    <div class="row hidden-print">
+      <div class="col-md-12 col-sx-12">
+
+        <section class="tile" cg-busy="[loadRelatorio, loadUusuarios, loadFiliais, loadSituacoes, loadTiposEnvios, loadOperadoras, loadSites, loadFornecedores, loadOrigens, loadCorretores]">
+          <!-- tile header -->
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"><strong>Buscar </strong>contatos</h1>
+          </div>
+          <!-- /tile header -->
+          <!-- tile body -->
+          <div class="tile-body">
+            <form name="formRelatorioIndicacoes" data-ng-submit="consultar(parametro)">
+              <div class="row">
+                <div class="form-group col-sm-2">
+                  <label class="" for="id">Id</label>
+                  <input type="number" id="id" class="form-control" placeholder="Id" ng-model="parametro.idContato" min="1" />
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="nome">Nome</label>
+                  <input type="text" id="nome" class="form-control" placeholder="Nome" ng-model="parametro.nome" />
+                </div>
+                <div class="form-group  col-md-2">
+                  <label for="telefone">Telefone</label>
+                  <input type="text" id="telefone" class="form-control" placeholder="Telefone" ng-model="parametro.telefone" ui-br-phone-number/>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="email">Email</label>
+                  <input type="text" id="email" class="form-control" placeholder="Email" ng-model="parametro.email" />
+                </div>
+
+              </div>
+              <div class="row">
+                <div class="form-group col-md-3">
+                  <label for="idade">Operadora Afinidade</label>
+                  <select multiple chosen="{width: '100%'}" ng-options="operadora.id as operadora.nomeFantasia for operadora in operadorasList" ng-model="parametro.idOperadora">
+                  </select>
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="nome">Status</label>
+                  <select multiple chosen="{width: '100%'}" ng-options="situacao.id as situacao.descricao group by situacao.statusPai  for situacao in situacaoList" ng-model="parametro.idStatus">
+                    <option value="">Todos</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="corretor">Corretor</label>
+                  <select multiple chosen="{width: '100%'}" name="corretor" id="corretor" ng-options="corretor.id as (corretor.id + ' ' + corretor.nomeCorretor | capitalize:true) for corretor in corretoresList" ng-model="parametro.corretorId">
+                    <option value="">Todos</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="tipo-envio">Tipo Envio</label>
+                  <select multiple chosen="{width: '100%'}" name="tipo-envio" id="tipo-envio" ng-options="tipo.id as tipo.tipoEnvio for tipo in tiposEnvios" ng-model="parametro.tipoEnvio">
+                    <option value="">Todos</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-md-4">
+                  <label for="nome">Usuário Cadastro</label>
+                  <select multiple chosen="{width: '100%'}" ng-options="usuarioCadastro.id as usuarioCadastro.nomeUsuario | capitalize:true for usuarioCadastro in usuariosCadastro" ng-model="parametro.usuarioCadastroId">
+                    <option value="">Todas</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-4" ng-show=exibeFiliais>
+                  <label for="nome">Filial</label>
+                  <select multiple chosen="{width: '100%'}" ng-options="filial.id as filial.razaoSocial for filial in filiais" ng-model="parametro.filialId">
+                    <option value="">Todas</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-md-3">
+                  <label for="dataInicio">Data Início</label>
+                  <p class="input-group">
+                    <input type="text" class="form-control datepicker" uib-datepicker-popup="{{:: format }}" ng-model="parametro.dataInicio" is-open="mostarCalendarioInicio.opened" close-text="Fechar" clear-text="Limpar" current-text="Hoje" id="dataInicio" placeholder="Data Início"
+                        datepicker-options="dateOptions" />
+                    <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" ng-click="openCalendarioInicio()">
+                      <i class="fa fa-calendar"></i>
+                    </button>
+                  </span>
+                  </p>
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="dataFim">Data Fim</label>
+                  <p class="input-group">
+                    <input type="text" class="form-control" uib-datepicker-popup="{{:: format }}" ng-model="parametro.dataFim" datepicker-options="dateOptions" is-open="mostarCalendarioFim.opened" close-text="Fechar" clear-text="Limpar" current-text="Hoje" id="dataFim" placeholder="Data Fim"
+                    />
+                    <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" ng-click="openCalendarioFim()">
+                      <i class="fa fa-calendar"></i>
+                    </button>
+                  </span>
+                  </p>
+                </div>
+
+                <div class="form-group col-md-2">
+                  <label>Origem</label>
+                  <div class="radio">
+                    <label for="fornecedores">
+                      <input id="fornecedores" name="tipoOrigem" ng-model="parametro.origemTipo" type="radio" value="fornecedores"> Fornecedores
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label for="sites">
+                      <input id="sites" name="tipoOrigem" ng-model="parametro.origemTipo" type="radio" value="sites"> Sites
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label for="outras">
+                      <input id="outras" name="tipoOrigem" ng-model="parametro.origemTipo" type="radio" value="outras"> Outras
+                    </label>
+                  </div>
+                </div>
+                <div class="form-group col-md-2">
+                  <label>Tipo</label>
+                  <div class="radio">
+                    <label for="pme">
+                      <input id="pme" name="tipo" ng-model="parametro.pmePf" type="radio" value="pme"> PME
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label for="pf">
+                      <input id="pf" name="tipo" ng-model="parametro.pmePf" type="radio" value="pf"> PF
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-md-3" ng-show="parametro.origemTipo == 'sites' ">
+                  <label for="sites">Sites</label>
+                  <select multiple chosen="{width: '100%'}" ng-options="site.id as site.site for site in sitesList" ng-model="parametro.idOrigem">
+                    <option value="">Todas</option>
+                  </select>
+
+                </div>
+                <div class="form-group  col-md-3" ng-show="parametro.origemTipo == 'fornecedores' ">
+                  <label for="fornecedores">Fornecedores</label>
+                  <select multiple chosen="{width: '100%'}" ng-options="fornecedor.id as  fornecedor.nomeFantasia for fornecedor in fornecedorList" ng-model="parametro.idOrigem">
+                    <option value="">Todas</option>
+                  </select>
+
+                </div>
+                <div class="form-group  col-md-3" ng-show="parametro.origemTipo == 'outras' ">
+                  <label for="outras">Outras</label>
+                  <select multiple chosen="{width: '100%'}" ng-options="origem.id as  origem.outraOrigem for origem in outrasOrigensList" ng-model="parametro.idOrigem">
+                    <option value="">Todas</option>
+                  </select>
+
+                </div>
+                <div class="form-group col-md-6" ng-show="parametro.tipo == 'pme' ">
+                  <label for="idade">Empresa</label>
+                  <input class="form-control" id="empresa" ng-model="parametro.empresa" placeholder="Empresa" type="text" />
+                </div>
+              </div>
+              <div class="row">
+
+                <div class="form-group col-md-4">
+                  <label class="checkbox checkbox-custom-alt">
+                    <input type="checkbox" ng-model="parametro.inativos" />
+                    <i></i> Contatos Inativos?
+                  </label>
+                </div>
+
+                <div class="form-group col-md-4">
+                  <label class="checkbox checkbox-custom-alt">
+                    <input type="checkbox" ng-model="parametro.contatoProprio" />
+                    <i></i> Contatos Próprio?
+                  </label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <button type="button" class="btn btn-danger btn-block" ng-click="limpar()">
+                    <i class="fa fa-trash-o"></i>
+                    <span>Limpar</span>
+                  </button>
+                </div>
+                <div class="col-md-6">
+                  <button type="submit" class="btn btn-success btn-block">
+                    <i class="fa fa-search"></i>
+                    <span>Consultar</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <div class="row" ng-if="mostrarRelatorio">
+      <div class="col-md-12 col-xs-12 col-sm-12">
+        <section class="tile">
+          <!-- tile header -->
+          <div class="tile-header dvd dvd-btm hidden-print">
+            <h1 class="custom-font"><strong>Relatório</strong></h1>
+          </div>
+          <div class="tile-body">
+            <div class="visible-print-block">
+              <figure>
+                <img src="http://imagens.allcross.com.br/logo_allcross_colorida.png" alt="Logo AllCross" />
+              </figure>
+              <h1> <b>Relatório </b>Contatos </h1>
+              <b>Relatório extraido em:</b> {{:: dataAtual | date: 'dd/MM/yyyy HH:MM' }} - <b>Por :</b> {{:: usuarioLogado | capitalize : true }}
+            </div>
+
+            <div class="table-responsive">
+
+              <table class="st-table table table-custom" st-table="interacoesDisplayedCollection" st-safe-src="interacoes" cg-busy="loadRelatorio">
+                <thead>
+                  <tr>
+                    <th st-sort="idContato" class="sorting">Id</th>
+                    <th st-sort="dataCadastroInterecao" class="sorting">Data</th>
+                    <th st-sort="usuarioCorretor" class="sorting" width="10%">Corretor</th>
+                    <th st-sort="nomeContato" class="sorting" width="10%">Contato</th>
+                    <th st-sort="telefone" class="sorting" width="12%">Telefone</th>
+                    <th st-sort="tipoEnvio" class="sorting">Tipo Envio</th>
+                    <th st-sort="situacao" class="sorting">Situação</th>
+                    <th st-sort="situacao" class="sorting">Origem</th>
+                  </tr>
+                  <tr>
+                    <td class="hidden-print" colspan="6">
+                      <input st-search placeholder="Pesquise no relatório" class="form-control input-sm" type="search" />
+                    </td>
+                    <td colspan="2" class="hidden-print text-right">
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-default" tooltip-placement="top" uib-tooltip="Quantitade de itens por página" ng-click="atualizaQtdItensVisualizados(5)">5</button>
+                        <button type="button" class="btn btn-default" tooltip-placement="top" uib-tooltip="Quantitade de itens por página" ng-click="atualizaQtdItensVisualizados(10)">10</button>
+                        <button type="button" class="btn btn-default" tooltip-placement="top" uib-tooltip="Quantitade de itens por página" ng-click="atualizaQtdItensVisualizados(25)">25</button>
+                        <button type="button" class="btn btn-default" tooltip-placement="top" uib-tooltip="Quantitade de itens por página" ng-click="atualizaQtdItensVisualizados(50)">50</button>
+                        <button type="button" class="btn btn-default" tooltip-placement="top" uib-tooltip="Quantitade de itens por página" ng-click="atualizaQtdItensVisualizados(100)">100</button>
+                      </div>
+
+                    </td>
+                  </tr>
+
+                </thead>
+                <tbody>
+                  <tr class="lista-animada" ng-repeat="resultado in interacoesDisplayedCollection">
+                    <td><a class="link" ng-href="#app/contatos/detalhes/{{:: resultado.idContato }}">{{:: resultado.idContato }}</a></td>
+                    <td>{{:: resultado.dataEdicaoInteracao }}</td>
+                    <td>{{:: resultado.usuarioCorretor | capitalize: true }}</td>
+                    <td>{{:: resultado.nomeContato | capitalize: true }}</td>
+                    <td>{{:: resultado.telefone | telefone}}</td>
+                    <td>{{:: resultado.tipoEnvio }}</td>
+                    <td>{{:: resultado.situacao }}</td>
+                    <td>{{:: resultado.origem }}</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="2">
+                      <h4 class="custom-font">{{ interacoesDisplayedCollection.length }} de {{:: tamanhoArray }} resultado(s).</h4>
+                    </td>
+
+
+                    <td colspan="6" class="text-right hidden-print">
+                      <div st-pagination="" st-items-by-page="itensPorPagina" st-displayed-pages="10"></div>
+                    </td>
+
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+            <button ng-click="imprimirRelatorio()" class="btn btn-success btn-block hidden-print">
+              <i class="fa fa-file-pdf-o"></i>
+              <span>Imprimir</span>
+            </button>
+
+          </div>
+        </section>
+      </div>
+    </div>
+
+
+  </div>
+</div>

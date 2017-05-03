@@ -1,0 +1,42 @@
+<div cg-busy="[loadingInsertInteracao, loadContato]">
+  <div class="modal-header">
+    <h3 class="modal-title">Indicação Seguro</h3>
+  </div>
+  <div class="modal-body">
+    <form name="formulario" novaidate>
+
+        <div class="form-group">
+          <label for="data">Data para contato</label>
+          <div class="input-group col-md-6">
+            <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
+            ng-model="interacao.dataObs" is-open="mostrarCalendario.opened" close-text="Fechar"
+            clear-text="Limpar" current-text="Hoje" id="data" placeholder="Data"
+            datepicker-options="dateOptions"  />
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-primary" ng-click="abrirCalendario()">
+                <i class="fa fa-calendar"></i>
+              </button>
+            </span>
+          </div>
+        </div>
+
+
+      <div class="form-group">
+        <label>Produtos a serem ofertados</label>
+          <select ng-model="produtosInteresse" name="produtos"  multiple chosen="{width: '100%'}" ng-options="produto.id as produto.tipoProduto +' - ' +produto.nome for produto in produtos" required>
+          </select>
+      </div>
+
+
+      <div class="form-group">
+        <label for="observacao">Observação</label>
+        <textarea class="form-control" id="observacao" ng-model="interacao.observacao" placeholder="Observação" rows="2" required></textarea>
+      </div>
+    </form>
+
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success btn-ef btn-ef-3 btn-ef-3c" ng-click="enviarPrime(interacao, produtosInteresse)"  ng-disabled="formulario.$invalid"> OK</button>
+    <button class="btn btn-lightred btn-ef btn-ef-4 btn-ef-4c" ng-click="cancel()">Cancelar</button>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+<form name="formularioChamado" novalidate cg-busy="[Designa.loadFilaChamado, Designa.loadFila]">
+
+
+  <div class="modal-header">
+
+    <div class="media">
+      <div class="media-heading">
+        <b class="text-lg">{{:: Designa.chamado.titulo }}</b>
+        <span class="pull-right text-sm text-muted">
+            <span >{{:: Designa.chamado.usuarioCadastro }}</span>
+        <br>
+        <span>{{:: Designa.chamado.dataCadatro }}</span>
+        </span>
+      </div>
+      <p clas="texto-chamado">{{:: Designa.chamado.descricao }}</p>
+    </div>
+
+  </div>
+  <div class="modal-body">
+
+    <div class="form-group">
+      <label for="fila">Fila</label>
+      <select chosen="{width: '100%'}" id="fila" name="fila"
+       data-ng-options="fila as fila.fila for fila in Designa.filaChamado"  data-ng-model="Designa.chamado.fila" required>
+        <option value="">Selecione a fila de destino do chamado</option>
+      </select>
+
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success btn-ef btn-ef-3 btn-ef-3c" ng-click="Designa.salvar(Designa.chamado)" data-ng-disabled="formularioChamado.$invalid">
+      <i class="fa fa-save"></i> Salvar
+    </button>
+    <button type="button" class="btn btn-lightred btn-ef btn-ef-4 btn-ef-4c" ng-click="Designa.cancelar()"><i class="fa fa-arrow-left"></i> Cancelar</button>
+  </div>
+</form>

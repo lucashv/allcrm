@@ -1,0 +1,121 @@
+<div class="page">
+
+  <div class="pageheader">
+    <div class="page-bar">
+      <ul class="page-breadcrumb">
+        <li>
+          <a ui-sref="javascript:;">
+            <i class="fa fa-home"></i> CRM
+          </a>
+        </li>
+        <li>
+          <a href="javascript:;">Suporte</a>
+        </li>
+        <li>
+          <a href="javascript:;">Meus chamados</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+
+
+  <div class="pagecontent" cg-busy="MeusChamados.loadChamados">
+    <div class="row">
+      <div class="col-md-12">
+
+        <uib-accordion>
+          <uib-accordion-group is-open="status.open">
+            <uib-accordion-heading>
+              Filtros <i class="pull-right fa" ng-class="{'fa-angle-down': status.open, 'fa-angle-right': !status.open}"></i>
+            </uib-accordion-heading>
+
+            <div class="tile-body">
+
+              <form>
+                <div class="row">
+
+                  <div class="col-sm-2 col-md-2">
+                    <div class="form-group">
+                      <label for="chamadoId">Id</label>
+                      <input type="text" class="form-control" id="chamadoId" data-ng-model="MeusChamados.filtro.chamadoId" name="chamadoId" placeholder="Id do chamado">
+                    </div>
+                    <div class="form-group">
+                      <label for="situacao">Situação</label>
+                      <select chosen="{width: '100%'}"
+                      data-ng-controller="StatusChamadoController as Status"
+                      ng-options="situacao.id as situacao.statusChamado for situacao in Status.situacoes"
+                      data-ng-model="MeusChamados.filtro.statusChamado" name="situacao">
+                        <option value="">Todas</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-sm-2 col-md-2">
+                    <div class="form-group">
+                      <label class="control-label" for="dataInicio">Data Inicio</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control datepicker" uib-datepicker-popup="{{:: MeusChamados.format }}" data-ng-model="MeusChamados.filtro.dataInicio" is-open="MeusChamados.calendarioInicio.opened" close-text="Fechar" clear-text="Limpar" current-text="Hoje"
+                            id="dataInicio" placeholder="Data Início" datepicker-options="MeusChamados.dateOptions" />
+                        <div class="input-group-btn">
+                          <button type="button" class="btn btn-primary" data-ng-click="MeusChamados.abrirCalendarioInicio(MeusChamados.calendarioInicio.opened)">
+                            <i class="fa fa-calendar"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label" for="dataFim">Data Fim</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control datepicker" uib-datepicker-popup="{{:: MeusChamados.format }}" data-ng-model="MeusChamados.filtro.dataFim" is-open="MeusChamados.calendarioFim.opened" close-text="Fechar" clear-text="Limpar" current-text="Hoje" id="dataFim" placeholder="Data Início" datepicker-options="MeusChamados.dateOptions" />
+                        <div class="input-group-btn">
+                          <button type="button" class="btn btn-primary" data-ng-click="MeusChamados.abrirCalendarioFim()">
+                            <i class="fa fa-calendar"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+
+
+
+                </div>
+
+
+                <div class="form-group mt-10">
+                  <div class="col-md-12">
+                    <button type="button" class="btn btn-success" ng-click="MeusChamados.consultar(MeusChamados.filtro)">
+                      <i class="fa fa-search"></i> Consultar
+                    </button>
+                    <button type="button" class="btn btn-primary" data-ng-click="MeusChamados.salvarFiltros(MeusChamados.filtro)" name="button">
+                      <i class="fa fa-save mr-5"></i>Salvar filtros e pesquisar
+                    </button>
+                    <button type="button" class="btn btn-danger" data-ng-click="MeusChamados.limparFiltro()" name="button">
+                      <i class="fa fa-trash-o mr-5"></i>Limpar filtros
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+          </uib-accordion-group>
+        </uib-accordion>
+
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12">
+
+        <div class="list-group">
+          <template-chamado data-ng-repeat="chamado in MeusChamados.chamados track by chamado.id" data-ng-click="MeusChamados.detalhesChamado(chamado)" chamado="chamado">
+          </template-chamado>
+        </div>
+
+
+      </div>
+    </div>
+
+  </div>

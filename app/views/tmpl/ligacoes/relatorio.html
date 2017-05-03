@@ -1,0 +1,288 @@
+<div class="page">
+  <!-- page header -->
+  <div class="pageheader hidden-print">
+    <div class="page-bar">
+      <ul class="page-breadcrumb">
+        <li>
+          <a ui-sref="app.dashboard">
+            <i class="fa fa-home"></i> {{:: main.title }}
+          </a>
+        </li>
+        <li>
+          <a href="javascript:;">Ligações</a>
+        </li>
+        <li>
+          <a ui-sref="app.ligacoes.relatorio">{{:: page.subtitle }}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- / page header -->
+  <div class="pagecontent">
+
+    <div class="row">
+      <div class="col-md-12">
+        <!-- tile -->
+        <section class="tile hidden-print" cg-busy="[loadTipos, loadingRelatorio, loadFiliais]">
+          <!-- tile header -->
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font">
+          <strong>Relatório</strong>
+          Ligações</h1>
+          </div>
+          <!-- /tile header -->
+          <div class="tile-body">
+            <!-- form pesquisa -->
+            <form role="form" name="formPesquisa" ng-submit="consultar(parametro)" novalidate>
+              <!-- Inputs iniciais -->
+              <div class="row">
+                <div class="form-group  col-md-2">
+                  <label for="id">Id</label>
+                  <input type="number" id="id" class="form-control" placeholder="Id" ng-model="parametro.idContato" />
+                </div>
+                <div class="form-group  col-md-3">
+                  <label for="nome">Nome</label>
+                  <input type="text" id="nome" class="form-control" placeholder="Nome" ng-model="parametro.nome" />
+                </div>
+                <div class="form-group  col-md-2">
+                  <label for="telefone">Telefone</label>
+                  <input type="text" id="telefone" class="form-control" placeholder="Telefone" ng-model="parametro.telefone" ui-br-phone-number/>
+                </div>
+                <div class="form-group col-md-2">
+                  <label for="dataInicio">Data Início</label>
+                  <p class="input-group">
+                    <input type="text" class="form-control" uib-datepicker-popup="{{:: format }}" ng-model="parametro.dataInicio" is-open="mostarCalendarioInicio.opened" datepicker-options="dateOptions" close-text="Fechar" clear-text="Limpar" current-text="Hoje" id="dataInicio"
+                        placeholder="Data Início" />
+                    <span class="input-group-btn">
+                  <button type="button" class="btn btn-primary" ng-click="openCalendarioInicio()">
+                    <i class="fa fa-calendar"></i>
+                  </button>
+                </span>
+                  </p>
+                </div>
+                <div class="form-group col-md-2">
+                  <label for="dataFim">Data Fim</label>
+                  <p class="input-group">
+                    <input type="text" class="form-control" uib-datepicker-popup="{{:: format}}" ng-model="parametro.dataFim" is-open="mostarCalendarioFim.opened" datepicker-options="dateOptions" close-text="Fechar" clear-text="Limpar" current-text="Hoje" id="dataFim" placeholder="Data Fim"
+                    />
+                    <span class="input-group-btn">
+                  <button type="button" class="btn btn-primary" ng-click="openCalendarioFim()">
+                    <i class="fa fa-calendar"></i>
+                  </button>
+                </span>
+                  </p>
+                </div>
+              </div>
+              <!-- /Fim inputs iniciais -->
+              <!-- linha da combo tipo plantao e corretores -->
+              <div class="row">
+                <div class="form-group col-md-4">
+                  <label>Tipo Plantão</label>
+                  <select chosen="{width: '100%'}" ng-model="parametro.tipoId" name="tipoLigacao" ng-options="item.id as  item.tipoLigacao  for item in tiposLigacoesList">
+                    <option value="">Todos</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-4">
+                  <label>Corretor</label>
+                  <select chosen="{width: '100%'}" ng-model="parametro.corretorId" name="corretor"
+                  ng-options="corretor.id as  (corretor.id + ' ' +  corretor.nomeCorretor | capitalize : true )  for corretor in corretoresList">
+                    <option value="">Todos</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-4" ng-if="exibeListaFiliais" >
+                  <label for="nome">Filial</label>
+                  <select chosen="{width: '100%'}"
+                   ng-options="filial.id as filial.razaoSocial for filial in filiais" ng-model="parametro.filialId">
+                    <option value="">Selecione </option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-md-4">
+                  <label class="checkbox checkbox-custom-alt">
+                    <input type="checkbox" ng-model="parametro.groupBy" />
+                    <i></i> Agrupar por Corretor ?
+                  </label>
+                </div>
+                <div class="form-group col-md-4">
+                  <label class="checkbox checkbox-custom-alt">
+                    <input type="checkbox" ng-model="parametro.grafico" />
+                    <i></i> Mostrar Gráfico ?
+                  </label>
+                </div>
+              </div>
+              <!-- fim da linha da combo tipo plantao e corretores -->
+              <div class="row">
+                <div class="col-md-6">
+                  <button type="button" class="btn btn-danger btn-block" ng-click="limpar()">
+                    <i class="fa fa-trash-o"></i>
+                    <span>Limpar</span>
+                  </button>
+                </div>
+                <div class="col-md-6">
+                  <button type="submit" class="btn btn-success btn-block">
+                    <i class="fa fa-search"></i>
+                    <span>Consultar</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+            <!-- /form -->
+          </div>
+          <!-- /tile  -->
+        </section>
+      </div>
+    </div>
+
+    <div class="row hidden-print" ng-if="mostrarRelacao">
+      <div class="col-md-12">
+        <section class="tile" cg-busy="loadingRelatorio">
+          <!-- tile header -->
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"><strong>Relação das ligações</strong> </h1>
+          </div>
+          <div class="tile-body">
+            <div class="row">
+              <div class="col-md-10">
+                <fa class="fa-user-md "></fa>&nbsp;&nbsp;Saúde:</a>&nbsp;{{ totalSaude }} &nbsp;&nbsp;
+                <fa class="fa-medkit"></fa>&nbsp;&nbsp;Odonto:</a>&nbsp;{{ totalOdonto }} &nbsp;&nbsp;
+                <fa class="fa-users"></fa>&nbsp;&nbsp;Presencial:</a>&nbsp;{{ totalPresencial }}
+              </div>
+              <div class="col-md-2">
+                <button class="btn btn-success btn-ef btn-ef-5 btn-ef-5a mb-10" ng-click="mostraRelatorio(mostrarRelatorio)">
+                  <i class="fa fa-file-o"></i> <span>Relatório</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="row" ng-if="mostrarRelatorio">
+      <div class="col-md-12">
+        <section class="tile" cg-busy="loadingRelatorio">
+          <!-- tile header -->
+          <div class="tile-header dvd dvd-btm hidden-print">
+            <h1 class="custom-font">
+              <strong>Relatório</strong>
+            </h1>
+          </div>
+          <div class="tile-body">
+            <div class="visible-print-block">
+              <figure>
+                <img src="http://imagens.allcross.com.br/logo_allcross_colorida.png" alt="Logo AllCross" />
+              </figure>
+              <h1> <strong>Relatório </strong>Ligações Plantão </h1>
+              <b>Relatório extraido em:</b> {{::  dataAtual | date: 'dd/MM/yyyy HH:MM' }} - <b>Por : </b>{{:: usuarioLogado | capitalize : true}}
+              <br>
+              <fa class="fa-user-md "></fa>&nbsp;&nbsp;Saúde:</a>&nbsp;{{:: totalSaude }} &nbsp;&nbsp;
+              <fa class="fa-medkit"></fa>&nbsp;&nbsp;Odonto:</a>&nbsp;{{:: totalOdonto }} &nbsp;&nbsp;
+              <fa class="fa-users"></fa>&nbsp;&nbsp;Presencial:</a>&nbsp;{{:: totalPresencial }}
+            </div>
+
+            <table ng-if="mostraRelatorio" st-table="resultados" class="table table-striped" st-safe-src="data">
+              <thead>
+                <tr>
+                  <th st-sort="id" ng-if="!parametro.groupBy">ID</th>
+                  <th st-sort="dataCadastro" ng-if="!parametro.groupBy">Data</th>
+                  <th st-sort="corretorNome">Corretor</th>
+                  <th st-sort="filialPlantao">Filial Plantão</th>
+                  <th st-sort="contatoNome" ng-if="!parametro.groupBy">Nome</th>
+                  <th st-sort="telefone" ng-if="!parametro.groupBy">Telefone</th>
+                  <th st-sort="tipo">Tipo Plantão</th>
+                  <th st-sort="reposicao" ng-if="!parametro.groupBy">Reposição?</th>
+                  <th st-sort="qtdPorCorretor" ng-if="parametro.groupBy">Qtd</th>
+                  <th st-sort="qtdPorCorretor" ng-if="parametro.groupBy">Reposições</th>
+                  <th st-sort="qtdPorCorretor" ng-if="parametro.groupBy">Reposição paga?</th>
+                  <th st-sort="qtdPorCorretor" ng-if="parametro.groupBy">Ligações perdidas</th>
+                </tr>
+                <tr class="hidden-print">
+                  <th colspan="7">
+                    <div class="form-group">
+                      <label for="pesquise">Pesquise</label>
+                      <input id="pesquise" type="text" class="form-control" st-search placeholder="Pesquise no relatório" />
+                    </div>
+                  </th>
+                  <th colspan="1">
+                    <div class="form-group">
+                      <label>Itens por página</label>
+                      <select class="form-control" ng-model="itemsByPage">
+                        <option value="5">5</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="{{:: tamanhoArray}}">Todos</option>
+                      </select>
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="resultado in resultados">
+                  <td ng-if="!parametro.groupBy">  <a ng-href="#app/contatos/detalhes/{{:: resultado.contatoId }}" popover-trigger="mouseenter" popover-placement="right">{{:: resultado.contatoId }}</a></td>
+                  <td ng-if="!parametro.groupBy">{{:: resultado.dataCadastro }}</td>
+                  <td>
+                    {{:: resultado.corretorNome | capitalize: true }}
+                    <span nf-if="resultado.sobreNome">{{:: resultado.corretorSobreNome  | capitalize: true }}</span>
+                  </td>
+                  <td>{{:: resultado.filialPlantao | capitalize: true }}</td>
+
+                  <td ng-if="!parametro.groupBy">{{:: resultado.contatoNome }}</td>
+                  <td ng-if="!parametro.groupBy">{{:: resultado.telefone }}</td>
+                  <td>{{:: resultado.tipo }}</td>
+                  <td ng-if="!parametro.groupBy">
+                    <i class="fa fa-check text-success" ng-if="resultado.tipoEnvioId == 8"></i>
+                    <i class="fa fa-times-circle text-danger" ng-if="resultado.tipoEnvioId != 8"></i>
+                  </td>
+                  <td ng-if="parametro.groupBy">{{:: resultado.qtdPorCorretor }}</td>
+                  <td ng-if="parametro.groupBy">{{:: resultado.reposicao }}</td>
+                  <td ng-if="parametro.groupBy">{{:: resultado.reposicao_paga }}</td>
+                  <td ng-if="parametro.groupBy">{{:: resultado.ligacoes_perdidas }}</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="8">
+                    <h4 class="custom-font">{{ resultados.length }} de {{ tamanhoArray }} resultado(s).</h4></td>
+                </tr>
+                <tr class="text-center hidden-print">
+                  <td colspan="8">
+                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="60"></div>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="8">
+                    <button ng-click="imprimirRelatorioLigacoes()" class="btn btn-success btn-block hidden-print">
+                      <i class="fa fa-file-pdf-o"></i>
+                      <span>Imprimir</span>
+                    </button>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+
+          </div>
+
+        </section>
+      </div>
+    </div>
+
+
+    <div class="row hidden-print" ng-if="mostrarGrafico" cg-busy="loadingRelatorio">
+      <!-- col -->
+      <div class="col-md-12">
+        <section class="tile">
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"><strong> Gráfico</strong></h1>
+          </div>
+          <div class="tile-body">
+            <div morris-bar-chart bar-data='basicData' bar-xkey='0' bar-ykeys='["1", "2", "3" ]' bar-labels='["Saúde", "Odonto", "Presencial" ]' bar-colors='["#d9534f", "#a2d200", "#428bca"]'>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,199 @@
+  <div class="page">
+  <!-- page header -->
+  <div class="pageheader">
+    <div class="page-bar">
+      <ul class="page-breadcrumb">
+        <li>
+          <a ui-sref="app.dashboard">
+            <i class="fa fa-home"></i> {{:: main.title }}
+          </a>
+        </li>
+        <li>
+          <a href="javascript:;">Contatos</a>
+        </li>
+        <li>
+          <a ui-sref="app.contatos.new">{{:: page.subtitle }}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- /page header -->
+
+
+
+
+  <div class="pagecontent">
+
+    <div class="row">
+
+      <div class="col-md-12 col-sx-12">
+
+        <section class="tile form-validation" cg-busy="[ loadingForm ,loadProdutosContato]">
+
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font">
+                <strong>Contatos</strong>
+              </h1>
+          </div>
+
+          <div class="tile-body">
+            <form class="form-horizontal" name="formCadContato" role="form">
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="idade">Enviar Para:</label>
+                <div class="col-sm-2">
+                  <select class=" form-control rounded" ng-init="contato.enviarPara = enviarParaList[0]" ng-model="contato.enviarPara" ng-options="enviarPara as enviarPara.Tipo for enviarPara in enviarParaList" ng-change="enviarParaValidacao(contato.enviarPara)"></select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="nome">Nome</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control rounded" name="nome" ng-model="contato.nome" placeholder="Nome" required />
+                </div>
+              </div>
+              <div class="row form-inline">
+                <label class="col-sm-2 control-label" for="email">Emails</label>
+                <div class="col-sm-10">
+                  <span data-ng-repeat="email in emails">
+                    <input type="email"  class="form-control rounded" name="email" ng-blur="validaDuplicidadeEmail(email.email, emails.length)" ng-model="email.email" placeholder="Email" />
+                    <button class="btn btn-rounded btn-danger btn-md form-inline" ng-click="removeEmail()" ng-show="$last" type='button'>-</button>
+                  </span>
+                  <button class="btn btn-rounded btn-success btn-md rounded" ng-click="addEmail()" type='button' ng-disabled="formCadContato.email.$invalid">+</button>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <label class="col-sm-2 control-label" for="telefone">Telefone</label>
+                <div class="col-sm-10">
+
+                  <span data-ng-repeat="telefone in telefones">
+                  <input class="form-control-telefone" name="telefone" ng-blur="validaDuplicidadeTelefone(telefone.telefone, telefones.length, telefones)" ng-model="telefone.telefone"
+                   type="text" ui-br-phone-number  placeholder="Telefone" />
+                  <button class="btn btn-rounded btn-danger  form-inline" ng-click="removeTel()" ng-show="$last" type='button'>-</button>
+                </span>
+                  <button class="btn btn-rounded btn-success btn-md rounded" ng-click="addTel()" type='button' ng-disabled="formCadContato.telefone.$invalid">+</button>
+                </div>
+              </div>
+              <br/>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="idade">Idade</label>
+                <div class="col-sm-2">
+                  <input class="form-control rounded" name="idade" ng-model="contato.idade" placeholder="Idade" type="number" min="1" max="100" ng-init="contato.idade = 1" />
+                </div>
+              </div>
+
+              <div class="form-group" ng-if="!exiveProdutos">
+                <label class="col-sm-2 control-label" for="idade">Operadora Afinidade</label>
+                <div class="col-sm-2">
+                  <select class=" form-control rounded" ng-model="contato.idOperadora" ng-options="operadora.id as operadora.nomeFantasia for operadora in operadorasList"></select>
+                </div>
+              </div>
+
+              <div class="form-group" ng-if="exiveProdutos">
+                <label class="col-sm-2 control-label" for="produtos">Produtos de Interesse</label>
+                <select name="produtos"  multiple chosen="{width: '35%'}"
+                   ng-options="produto.id as produto.tipoProduto +' - ' +produto.nome for produto in produtos" ng-model="contato.produtos"  required>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Origem</label>
+                <div class="col-sm-10">
+                  <label class="checkbox checkbox-custom-alt checkbox-custom-sm" for="fornecedores">
+                    <input id="fornecedores" name="tipoOrigem" ng-model="contato.origemTipo" type="radio" value="fornecedores">
+                    <i></i> Fornecedores
+                  </label>
+                  <label class="checkbox checkbox-custom-alt checkbox-custom-sm" for="sites">
+                    <input id="sites" name="tipoOrigem" ng-model="contato.origemTipo" type="radio" value="sites">
+                    <i></i>Sites
+                  </label>
+
+                  <label class="checkbox checkbox-custom-alt checkbox-custom-sm" for="outras">
+                    <input id="outras" name="tipoOrigem" ng-model="contato.origemTipo" type="radio" value="outras">
+                    <i></i>Outras
+                  </label>
+                  <label class="checkbox checkbox-custom-alt checkbox-custom-sm" for="chat">
+                    <input id="chat" name="tipoOrigem" ng-model="contato.origemTipo" type="radio" value="chat" ng-click="contato.origem.id = 3">
+                    <i></i>Chat
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group" ng-show="contato.origemTipo == 'sites' ">
+                <label class="col-sm-2 control-label" for="sites">Sites</label>
+                <div class="col-sm-3">
+
+                  <select chosen="{width: '100%'}" ng-model="contato.origem" ng-options=" site   as  (site.id + ' ' + site.site) for site in sitesList">
+                    <option value="">Selecione uma opção</option>
+
+                  </select>
+                </div>
+              </div>
+              <div class="form-group" ng-show="contato.origemTipo == 'fornecedores' ">
+                <label class="col-sm-2 control-label" for="fornecedores">Fornecedores</label>
+                <div class="col-sm-3">
+
+                  <select chosen="{width: '100%'}" ng-model="contato.origem" name="outrasOrigens" ng-options=" fornecedor as (fornecedor.id+ ' '+ fornecedor.nomeFantasia) for fornecedor in fornecedorList">
+                    <option value="">Selecione uma opção</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group" ng-show="contato.origemTipo == 'outras' ">
+                <label class="col-sm-2 control-label" for="outras">Outras</label>
+                <div class="col-sm-3">
+                  <select chosen="{width: '100%'}" ng-model="contato.origem" name="outrasOrigens" ng-options=" outraOrigem   as  (outraOrigem.id + ' ' +outraOrigem.outraOrigem) group by outraOrigem.origemPai  disable when outraOrigem.is_pai  for outraOrigem in outrasOrigensList ">
+                    <option value="">Selecione uma opção</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group" ng-init="contato.tipo = 'pf'">
+                <label class="col-sm-2 control-label">Tipo</label>
+                <div class="col-sm-10">
+                  <label class="checkbox checkbox-custom-alt checkbox-custom-sm" for="pme">
+                    <input id="pme" name="tipo" ng-model="contato.tipo" type="radio" value="pme"> <i></i> PME
+                  </label>
+                  <label class="checkbox checkbox-custom-alt checkbox-custom-sm" for="pf">
+                    <input id="pf" name="tipo" ng-model="contato.tipo" type="radio" value="pf"> <i></i>PF
+                  </label>
+                </div>
+              </div>
+              <div class="form-group" ng-if="contato.tipo == 'pme'">
+                <label class="col-sm-2 control-label" for="idade">Empresa</label>
+                <div class="col-sm-10">
+                  <input class="form-control rounded" id="empresa" ng-model="contato.empresa" ng-init="contato.empresa = 'Não Informado.'" placeholder="Empresa" type="text">
+                </div>
+              </div>
+              <div class="form-group" ng-if="contato.tipo == 'pme'">
+                <label class="col-sm-2 control-label" for="idade">Nº Pessoas</label>
+                <div class="col-sm-10">
+                  <input class="form-control rounded" id="empresa" ng-model="contato.numeroPessoas" placeholder="Nº de Pessoas" type="number">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="comment">Observação</label>
+                <div class="col-sm-8">
+                  <textarea class="form-control" name="comment" ng-model="contato.observacao" placeholder="Observação" rows="10"></textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <button class="btn btn-success" ng-click="salvaContato(contato, telefones, emails, formCadContato)" ng-disabled="formCadContato.$invalid ">
+                    <i class="fa fa-save"></i>
+                    <span>&nbsp;&nbsp;Salvar</span>
+                  </button>
+                  <button class="btn btn-danger " type="reset">
+                    <i class="fa fa-trash-o"></i>
+                    <span>&nbsp;&nbsp;Limpar</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- /tile body -->
+        </section>
+        <!-- /tile -->
+      </div>
+      <!-- /col -->
+    </div>

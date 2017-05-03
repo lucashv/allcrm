@@ -1,0 +1,195 @@
+<div class="page">
+  <div class="pageheader">
+    <div class="page-bar">
+      <ul class="page-breadcrumb">
+        <li>
+          <a ui-sref="app.dashboard">
+            <i class="fa fa-home"></i> {{:: main.title }}
+          </a>
+        </li>
+        <li>
+          <a href="javascript:;">Corretores</a>
+        </li>
+        <li>
+          <a ui-sref="app.forms.common">{{:: page.title }}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+
+  <div class="row">
+    <div class='col-md-12'>
+      <section cg-busy="loadingAcesse" class="tile" ng-if="showAviso">
+        <!-- tile header -->
+        <div class="tile-header bg-red">
+          <h1 class="custom-font">
+          <strong>{{aviso.tipo}}
+            já cadastrado</strong>
+        </h1>
+          <ul class="controls">
+            <li class="remove">
+              <a href="" ng-click="ocultaAviso()">
+                <i class="fa fa-times"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <!-- /tile header -->
+        <!-- tile widget -->
+        <div class="tile-widget bg-lightred">
+          <p>
+            <strong>{{aviso.texto}}</strong>
+          </p>
+        </div>
+        <!-- /tile widget -->
+      </section>
+    </div>
+  </div>
+
+
+
+
+  <div class="pagecontent">
+
+    <div class="row">
+      <div class="col-md-12">
+        <section class="tile form-validation">
+          <!-- tile header -->
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font">
+              <strong>Novo Contato <span ng-if="contato.prime"> Seguro</span><span ng-if="!contato.prime"> Próprio</span></strong>
+            </h1>
+          </div>
+          <!-- /tile header -->
+          <!-- tile body -->
+          <div class="tile-body">
+            <form class="form-horizontal" name="formCadContato" role="form" cg-busy="[loadingForm, loadProdutosContato]" cg-busy="promise">
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Tipo</label>
+                <div class="col-sm-10">
+                  <div class="btn-group">
+                    <label class="btn btn-default" uib-popover="Esse contato será incluído nas suas indicações." popover-trigger="mouseenter" ng-click="montaComboOperadora('proprio')" ng-model="contato.prime" uib-btn-radio="false">Próprio</label>
+                    <label class="btn btn-dutch" uib-tooltip="Esse contato será enviado para a corretora de seguros como uma nova indicação de seguros."  tooltip-placement="bottom" ng-click="montaComboOperadora('prime')" ng-model="contato.prime" uib-btn-radio="true">Seguro</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="nome">Nome</label>
+                <div class="col-sm-8">
+                  <input autofocus class="form-control rounded" id="nome" ng-model="contato.nome" placeholder="Nome" required type="text">
+                </div>
+              </div>
+              <div class="row form-inline">
+                <label class="col-sm-2 control-label" for="email">Emails</label>
+                <div class="col-sm-10">
+                  <span data-ng-repeat="email in emails">
+                    <input class="form-control rounded" name="email" ng-blur="validaDuplicidadeEmail(email.email, emails.length)" ng-model="email.email" placeholder="Email" type="text"/>
+                    <button class="btn btn-rounded btn-danger btn-md form-inline" ng-click="removeEmail()" ng-show="$last" type='button'>-</button>
+                  </span>
+                  <button class="btn btn-rounded btn-success btn-md rounded" ng-click="addEmail()" type='button' ng-disabled="formCadContato.email.$invalid">+</button>
+                </div>
+              </div>
+              <br/>
+              <div class="row form-inline">
+                <label class="col-sm-2 control-label" for="telefone">Telefone</label>
+                <div class="col-sm-10">
+                  <span data-ng-repeat="telefone in telefones">
+                    <input class="form-control rounded" name="telefone" ng-blur="validaDuplicidadeTelefone(telefone.telefone, telefones.length )" ng-model="telefone.telefone" placeholder="Telefone" type="text" ui-br-phone-number/>
+                    <button class="btn btn-rounded btn-danger btn-md form-inline" ng-click="removeTel()" ng-show="$last" type='button'>-</button>
+                  </span>
+                  <button class="btn btn-rounded btn-success btn-md rounded" ng-click="addTel()" type='button' ng-disabled="formCadContato.telefone.$invalid">+</button>
+                </div>
+              </div>
+              <br/>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="idade">Idade</label>
+                <div class="col-sm-2">
+                  <input class="form-control rounded" id="idade" ng-model="contato.idade" placeholder="Idade" type="number" min="1" max="100" ng-init="contato.idade = 1" />
+                </div>
+              </div>
+
+              <div class="form-group" ng-if="!contato.prime">
+                <label class="col-sm-2 control-label" for="idade">Operadora Afinidade</label>
+                <div class="col-sm-2">
+                  <select class="form-control rounded"
+                   ng-options="operadora.id as operadora.nomeFantasia for operadora in operadorasList" ng-model="operadora"></select>
+                </div>
+              </div>
+
+              <div class="form-group" ng-if="contato.prime">
+                <label class="col-sm-2 control-label" for="idade">Produtos de Interesse</label>
+                <div class="col-sm-2">
+                  <select name="produtos"  multiple chosen="{width: '100%'}"  placeholder-text-multiple="'Selecione o(s) produto(s)'"
+                   ng-options="produto.id as produto.tipoProduto +' - ' +produto.nome for produto in produtos" ng-model="contato.produtos"  required>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group" ng-init="contato.tipo = 'pf'">
+                <label class="col-sm-2 control-label">Tipo</label>
+                <div class="col-sm-10">
+                  <div class="radio">
+                    <label for="pme">
+                      <input id="pme" name="tipo" ng-model="contato.tipo" type="radio" value="pme"> PME
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label for="pf">
+                      <input id="pf" name="tipo" ng-model="contato.tipo" type="radio" value="pf"> PF
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group" ng-show="contato.tipo == 'pme' ">
+                <label class="col-sm-2 control-label" for="idade">Empresa</label>
+                <div class="col-sm-10">
+                  <input class="form-control rounded" id="empresa" ng-model="contato.empresa" ng-init=" contato.empresa = 'Não Informado.'" placeholder="Empresa" type="text">
+                </div>
+              </div>
+              <div class="form-group" ng-show="contato.tipo == 'pme' ">
+                <label class="col-sm-2 control-label" for="idade">Nº Pessoas</label>
+                <div class="col-sm-10">
+                  <input class="form-control rounded" id="empresa" ng-model="contato.numeroPessoas" placeholder="Nº de Pessoas" type="number">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="comment">Observação</label>
+                <div class="col-sm-8">
+                  <textarea class="form-control" id="comment" ng-model="contato.observacao" placeholder="Observação" rows="10"></textarea>
+                </div>
+              </div>
+
+
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <button ng-class="{'btn-success':contato.prime == false, 'btn-dutch': contato.prime == true}" class="btn"
+                    ng-click="open(contato, emails, telefones, produtos)" ng-disabled="formCadContato.$invalid">
+                    <i class="fa fa-save"></i>
+                    <span>&nbsp;&nbsp;Salvar</span>
+                  </button>
+                  <button class="btn btn-danger " type="reset">
+                    <i class="fa fa-trash-o"></i>
+                    <span>&nbsp;&nbsp;Limpar</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- /tile body -->
+        </section>
+        <!-- /tile -->
+      </div>
+      <!-- /col -->
+    </div>
+  </div>
+
+  </section>
+</div>
+</div>
+
+</div>

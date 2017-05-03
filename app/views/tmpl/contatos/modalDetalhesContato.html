@@ -1,0 +1,146 @@
+<div cg-busy="[loadUpdateContato, loadUpdateEmail, loadUpdateTelefone, loadCreateEmail, loadCreateTelefone]">
+  <div class="modal-header">
+    <h3 class="modal-title">Dados do Contato</h3>
+  </div>
+
+
+  <div class="modal-body form-validation">
+    <div class="col-md-12">
+      <section cg-busy="loadingAcesse" class="tile " ng-if="showAviso">
+        <!-- tile header -->
+        <div class="tile-header bg-red">
+          <h1 class="custom-font">
+              <strong>
+                {{aviso.tipo}}
+                já cadastrado
+              </strong>
+            </h1>
+          <ul class="controls">
+            <li class="remove">
+              <a href="" ng-click="ocultarAviso()">
+                <i class="fa fa-times"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <!-- /tile header -->
+        <!-- tile widget -->
+        <div class="tile-widget bg-lightred">
+          <p>
+            <strong>{{aviso.texto}}</strong>
+          </p>
+        </div>
+        <!-- /tile widget -->
+      </section>
+    </div>
+
+
+    <uib-tabset justified="true">
+      <uib-tab heading="Dados do contato">
+
+        <form class="form-horizontal" name="formEditContato" role="form">
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="nome">Nome</label>
+            <div class="col-sm-8">
+              <input class="form-control rounded" ng-maxlength="150" name="nome" ng-model="contato.nome" placeholder="Nome" type="text" required/>
+            </div>
+          </div>
+
+
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="idade">Idade</label>
+            <div class="col-sm-2">
+              <input class="form-control rounded" name="nome" ng-model="contato.idade" placeholder="Idade" min="0" max="99" type="number" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="comment">Observação</label>
+            <div class="col-sm-8">
+              <textarea ng-disabled="edicaoEmailTelefone" class="form-control" name="observacao" ng-model="contato.observacao" placeholder="Observação" rows="5"></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8 text-right">
+              <button type="button" class="btn btn-success btn-block" ng-click="salvarEdicaoContato(contato, telefones, emails, telefonesContato, emailsContato)" ng-disabled="formEditContato.$invalid ">
+                <i class="fa fa-save"></i>
+                <span class="ml-5">Salvar</span>
+              </button>
+            </div>
+
+          </div>
+        </form>
+
+      </uib-tab>
+      <uib-tab heading="Emails">
+        <form name="formularioEmail" novalidate>
+          <div class="mb-5" data-ng-repeat="email in emailsContato">
+            <div class="input-group">
+              <input type="email" data-ng-model="email.email" class="form-control" data-ng-disabled="edicaoEmailTelefone" />
+              <div class="input-group-btn">
+                <button type="button" class="btn btn-primary" data-ng-click="alterarEmail(email)" name="button" data-ng-disabled="edicaoEmailTelefone"><i class="fa fa-save"></i></button>
+              </div>
+            </div>
+          </div>
+          <div class="mb-5" data-ng-repeat="novoEmail in novosEmails">
+
+            <div class="input-group">
+              <input class="form-control" type="email" name="novoEmail" data-ng-model="novoEmail.email"  ng-blur="validaDuplicidadeEmail(novoEmail.email, $index)" required />
+              <div class="input-group-btn">
+                <button type="button" class="btn btn-primary" data-ng-click="salvarNovoEmail(novoEmail)" data-ng-disabled="formularioEmail.novoEmail.$invalid" name="button">
+                  <i class="fa fa-save"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="text-right">
+            <button type="button" class="btn btn-success btn-sm btn-rounded" data-ng-click="addEmail(contato)" data-ng-disabled="formularioEmail.novoEmail.$invalid"><i class="fa fa-plus"></i></button>
+          </div>
+        </form>
+
+      </uib-tab>
+      <uib-tab heading="Telefones">
+        <form name="formularioTelefones" novalidate>
+          <div class="mb-5" data-ng-repeat="telefone in telefonesContato">
+            <div class="input-group">
+              <input class="form-control input-group-telefone" type="text" data-ng-model="telefone.telefone" data-ng-disabled="edicaoEmailTelefone" ui-br-phone-number />
+              <select class="form-control input-group-telefone" name="corretor" data-ng-options="operadora.id as operadora.nome for operadora in operadorasTelefone" data-ng-model="telefone.operadoraId">
+                <option value="">Selecione a operadora</option>
+              </select>
+              <div class="input-group-btn">
+                <button type="button" class="btn btn-primary" data-ng-click="alterarTelefone(telefone)" name="button"><i class="fa fa-save"></i></button>
+              </div>
+            </div>
+          </div>
+          <div class="mb-5" data-ng-repeat="novoTelefone in novosTelefones">
+
+            <div class="input-group">
+              <input class="form-control input-group-telefone" type="text" name="novotelefone" ng-blur="validaDuplicidadeTelefone(novoTelefone.telefone, $index)" data-ng-model="novoTelefone.telefone" ui-br-phone-number required/>
+              <select class="form-control input-group-telefone" name="corretor" data-ng-options="operadora.id as operadora.nome for operadora in operadorasTelefone" data-ng-model="novoTelefone.operadoraId">
+                <option value="">Selecione a operadora</option>
+              </select>
+              <div class="input-group-btn">
+                <button type="button" class="btn btn-primary" data-ng-click="salvarNovoTelefone(novoTelefone)" data-ng-disabled="formularioTelefones.novotelefone.$invalid" name="button">
+                  <i class="fa fa-save"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="text-right">
+            <button type="button" class="btn btn-success btn-sm btn-rounded" data-ng-click="addTel(contato)" data-ng-disabled="formularioTelefones.novotelefone.$invalid"><i class="fa fa-plus"></i></button>
+          </div>
+        </form>
+
+      </uib-tab>
+
+    </uib-tabset>
+
+  </div>
+  <div class="modal-footer">
+
+    <button type="button" class="btn btn-lightred btn-ef btn-ef-4 btn-ef-4c" ng-click="cancel()">
+      <i class="fa fa-arrow-left"></i> Fechar
+    </button>
+  </div>
+</div>

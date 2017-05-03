@@ -1,0 +1,21 @@
+<div class="tile-body" style="max-height: 450px;overflow:auto;" slimscroll="{height: '100%'}">
+
+  <ul class="chats p-0">
+    <li  data-ng-repeat="interacao in interacoes"
+    data-ng-class="{in: interacao.usuarioCadastro == usuario, out: interacao.usuarioCadastro != usuario }" >
+      <div class="media">
+        <div class="thumb thumb-sm"
+        data-ng-class="{'pull-left': interacao.usuarioCadastro == usuario, 'pull-right': interacao.usuarioCadastro != usuario }">
+         <img class="media-object img-circle" src="images/avatar/avatar.png" alt="">
+        </div>
+
+        <div class="media-body">
+          <p class="media-heading">{{:: interacao.usuarioCadastro }}<span class="datetime"> {{:: interacao.dataCriacao }}</span></p>
+          <span class="body">{{:: interacao.descricao }} </span>
+        </div>
+      </div>
+    </li>
+
+  </ul>
+
+</div>

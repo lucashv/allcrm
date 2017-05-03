@@ -1,0 +1,19 @@
+<form name="formulario" novalidate>
+  <div class="modal-header">
+    <h3 class="modal-title custom-font">{{aviso.titulo}}</h3>
+  </div>
+  <div class="modal-body">
+    <p>
+      {{aviso.mensagem}}
+    </p>
+    <div class="form-group" ng-if="exibeObservacao">
+      <textarea  class="form-control" name="observacao" ng-model="$parent.observacao" placeholder="Observação" required></textarea>
+    </div>
+
+    <!-- {{formulario.$valid}} {{formulario.$invalid}} -->
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success" ng-click="ok(observacao)" ng-disabled="formulario.$invalid"><i class="fa fa-save mr-5"></i> Confirmar</button>
+    <button class="btn btn-lightred btn-ef btn-ef-4 btn-ef-4c" ng-click="cancel()"> <i class="fa fa-arrow-left"></i>Cancelar</button>
+  </div>
+</form>

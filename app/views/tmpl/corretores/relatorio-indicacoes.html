@@ -1,0 +1,393 @@
+<div class="page">
+  <!-- page header -->
+  <div class="pageheader">
+    <div class="page-bar">
+      <ul class="page-breadcrumb">
+        <li>
+          <a ui-sref="app.dashboard">
+            <i class="fa fa-home"></i> {{main.title}}
+          </a>
+        </li>
+        <li>
+          <a href="javascript:;">Corretores</a>
+        </li>
+        <li>
+          <a>{{page.subtitle}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- /page header -->
+  <!-- table -->
+
+
+  <!-- formBuscaIndicacoes -->
+  <div class="pagecontent">
+
+    <div class="row hidden-print" cg-busy="loadRelatorio">
+      <div class="col-md-12 col-sx-12">
+        <section class="tile">
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"><strong>Minhas</strong> Indicações</h1>
+          </div>
+          <div class="tile-body">
+            <form name="formRelatorioIndicacoes"  ng-submit="consultar(parametro)" class="hidden-print">
+              <div class="row">
+                <div class="form-group   col-sm-2">
+                  <label class="" for="id">Id</label>
+                  <input type="number" id="id" class="form-control" placeholder="Id" ng-model="parametro.idContato" min="1" />
+                </div>
+                <div class="form-group  col-md-4">
+                  <label for="nome">Nome</label>
+                  <input type="text" id="nome" class="form-control" placeholder="Nome" ng-model="parametro.nome" />
+                </div>
+                <div class="form-group  col-md-2">
+                  <label for="telefone">Telefone</label>
+                  <input type="text" id="telefone" class="form-control" placeholder="Telefone" ng-model="parametro.telefone" ui-br-phone-number/>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="email">Email</label>
+                  <input type="text" id="email" class="form-control" placeholder="Email" ng-model="parametro.email" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-md-3">
+                  <label for="idade">Operadora Afinidade</label>
+                  <select multiple chosen="{width: '100%'}"
+                  ng-options="operadora.id as operadora.nomeFantasia for operadora in operadorasList"
+                  ng-model="parametro.idOperadora">
+                  </select>
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="nome">Status</label>
+                  <select multiple chosen="{width: '100%'}"
+                  ng-options="situacao.id as situacao.descricao group by situacao.statusPai  for situacao in situacaoList"
+                  ng-model="parametro.idStatus">
+                  </select>
+                </div>
+
+                <div class="form-group col-md-3">
+                  <label>Tipo Envio</label>
+                  <select multiple chosen="{width: '100%'}" data-ng-options="tipoEnvio.id as tipoEnvio.tipoEnvio for tipoEnvio in tiposEnvios" data-ng-model="parametro.tipoEnvio">
+                 </select>
+                </div>
+              </div>
+              <div class="row">
+
+                <div class="form-group col-md-3">
+                  <label for="dataInicio">Data Início</label>
+
+                  <p class="input-group">
+                    <input type="text" class="form-control"  uib-datepicker-popup="{{format}}" ng-model="parametro.dataInicio"
+                    is-open="mostarCalendarioInicio.opened"  datepicker-options="dateOptions"
+                    close-text="Fechar" clear-text="Limpar" current-text="Hoje" id="dataInicio" placeholder="Data Início"  />
+                    <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" ng-click="openCalendarioInicio()">
+                      <i class="fa fa-calendar"></i>
+                    </button>
+                  </span>
+                  </p>
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="dataFim">Data Fim</label>
+                  <p class="input-group">
+                    <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="parametro.dataFim"
+                    is-open="mostarCalendarioFim.opened"  datepicker-options="dateOptions"
+                    close-text="Fechar" clear-text="Limpar" current-text="Hoje" id="dataFim" placeholder="Data Fim"  />
+                    <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" ng-click="openCalendarioFim()">
+                      <i class="fa fa-calendar"></i>
+                    </button>
+                  </span>
+                  </p>
+                </div>
+                <div class="form-group col-md-2">
+                  <label>Origem</label>
+                  <div class="checkbox">
+                    <label >
+                      <input  name="tipoOrigem" ng-model="parametro.origemTipo.fornecedores" type="checkbox"> Fornecedores
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input  name="tipoOrigem" ng-model="parametro.origemTipo.sites" type="checkbox"> Sites
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input name="tipoOrigem" ng-model="parametro.origemTipo.outras" type="checkbox"> Outras
+                    </label>
+                  </div>
+                </div>
+                <div class="form-group col-md-2">
+                  <label>Tipo</label>
+                  <div class="radio">
+                    <label for="pme">
+                      <input id="pme" name="tipo" ng-model="parametro.pmePf" type="radio" value="pme"> PME
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label for="pf">
+                      <input id="pf" name="tipo" ng-model="parametro.pmePf" type="radio" value="pf"> PF
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-md-4" ng-show="parametro.origemTipo.sites">
+                  <label for="sites">Sites</label>
+                  <select multiple chosen="{width: '100%'}"
+                    data-ng-options="site.id as site.site for site in sitesList" data-ng-model="parametro.siteId">
+                   <option value="">Todos</option>
+                  </select>
+                </div>
+                <div class="form-group  col-md-4" ng-show="parametro.origemTipo.fornecedores">
+                  <label for="fornecedores">Fornecedores</label>
+                  <select multiple chosen="{width: '100%'}"
+                  data-ng-options="fornecedor.id as fornecedor.nomeFantasia for fornecedor in fornecedorList" data-ng-model="parametro.fornecedorId">
+                   <option value="">Todos</option>
+                  </select>
+                </div>
+                <div class="form-group  col-md-4" ng-show="parametro.origemTipo.outras">
+                  <label for="outras">Outras</label>
+                  <select multiple chosen="{width: '100%'}"
+                  data-ng-options="origem.id as origem.outraOrigem for origem in outrasOrigensList" data-ng-model="parametro.outrasId">
+                   <option value="">Todos</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-6" ng-show="parametro.pmePf == 'pme' ">
+                  <label for="idade">Empresa</label>
+                  <input class="form-control" id="empresa" ng-model="parametro.empresa" placeholder="Empresa" type="text" />
+                </div>
+              </div>
+              <div class="row">
+
+                <div class="form-group col-md-4">
+                  <label class="checkbox checkbox-custom-alt">
+                    <input type="checkbox" ng-model="parametro.inativo" />
+                    <i></i> Contatos Inativos?
+                  </label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <button type="button" class="btn btn-danger btn-block" ng-click="limpar()">
+                    <i class="fa fa-trash-o"></i>
+                    <span>Limpar</span>
+                  </button>
+                </div>
+                <div class="col-md-6">
+                  <button type="submit"  class="btn btn-success btn-block">
+                    <i class="fa fa-search"></i>
+                    <span>Consultar</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- corpoform -->
+        </section>
+      </div>
+    </div>
+    <!-- formBuscaIndicacoes -->
+
+    <!-- cards -->
+    <div ng-if="showCards">
+      <div class="card-container col-lg-4 col-sm-12 col-sm-12">
+        <div class="card">
+          <div class="front bg-greensea">
+            <!-- row -->
+            <div class="row">
+              <!-- col -->
+              <div class="col-xs-4">
+                <i class="fa  fa-fax fa-2x"></i>
+              </div>
+              <!-- /col -->
+              <!-- col -->
+              <div class="col-xs-8">
+                <p class="text-strong mb-0">Recebidas:</p>
+                <p class="text-strong mb-0">{{qtdIndicaoes}}</p>
+              </div>
+              <!-- /col -->
+            </div>
+            <!-- /row -->
+          </div>
+          <div class="back  bg-greensea">
+            <!-- row -->
+            <div class="row">
+              <!-- col -->
+              <div class="col-xs-12">
+                <a href=javascript:;>
+                  <i class="fa fa-eye fa-2x"></i> Acesse
+                </a>
+              </div>
+              <!-- /col -->
+            </div>
+            <!-- /row -->
+          </div>
+        </div>
+      </div>
+      <div class="card-container col-lg-4 col-sm-12 col-sm-12">
+        <div class="card">
+          <div class="front bg-blue">
+            <!-- row -->
+            <div class="row">
+              <!-- col -->
+              <div class="col-xs-4">
+                <i class="fa fa-check fa-2x"></i>
+              </div>
+              <!-- /col -->
+              <!-- col -->
+              <div class="col-xs-8">
+                <p class=" text-strong mb-0">Respondidas</p>
+                <p class=" text-strong mb-0">{{qtdIndicaoes}}</p>
+              </div>
+              <!-- /col -->
+            </div>
+            <!-- /row -->
+          </div>
+          <div class="back  bg-blue">
+            <!-- row -->
+            <div class="row">
+              <!-- col -->
+              <div class="col-xs-12">
+                <a href=javascript:;>
+                  <i class="fa fa-eye fa-2x"></i> Acesse
+                </a>
+              </div>
+              <!-- /col -->
+            </div>
+            <!-- /row -->
+          </div>
+        </div>
+      </div>
+      <div class="card-container col-lg-4 col-sm-12 col-sm-12">
+        <div class="card">
+          <div class="front bg-lightred">
+            <!-- row -->
+            <div class="row">
+              <!-- col -->
+              <div class="col-xs-4">
+                <i class="fa fa-warning fa-2x"></i>
+              </div>
+              <!-- /col -->
+              <!-- col -->
+              <div class="col-xs-8">
+                <p class=" text-strong mb-0">Pendentes:</p>
+                <p class=" text-strong mb-0">{{qtdIndicaoes}}</p>
+              </div>
+              <!-- /col -->
+            </div>
+            <!-- /row -->
+          </div>
+          <div class="back   bg-lightred">
+            <!-- row -->
+            <div class="row">
+              <!-- col -->
+              <div class="col-xs-12">
+                <a href=javascript:;>
+                  <i class="fa fa-eye fa-2x"></i> Acesse
+                </a>
+              </div>
+              <!-- /col -->
+            </div>
+            <!-- /row -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- cards -->
+
+    <div class="row">
+      <div class="col-md-12" ng-if="mostraRelatorio">
+        <section class="tile">
+
+          <div class="tile-body">
+            <div class="visible-print-block">
+              <figure>
+                <img src="http://imagens.allcross.com.br/logo_allcross_colorida.png" alt="Logo AllCross" />
+              </figure>
+              <h1><strong>Relatório</strong> Minhas Indicações</h1>
+              <b>Relatório extraido em:</b> {{dataAtual | date: 'dd/MM/yyyy'}} - <b>Por :</b> {{usuarioLogado | capitalize : true}}
+            </div>
+
+            <table class="table table-striped" st-table="resultados" st-safe-src="data">
+              <thead>
+                <tr>
+                  <th st-sort="contatoId">ID</th>
+                  <th st-sort="dataCadastroInterecao">Data</th>
+                  <th st-sort="nomeContato">Nome</th>
+                  <th st-sort="telefone">Telefone</th>
+                  <th st-sort="tipoEnvio">Tipo</th>
+                  <th st-sort="situacao">Situação</th>
+                  <th>Status</th>
+                </tr>
+                <tr class="hidden-print">
+                  <th colspan="6">
+                    <div class="form-group">
+                      <label for="pesquise">Pesquise</label>
+                      <input id="pesquise" type="text" class="form-control" st-search placeholder="Pesquise no relatório" />
+                    </div>
+                  </th>
+                  <th colspan="1">
+                    <div class="form-group">
+                      <label>Itens por página</label>
+                      <select class="form-control" ng-model="itemsByPage">
+                        <option value="5">5</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="{{tamanhoArray}}">Todos</option>
+                      </select>
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr ng-repeat="resultado in resultados">
+                  <td><a class="link" data-ytta-id="-" ng-href="#app/contatos/detalhes/{{resultado.idContato}}" target="_blank">{{resultado.idContato}}</a></td>
+                  <td>{{resultado.dataCadastroInterecao}}</td>
+                  <td>{{resultado.nomeContato | capitalize: true}}</td>
+                  <td>{{resultado.telefone}}</td>
+                  <td>{{resultado.tipoEnvio}}</td>
+                  <td>
+                    <p ng-class="
+                    {'text-danger': resultado.situacao == 'Enviada ao Corretor',
+                    'text-primary': resultado.situacao != 'Enviada ao Corretor' && resultado.situacao != 'Venda Efetuada',
+                    'text-success': resultado.situacao == 'Venda Efetuada'}">{{resultado.situacao}}</p>
+                  </td>
+                  <td>
+                    <i ng-if="resultado.situacao == 'Enviada ao Corretor'" class="fa fa-exclamation-circle text-danger"></i>
+                    <i ng-if="resultado.situacao != 'Enviada ao Corretor' && resultado.situacao != 'Venda Efetuada'" class="fa fa-check-circle text-primary"></i>
+                    <i ng-if="resultado.situacao == 'Venda Efetuada'" class="fa fa-check-circle text-success"></i>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="7">
+                    <h4>{{resultados.length}} de {{tamanhoArray}} resultado(s).</h4></td>
+                </tr>
+                <tr class="hidden-print">
+                  <td colspan="6" class="text-center">
+                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="50"></div>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="7">
+                    <button ng-click="imprimirRelatorioIndicacoes()" class="btn btn-success btn-block hidden-print">
+                      <i class="fa fa-file-pdf-o"></i>
+                      <span>Imprimir</span>
+                    </button>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,149 @@
+<div class="page">
+  <div class="pageheader">
+    <div class="page-bar">
+      <ul class="page-breadcrumb">
+        <li>
+          <a ui-sref="app.dashboard">
+            <i class="fa fa-home"></i> {{main.title}}
+          </a>
+        </li>
+        <li>
+          <a href="javascript:;">{{page.module}}</a>
+        </li>
+        <li>
+          <a href="javascript:;">{{page.subtitle}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="pagecontent">
+
+    <div class="row hidden-print">
+      <div class="col-md-12 col-sx-12">
+
+        <section class="tile"  cg-busy="loadRelatorio">
+          <!-- tile header -->
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"><strong>Buscar </strong>Agenda</h1>
+          </div>
+          <!-- /tile header -->
+          <!-- tile body -->
+          <div class="tile-body">
+            <form name="formTarefasAgendaddas">
+
+              <div class="row">
+                <div class="form-group col-md-3">
+                  <label for="dataInicio">Data Início</label>
+                  <p class="input-group">
+                    <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="parametro.dataInicio"
+                    is-open="mostarCalendarioInicio.opened"  close-text="Fechar" clear-text="Limpar" current-text="Hoje"
+                    datepicker-options="dateOptions" placeholder="Data Início"    />
+                    <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" ng-click="openCalendarioInicio()">
+                      <i class="fa fa-calendar"></i>
+                    </button>
+                  </span>
+                  </p>
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="dataFim">Data Fim</label>
+                  <p class="input-group">
+                    <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="parametro.dataFim"
+                    is-open="mostarCalendarioFim.opened" close-text="Fechar" clear-text="Limpar" current-text="Hoje"
+                    datepicker-options="dateOptions"  placeholder="Data Fim"  />
+                    <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" ng-click="openCalendarioFim()">
+                      <i class="fa fa-calendar"></i>
+                    </button>
+                  </span>
+                  </p>
+                </div>
+
+              </div>
+
+              <div class="row">
+
+                <div class="form-group col-md-4">
+                  <label class="checkbox checkbox-custom-alt">
+                    <input type="checkbox" ng-model="parametro.inativos" ng-init="parametro.inativos = false"/>
+                    <i></i> Mostrar Inativados?
+                  </label>
+                </div>
+                <div class="form-group col-md-4">
+                  <label class="checkbox checkbox-custom-alt">
+                    <input type="checkbox" ng-model="parametro.concluidos" ng-init="parametro.concluidos = false"/>
+                    <i></i> Mostrar Concluídos
+                  </label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <button type="button" class="btn btn-danger btn-block" ng-click="limpar()">
+                    <i class="fa fa-trash-o"></i>
+                    <span>Limpar</span>
+                  </button>
+                </div>
+                <div class="col-md-6">
+                  <button type="button" ng-click="consultar(parametro)" class="btn btn-success btn-block">
+                    <i class="fa fa-search"></i>
+                    <span>Consultar</span>
+                  </button>
+                </div>
+              </div>
+              <br />
+              <div class="row">
+                <div class="col-md-6">
+                  <button class="btn btn-dutch btn-ef btn-ef-3 btn-ef-3c m-5" type="button" ng-click="criarLembrete()">
+                    <i class="fa fa-book"></i> Criar Lembrete
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <section class="tile widget-todo"  ng-if="showAgenda">
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"><strong>Tarefas </strong>  Agendadas</h1>
+          </div>
+          <!-- /tile header -->
+          <!-- tile body -->
+
+          <div class="tile-body lined-paper" cg-busy="loadAgenda">
+
+            <ul class="todo-list list-unstyled">
+              <li ng-repeat="todo in dadosAgenda" ng-class="{completed: todo.concluida, editing: todo == editedTodo}">
+                <div class="view">
+                  <label class="checkbox checkbox-custom m-0 text-muted inline" ng-if="todo.status == 1">
+                    <input type="checkbox" ng-checked="todo.concluida" ng-model="todo.concluida" ng-click="concluiAgenda(todo)" ><i></i>
+                  </label>
+                  <span>
+                    <a ng-if="todo.status == 1" href="javascriph:;" class="text-danger remove-todo pull-right" ng-click="deleteAgenda(todo)" ng-confirm-dialog header-text="Remover tarefa agendada?" content="Tem certeza?" no-text="Não" yes-text="Sim"  aria-label="Remove">
+                      <i class="fa fa-times"></i>
+                    </a>
+                    <strong>{{todo.titulo}}</strong>
+                    <p>
+                      {{todo.descricao}}<br/>
+                      {{todo.data_agenda}}<br/>
+                      <span ng-if="todo.contato_id" ng-if="todo.status == 1" >
+                        Acesse o <a class=""  ng-href="#app/contatos/detalhes/{{todo.contato_id}}">Contato</a>
+                      </span>
+                      <p class="bg-lightred dker">
+                        <span class="bg-dker" ng-if="todo.status == 0 ">Tarefa Excluida</span>
+                      </p>
+                    </p>
+                  </span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,219 @@
+<div class="page" ng-controller="AdicionarLigacoesCtrl">
+  <div class="pageheader">
+    <div class="page-bar">
+      <ul class="page-breadcrumb">
+        <li>
+          <a ui-sref="app.dashboard">
+            <i class="fa fa-home"></i> {{main.title}}
+          </a>
+        </li>
+        <li>
+          <a href="javascript:;">Recepção</a>
+        </li>
+        <li>
+          <a href="javascript:;">{{page.subtitle}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- cabecalho -->
+
+
+  <div class="pagecontent">
+    <div class="row">
+      <div class="col-md-6" ng-if="showAviso">
+        <section cg-busy="loadingAcesse" class="tile">
+          <!-- tile header -->
+          <div class="tile-header bg-red">
+            <h1 class="custom-font">
+          <strong>{{aviso.tipo}}
+            já cadastrado</strong>
+        </h1>
+            <ul class="controls">
+              <li class="remove">
+                <a href="" ng-click="ocultaAviso()">
+                  <i class="fa fa-times"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <!-- /tile header -->
+          <!-- tile widget -->
+          <div class="tile-widget bg-lightred">
+            <p>
+              <strong>{{:: aviso.texto }}</strong>
+            </p>
+            <div class="input-group">
+
+              <button class="btn btn-slategray" ng-click="acessar(telefoneRepetido)">
+                <i class="fa fa-hand-o-right"></i>
+                <span>Acesse</span>
+              </button>
+            </div>
+
+            <!-- /tile widget -->
+        </section>
+        </div>
+        <div class="col-md-6" ng-show="exibeMensagemAlerta">
+          <div class="panel panel-primary panel-filled">
+            <div class="panel-heading">
+              <button type="button" ng-click="ocultaAviso()" class="close">×</button>
+              <h3 class="panel-title custom-font">Atenção</h3>
+            </div>
+            <div class="panel-body">
+              <p>{{:: mensagemAlerta }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- row -->
+      <div class="row">
+        <!-- col -->
+        <div class="col-md-12 col-sx-12">
+          <!-- tile -->
+          <section class="tile" cg-busy="[loadTipos, loadPerdeuLigacao, loadLigacaoInformacao, loadPlantao, loadingForm, loadOperadoras]">
+            <!-- tile header -->
+            <div class="tile-header dvd dvd-btm">
+              <h1 class="custom-font">Cadastro de
+                    <strong>Ligações</strong>
+                  </h1>
+            </div>
+            <!-- /tile header -->
+            <!-- tile body -->
+            <div class="tile-body">
+              <form class="form-horizontal" name="formCadContato" novalidate>
+                <div class="form-group" ng-show="visualizaComboFiliais">
+                  <label class="col-sm-2 control-label" for="sites">Filial</label>
+                  <div class="col-sm-3">
+                    <select chosen="{width: '100%'}" ng-change="atualizaComboCorretor(ligacao.tipo.id, ligacao.filial)" ng-options="filial.id as filial.razaoSocial for filial in filiais" ng-model="ligacao.filial">
+                      <option value="">Selecione </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="sites">Tipo</label>
+                  <div class="col-sm-3">
+                    <select chosen="{width: '100%'}" ng-change="atualizaComboCorretor(ligacao.tipo.id, ligacao.filial)" ng-options="tipo as tipo.tipoLigacao for tipo in tiposLigacoesList" ng-model="ligacao.tipo">
+                      <option value="">Selecione </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-inline">
+                  <label class="col-sm-2 control-label" for="telefone">Telefone</label>
+                  <span data-ng-repeat="telefone in telefones">
+                  <input class="form-control" name="telefone" ng-blur="validaDuplicidadeTelefone(telefone.telefone, telefones.length, ligacao.tipo)"
+                   ng-model="telefone.telefone" placeholder="Telefone" type="text"  ui-br-phone-number required />
+                  <button class="btn btn-danger btn-rounded"  ng-if="adicionarTelefones" ng-click="removeTel()" ng-show="$last" type="button">
+                    -
+                  </button>
+                  </span>
+                  <button class="btn btn-success btn-rounded" ng-click="addTel()" type='button' ng-if="adicionarTelefones">
+                    +
+                  </button>
+                </div>
+                <br>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="nome">Nome</label>
+                  <div class="col-sm-3">
+                    <input type="text" class="form-control" name="nome" id="nome" ng-model="ligacao.nome" placeholder="Nome" required />
+                  </div>
+                </div>
+                <div class="form-group" ng-if="showCorretor">
+                  <label class="col-sm-2 control-label" for="">Corretor</label>
+                  <div class="col-sm-3">
+                    <select chosen="{width: '100%'}" ng-options="corretor as (corretor.usuario_corretor.nome + ' ' + corretor.usuario_corretor.sobreNome ) | capitalize:true for corretor in corretorList" ng-model="ligacao.plantao">
+                      <option value="">Selecione </option>
+                    </select>
+                  </div>
+                  <button class="btn btn-danger" type="button" ng-click="perdeuLigacao(ligacao.plantao)">
+                    <i class="fa  fa-phone-square"></i>
+                    <span>&nbsp;&nbsp;Perdeu Ligação</span>
+                  </button>
+                </div>
+                <br/>
+                <div class="form-group " ng-show="exibeReposicao">
+                  <div class="col-sm-offset-2 col-sm-10">
+                    <label class="checkbox checkbox-custom-alt">
+                      <input type="checkbox" ng-model="ligacao.isReposicao">
+                      <i></i> Reposição?
+                    </label>
+                  </div>
+                </div>
+                <div class="form-group" ng-show="exibeOperadora">
+                  <label class="col-sm-2 control-label" for="sites">Operadora</label>
+                  <div class="col-sm-3">
+                    <select chosen="{width: '100%'}" ng-options="operadora as operadora.nomeFantasia for operadora in operadorasList" ng-model="ligacao.operadora">
+                      <option value="">Selecione </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <div class="alert alert-danger col-sm-offset-2 col-sm-3 alert-dismissable" ng-if="showAvisoReposicao">
+                    <button type="button" class="close" ng-click="ocultaAvisoReposicao()">×</button>
+                    Não existem reposições cadastradas para esse corretor!
+                  </div>
+                  <br>
+                </div>
+                <div class="form-group">
+                  <div class="col-sm-offset-2 col-sm-10">
+                    <button class="btn btn-success" type="button" ng-click="salvarLigacao(ligacao)" ng-disabled="formCadContato.$invalid ">
+                      <i class="fa fa-save"></i>
+                      <span>&nbsp;&nbsp;Salvar</span>
+                    </button>
+                    <button class="btn btn-danger " type="button" ng-click="limpar()">
+                      <i class="fa fa-trash-o"></i>
+                      <span>&nbsp;&nbsp;Limpar</span>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <!-- /tile body -->
+          </section>
+          <!-- /tile -->
+        </div>
+        <!-- /col -->
+      </div>
+
+      <!-- table corretores no plantao -->
+      <div class="row">
+        <div class="col-md-12 col-sx-12" ng-show="showTableCorretor" cg-busy="[loadPlantao, loadAddReposicao]">
+          <section class="tile" cg-busy="loadCorretor">
+            <table class="table table-striped" id="tableContatos" st-safe-src="data" st-table="displayedCollection">
+              <thead>
+                <tr>
+
+                  <th width="10%">Sequência</th>
+                  <th width="15%">Corretor</th>
+                  <th width="10%">Ramal</th>
+                  <th width="5%">Ligações Perdidas</th>
+                  <th width="1%">Reposições Pagas</th>
+                  <th width="1%">Reposições</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="plantao in displayedCollection">
+
+                  <td>{{:: plantao.sequencia }}</td>
+                  <td>{{:: plantao.usuario_corretor.nome | capitalize:true }} <span ng-if="plantao.usuario_corretor.sobreNome">{{:: plantao.usuario_corretor.sobreNome | capitalize:true }}</span></td>
+                  <td>{{:: plantao.ramal }}</td>
+                  <td><span ng-if="plantao.ligacoes_perdidas">{{:: plantao.ligacoes_perdidas }}</span><span ng-if="!plantao.ligacoes_perdidas">0</span></td>
+                  <td>
+                    {{:: plantao.reposicao_paga }}
+                  </td>
+                  <td>{{:: plantao.reposicao }}&nbsp;&nbsp;
+                    <button class="btn btn-rounded btn-success btn-md rounded" ng-click="addReposicao(plantao)" type="button">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                  </td>
+
+                </tr>
+              </tbody>
+            </table>
+          </section>
+        </div>
+      </div>
+      <!-- table corretores no plantao -->
+    </div>
+  </div>

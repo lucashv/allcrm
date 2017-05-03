@@ -1,0 +1,285 @@
+<div class="page">
+
+  <div class="pageheader">
+    <div class="page-bar">
+      <ul class="page-breadcrumb ">
+        <li>
+          <a href="javascript:;"><i class="fa fa-home"></i> CRM </a>
+        </li>
+        <li>
+          <a href="javascript:;">Dashboard</a>
+        </li>
+        <li>
+          <a href="javascript:;">Corretor</a>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+
+  <div class="pagecontent">
+
+    <div class="row mb-10" ng-if="false" ng-dblclick="ocultaAvisoCampanha()">
+      <div class="col-md-12">
+        <img src="http://www.allcross.com.br/imagens.allcross.com.br/campanha_olimpiadas.png" alt="Campanha Olimpiadas" class="img-responsive" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4">
+        <section class="tile simple" cg-busy="load">
+
+          <!-- tile widget -->
+          <div class="tile-widget bg-slategray">
+
+            <div class="media">
+              <div class="media-body">
+                <h5 class="media-heading">
+                <span ng-if="!envioBloqueado">Meu Status :<span class="text-success"><b> Ativo</b></span></span>
+                <span ng-if="envioBloqueado">Meu Status : <span class="text-danger"><b>Bloqueado</b></span> - <a ng-click="modalContatosBloqueando()" style="cursor:help;">Acesse Detalhes</a></span>
+                </h5>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="tile-body p-0">
+            <table class="table">
+              <tr>
+                <th class="text-center">Recebidas</th>
+                <th class="text-center">Respondidas</th>
+                <th class="text-center">Pendentes</th>
+                <th class="text-center">Vendas</th>
+              </tr>
+              <tr>
+                <td class="text-center"><span class="text-success" ng-click="redirecionaViewIndicacoes(23,  filtro.dataInicio, filtro.dataFim)">{{indicacoesCorretor.recebidas}}</span></td>
+                <td class="text-center"><span class="text-info" ng-click="redirecionaViewIndicacoes(24,  filtro.dataInicio, filtro.dataFim)">{{indicacoesCorretor.respondidas}}</span></td>
+                <td class="text-center"><span class="text-danger" ng-click="redirecionaViewIndicacoes(2,  filtro.dataInicio, filtro.dataFim)">{{indicacoesCorretor.pendentes}}</span></td>
+                <td class="text-center"><span class="text-greensea" ng-click="redirecionaViewIndicacoes(5,  filtro.dataInicio, filtro.dataFim)">{{indicacoesCorretor.efetuadas}}</span></td>
+              </tr>
+            </table>
+          </div>
+        </section>
+
+        <section class="tile">
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"><strong>Filtro de Leads</strong></h1>
+          </div>
+          <div class="tile-body">
+            <form>
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label class="control-label" for="dataInicio">Data Inicio</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" data-ng-model="filtro.dataInicio" is-open="calendarioInicio.opened" close-text="Fechar" clear-text="Limpar" current-text="Hoje" id="dataInicio" placeholder="Data Início"
+                        datepicker-options="dateOptions" />
+                    <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary btn-sm" data-ng-click="abrirCalendarioInicio(calendarioInicio.opened)">
+                      <i class="fa fa-calendar"></i>
+                    </button>
+                  </span>
+                  </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                  <label class="control-label" for="dataInicio">Data Fim</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" data-ng-model="filtro.dataFim" is-open="calendarioFim.opened" close-text="Fechar" clear-text="Limpar" current-text="Hoje" id="dataInicio" placeholder="Data Fim" datepicker-options="dateOptions"
+                    />
+                    <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary btn-sm" data-ng-click="abrirCalendarioFim()">
+                      <i class="fa fa-calendar"></i>
+                    </button>
+                  </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="nome">Nome</label>
+                  <input type="text" id="nome" class="form-control" placeholder="Nome" ng-model="filtro.nome" />
+                </div>
+                <div class="form-group  col-md-6">
+                  <label for="telefone">Telefone</label>
+                  <input type="text" id="telefone" class="form-control" placeholder="Telefone" ng-model="filtro.telefone" ui-br-phone-number/>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-md-12">
+                  <label for="nome">Status</label>
+                  <select placeholder-text-multiple="'Selecione os status'" multiple chosen="{width: '100%'}" ng-options="situacao.id as situacao.descricao group by situacao.statusPai  for situacao in situacaoList" ng-model="filtro.idStatus">
+                  </select>
+                </div>
+              </div>
+
+              <div class="row">
+
+                <div class="form-group col-md-12">
+                  <button type="button" class="btn btn-success btn-sm" ng-click="consultar(filtro)">
+                    <i class="fa fa-search"></i> Consultar
+                  </button>
+                  <button type="button" class="btn btn-primary btn-sm" data-ng-click="salvarFiltros(filtro)">
+                    <i class="fa fa-save mr-5"></i>Salvar
+                  </button>
+                  <button type="button" class="btn btn-danger btn-sm" data-ng-click="limparFiltro()">
+                    <i class="fa fa-trash-o mr-5"></i>Limpar
+                  </button>
+
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </section>
+
+
+
+
+      </div>
+
+
+      <div class="col-md-8">
+        <section class="tile" cg-busy="loadInteracoesContato">
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"><strong>Contatos</strong></h1>
+          </div>
+          <div  id="grid1" ui-grid="interacoesOptions" class="grid text-center" ui-grid-resize-columns></div>
+          <div class="tile-body">
+
+            <div class="row mt-5">
+              <div class="col-md-2">
+                Acesso Rápido:
+              </div>
+              <div class="col-md-3">
+                <button type="button" ng-click="setData('mes')" class="btn btn-success btn-block">
+                  <i class="fa fa-calendar"></i>
+                  <span>Mês</span>
+                </button>
+              </div>
+              <div class="col-md-3">
+                <button type="button" ng-click="setData('semana')" class="btn btn-success btn-block">
+                  <i class="fa fa-calendar"></i>
+                  <span>Semana</span>
+                </button>
+              </div>
+              <div class="col-md-3">
+                <button type="button" ng-click="setData('hoje')" class="btn btn-success btn-block">
+                  <i class="fa fa-calendar"></i>
+                  <span>Hoje</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="row">
+
+      <div class="col-md-4">
+        <section class="tile bg-slategray widget-calendar">
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"><strong>Agenda </strong>Rápida</h1>
+          </div>
+          <div class="tile-body p-0">
+            <uib-datepicker ng-model="dataAgenda" show-weeks="false" class="datepicker" ng-click="clickAgenda(dataAgenda)"></uib-datepicker>
+          </div>
+        </section>
+      </div>
+
+
+      <div class="col-md-8" >
+        <section class="tile" cg-busy="loadAgenda">
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"><strong>Eventos</strong> Agenda</h1>
+          </div>
+
+            <div id="grid2" ui-grid="dadosAgendaOptions" class="grid text-center" ui-grid-resize-columns></div>
+
+
+
+          <!-- <table class="table table-striped">
+            <thead>
+              <tr>
+                <th width="5%">Contato</th>
+                <th width="10%">Telefone</th>
+                <th width="10%">Titulo</th>
+                <th width="50%">Descricao</th>
+                <th width="10%%">Data Agenda</th>
+              </tr>
+            </thead>
+            <tr>
+              <th colspan="6">
+                <div class="form-group">
+                  <input id="pesquise" type="text" class="form-control" placeholder="Pesquise" ng-model="filtroDePesquisaAgenda" />
+                </div>
+              </th>
+            </tr>
+            <tbody>
+              <tr class="lista-animada" ng-repeat="agenda in dadosAgenda | filter: filtroDePesquisaAgenda">
+                <td>
+                  <span ng-if="agenda.contato_id">
+                    <a class="link" ng-href="#app/contatos/detalhes/{{:: agenda.contato_id }}" target="_blank">{{:: agenda.contatoNome | capitalize:true}}</a>
+                  </span>
+                  <span ng-if="!agenda.contato_id">
+                    <i class="fa fa-ban text-danger"></i>
+                  </span>
+                </td>
+                <td>
+                  <span ng-if="agenda.telefone">
+                        {{:: agenda.telefone }}
+                  </span>
+                  <span ng-if="!agenda.telefone">
+                        <i class="fa fa-ban text-danger"></i>
+                  </span>
+                </td>
+                <td>{{:: agenda.titulo | capitalize: true }}</td>
+                <td>{{:: agenda.descricao }}</td>
+                <td> {{:: agenda.data_agenda_convertida }}</td>
+              </tr>
+            </tbody>
+          </table> -->
+        </section>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-md-4">
+        <section class="tile" cg-busy="loadInteracoesContato">
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"><strong>O que tenho Recebido p/ Operaodora?</strong></h1>
+          </div>
+          <div class="tile-body">
+            <div morris-donut-chart donut-data='donutData' style="height: 250px;" resize="true">
+          </div>
+        </section>
+      </div>
+      <div class="col-md-4">
+        <section class="tile" cg-busy="loadVendas">
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"><strong>Vendas Efetuadas p/ Operadora</strong></h1>
+          </div>
+          <div class="tile-body">
+            <div morris-donut-chart donut-data='donutDataVendas' style="height: 250px;" resize="true">
+          </div>
+        </section>
+      </div>
+      <div class="col-md-4">
+        <section class="tile" cg-busy="loadRespostas">
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"><strong>Principais Respostas</strong></h1>
+          </div>
+          <div class="tile-body">
+            <div morris-donut-chart donut-data='donutRespostas' style="height: 250px " resize="true">
+          </div>
+        </section>
+      </div>
+
+    </div>
+
+
+  </div>
+</div>

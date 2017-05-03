@@ -1,0 +1,178 @@
+<div class="page">
+  <!-- page header -->
+  <div class="pageheader">
+    <div class="page-bar">
+      <ul class="page-breadcrumb">
+        <li>
+          <a ui-sref="app.dashboard">
+            <i class="fa fa-home"></i> CRM
+          </a>
+        </li>
+        <li>
+          <a href="javascript:;">Reposições</a>
+        </li>
+        <li>
+          <a>Relatório de Reposição</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+
+  <div class="pagecontent">
+
+    <div class="row hidden-print">
+      <div class="col-md-12">
+        <section class="tile" cg-busy="[loadCorretores, loadSolicitacoesAgrupadas, loadSolicitacoes, loadSolicitacaoReposicao]">
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"><strong>Reposições</strong> Aprovadas</h1>
+          </div>
+          <div class="tile-body">
+            <div class="row">
+              <div class="form-group col-sm-2">
+                <label class="" for="id">Id</label>
+                <input type="number" id="id" class="form-control" placeholder="Id" ng-model="parametro.idContato" min="1" />
+              </div>
+              <div class="form-group col-md-3">
+                <label for="dataInicio">Data Início - Solicitação </label>
+                <p class="input-group">
+                  <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="parametro.dataInicio" is-open="mostarCalendarioInicio.opened" datepicker-options="dateOptions" close-text="Fechar" clear-text="Limpar" current-text="Hoje" />
+                  <span class="input-group-btn">
+                  <button type="button" class="btn btn-primary" ng-click="openCalendarioInicio()"><i class="fa fa-calendar"></i></button>
+                </span>
+                </p>
+              </div>
+              <div class="form-group col-md-3">
+                <label for="dataInicio">Data Fim - Solicitação</label>
+                <p class="input-group">
+                  <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="parametro.dataFim" is-open="mostarCalendarioFim.opened" datepicker-options="dateOptions" close-text="Fechar" clear-text="Limpar" current-text="Hoje" />
+                  <span class="input-group-btn">
+                  <button type="button" class="btn btn-primary" ng-click="openCalendarioFim()"><i class="fa fa-calendar"></i></button>
+                </span>
+                </p>
+              </div>
+              <div class="form-group col-md-4">
+                <label>Corretor</label>
+                <select chosen="{width: '100%'}" class="form-control" ng-model="parametro.corretorId" ng-options="corretor.id as  corretor.nomeCorretor  | capitalize:tru for corretor in corretores">
+                  <option value="">Todos</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <button type="button" class="btn btn-danger btn-block" ng-click="limpar()">
+                  <i class="fa fa-trash-o"></i>
+                  <span>Limpar</span>
+                </button>
+              </div>
+              <div class="col-md-6">
+                <button type="button" ng-click="consultar(parametro)" class="btn btn-success btn-block">
+                  <i class="fa fa-search"></i>
+                  <span>Consultar</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+          <!-- corpoform -->
+        </section>
+      </div>
+    </div>
+
+    <!--tableAgrupadas-->
+    <div class="row" data-ng-if="mostraSolicitacoes">
+      <div class="col-md-12">
+        <section class="tile">
+          <!-- tile header -->
+          <div class="tile-header dvd dvd-btm hidden-print">
+            <h1 class="custom-font"><strong>Reposições</strong></h1>
+          </div>
+          <div class="tile-body">
+            <table class="table" cg-busy="[loadSolicitacaoReposicao]">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Contato</th>
+                  <th>Corretor</th>
+                  <th>Data Solicitacao</th>
+                  <th>Primeira Avaliação </th>
+                  <th class="text-center">Autorizada?</th>
+                  <th>Observação</th>
+                  <th>Avaliação Gestor</th>
+                  <th>Data Avaliação Gestor</th>
+                  <th>Autorizada Gestor</th>
+                  <th>Contato Pagamento</th>
+                </tr>
+
+              </thead>
+              <tbody>
+                <tr ng-repeat="solicitacao in solicitacoes | orderBy : 'contatoNome' | filter: resultado.corretorId">
+
+                  <td>
+                      <a ng-href="#app/contatos/detalhes/{{:: solicitacao.contatoId }}" uib-popover="{{:: contato.observacao }}" popover-trigger="mouseenter" popover-placement="right">{{:: solicitacao.contatoId }}</a>
+                  </td>
+                  <td>{{ solicitacao.contatoNome | capitalize: true }}</td>
+                  <td>{{ solicitacao.corretorNome | capitalize: true }}</td>
+                  <td>{{:: solicitacao.dataSolicitacao }}</td>
+                  <td>
+                    <span ng-if="solicitacao.dataPrimeiraAvaliacao"> {{:: solicitacao.dataPrimeiraAvaliacao }} </span>
+                    <span ng-if="!solicitacao.dataPrimeiraAvaliacao" class="text-info">Pendente Avaliação</span>
+                  </td>
+                  <td>
+                    <div class="text-center">
+                      <span ng-class="
+                      { 'text-success' :  solicitacao.primeiraAvaliaca == '1' ,
+                        'text-danger'  :  solicitacao.primeiraAvaliaca == '0' }">
+                          <span ng-if="solicitacao.primeiraAvaliaca == '1' ">
+                            <i class="fa fa-check-circle"></i>
+                          </span>
+                          <span ng-if="solicitacao.primeiraAvaliaca == '0' ">
+                            <i class="fa fa-ban"></i>
+                          </span>
+                      </span>
+                    </div>
+                  </td>
+                  <td>
+                    <span ng-if="solicitacao.observacaoPrimeiraAvaliacao"> {{:: solicitacao.observacaoPrimeiraAvaliacao }} </span>
+                    <span ng-if="!solicitacao.observacaoPrimeiraAvaliacao" class="text-info">Pendente Avaliação</span>
+                  </td>
+                  <td>
+                    <span ng-if="solicitacao.observacaoSegundaAValiacao"> {{:: solicitacao.observacaoSegundaAValiacao }} </span>
+                    <span ng-if="!solicitacao.observacaoSegundaAValiacao" class="text-info">Pendente Avaliação</span>
+                  </td>
+                  <td>
+                    <span ng-if="solicitacao.dataSegundaAvaliacao"> {{:: solicitacao.dataSegundaAvaliacao }} </span>
+                    <span ng-if="!solicitacao.dataSegundaAvaliacao" class="text-info">Pendente Avaliação</span>
+                  </td>
+                    <td>
+                      <div class="text-center">
+                        <span ng-class="
+                        { 'text-success' :  solicitacao.autorizadoGestor == '1' ,
+                          'text-danger'  :  solicitacao.autorizadoGestor == '0' }">
+                            <span ng-if="solicitacao.autorizadoGestor == '1' ">
+                              <i class="fa fa-check-circle"></i>
+                            </span>
+                            <span ng-if="solicitacao.autorizadoGestor == '0' ">
+                              <i class="fa fa-ban"></i>
+                            </span>
+                        </span>
+                      </div>
+                    </td>
+                    <td>
+                    <span ng-if="solicitacao.contatoPagamento"> <a class="link" ng-href="#app/contatos/detalhes/{{:: solicitacao.contatoPagamento }}">{{:: solicitacao.contatoPagamento }}</a></span>
+                    <span ng-if="!solicitacao.contatoPagamento">  <i class="fa fa-ban text-danger"></i> </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+
+
+
+  </div>
+</div>
