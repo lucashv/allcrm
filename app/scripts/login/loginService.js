@@ -14,13 +14,18 @@
          console.log("Teste: " + user.usuario + "; senha: " + user.password);
          }
          */
-
+        /*
         return $resource(ApiUrlService.getUrl() + "/auth-ldap/", {},
                 {
                     create: {
                         method: 'POST'
                     }
-                });
+                });*/
+        return $resource(ApiUrlService.getUrl() + "/usuarios/", {}, {
+            create: {
+                method: 'POST'
+            }
+        });
 
     }
 })();
